@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 	fieldsets = (
 			('Main info',{
 				'classes': ('wide',),
-				'fields': ( ('name','surname', 'slug'),
+				'fields': ( ('name','surname'),
 			   			  ('img', 'city', 'type_persone' ,'about', ),
 			   			   ('subscription', 'start_subscription', 'end_subscription'))
 				}),
@@ -28,7 +28,6 @@ class UserAdmin(admin.ModelAdmin):
 				)
 	list_display = ('email','name', 'surname', 'subscription', 'start_subscription', 'end_subscription')		
 	list_display_links = ['email',]
-	prepopulated_fields = {'slug': ('name', 'surname')}
 	list_editable = ('subscription', 'start_subscription', 'end_subscription')
 
 admin.site.register( User, UserAdmin)

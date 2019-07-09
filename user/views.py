@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic import View
 from django.views.generic.list import ListView 
 from django.views.generic.detail import DetailView
 
@@ -14,16 +15,17 @@ class HomePageView(ListView):
 	model = User
 
 	def get_queryset(self):
-		if self.request.user.type_persone == 'S':
-			users = User.objects.filter(type_persone = 'T')
-		else:
-			user = User.objects.filter(type_persone = 'S')
+		try:
+			if self.request.user.type_persone == 'S':
+				users = User.objects.filter(type_persone = 'T')
+			else:
+				users = User.objects.filter(type_persone = 'S')
+		except:
+			users = User.objects.all().exclude(is_staff = True)
+
 		return users
 
-
-class DetailUserView(DetailView):
-	model = User 
-	template_name = 'detail_user_profile.html'
+#class LogoutView(View)
 	
 '''
 class Registration():

@@ -46,7 +46,6 @@ class User(AbstractUser):
 	username = None 
 	name = models.CharField(max_length=120, blank=True, null=True)
 	surname = models.CharField(max_length=120, blank=True, null=True)
-	slug = models.SlugField(max_length=240, blank=False, null=False, unique=True)
 	email = models.EmailField(max_length=120, blank=False, null=False, unique=True)
 
 	is_staff = models.BooleanField(
@@ -106,8 +105,6 @@ class User(AbstractUser):
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email, [self.email], **kwargs)
 
-	def get_absolute_url(self):
-		return reverse('user:user_profile', args = [self.slug])
 
 	def __str__(self):
 		return 'User: {} {} , type: {}, sub: {}'.format(self.name, self.surname, self.type_persone, self.subscription)

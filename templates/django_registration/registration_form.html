@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container ">
+	<div class="row">
+		<div class="col-12">
+			<h1 class='text-center h1'>Регистрация</h1>
+			{% if form.non_field_errors %}
+			<div class="alert alert-danger" role="alert">
+				{{ form.non_field_errors }}
+			</div>
+
+			{% endif %}
+		</div>
+		<div class="col-12 d-flex justify-content-center">
+			{% if user.is_authenticated %}
+			<p class='text-center h3'>Что такое, {{ user.username }}? Вы же уже авторизорваны. 
+				Впрочем, всегда можно <a href="{% url 'user:logout' %}">выйти</a>.<br/><br/></p>
+				{% else %}
+				<form method="post" action="">
+					{% csrf_token %}
+					{% for field in form %}
+					<dl class="register">   
+						
+						<dd class="clearfix">{{ field | as_crispy_field}}</dd>
+					</dl>
+					{% endfor %}
+
+					<input type="submit" value="Вход" class="btn btn-primary">
+				</form>
+
+				{% endif %}
+
+				<br/><br/>
+			</div>
+		</div>
+
+
+
+
+
+
+	{% endblock %}

@@ -18,9 +18,16 @@ from django.urls import path, include
 from django.conf import settings 
 from django.conf.urls.static import static 
 
+from django_registration.backends.activation.views import RegistrationView
+
+from user.forms import CustomFormRegistration
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('user.urls'))
+    path('', include('user.urls')),
+    path('accounts/register/', RegistrationView.as_view(form_class=CustomFormRegistration), name='registration_register'),
+    path('accounts/', include('django_registration.backends.activation.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static( settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
