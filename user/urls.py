@@ -1,17 +1,12 @@
 from django.urls import path, include
 
-from .views import HomePageView
+from .views import HomePageView, ProfileUpdateView
 
 app_name = 'user'
 
 urlpatterns = [
-
 	path('home/', HomePageView.as_view(), name='home'),
-	path('', include('django.contrib.auth.urls')),
-	#path('registration/'),
-	#path('login/'),
-	#path('foget_password_email/'),
-	#path('foget_password_reset/'),
+	path('profile/<int:pk>/',ProfileUpdateView.as_view(), name='update_profile')
 	#path('profile/'),
 	#path('add_status/'),
 

@@ -25,7 +25,6 @@ from user.forms import CustomFormRegistration
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user.urls')),
-    path('auth/', include('social_django.urls'))
     path('accounts/register/', RegistrationView.as_view(form_class=CustomFormRegistration), name='registration_register'),
     path('accounts/', include('django_registration.backends.activation.urls')),
     path('accounts/', include('django.contrib.auth.urls')),

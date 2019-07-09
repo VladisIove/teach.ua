@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic.list import ListView 
-from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 
 from .models import User 
 # Create your views here.
@@ -25,14 +25,7 @@ class HomePageView(ListView):
 
 		return users
 
-#class LogoutView(View)
-	
-'''
-class Registration():
-
-
-class Login():
-
-
-
-'''
+class ProfileUpdateView(UpdateView):
+	template_name = 'profile.html'
+	model = User 
+	fields = '__all__'

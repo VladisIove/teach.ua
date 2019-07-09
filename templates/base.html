@@ -26,9 +26,8 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link active" href="{% url 'user:home' %}">Home <span class="sr-only">(current)</span></a>
         {% if user.is_active %}
-
-        <a class="nav-item nav-link" href="#">Мой профиль</a>
-        <a class="nav-item nav-link" href="{% url 'user:logout' %}">Выйти</a>
+        <a class="nav-item nav-link" href="{% url 'user:update_profile' user.pk %}">Мой профиль</a>
+        <a class="nav-item nav-link" href="{% url 'logout' %}">Выйти</a>
         {% else %}
         <a class="nav-item nav-link " href="{% url 'login' %}">Войти</a>
         <a class="nav-item nav-link " href="{% url 'registration_register' %}">Зарегестрироваться</a>
