@@ -140,3 +140,4 @@ DEFAULT_TO_EMAIL = "#"
 LOGIN_REDIRECT_URL = 'user:home_page'
 LOGOUT_REDIRECT_URL = 'user:home_page'
 
+AUTH_USER_MODEL = 'user.User'
