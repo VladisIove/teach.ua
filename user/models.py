@@ -44,9 +44,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
 	username = None 
-	name = models.CharField(max_length=120, blank=True, null=True)
-	surname = models.CharField(max_length=120, blank=True, null=True)
-	email = models.EmailField(max_length=120, blank=False, null=False, unique=True)
+	name = models.CharField(max_length=120, blank=True, null=True, verbose_name='Имя')
+	surname = models.CharField(max_length=120, blank=True, null=True, verbose_name='Фамилия')
+	email = models.EmailField(max_length=120, blank=False, null=False, unique=True, verbose_name='Email')
+	valid_announcement = models.BooleanField(default=True, verbose_name='Показывать ваш профиль другим пользователям?')
 
 	is_staff = models.BooleanField(
 		_('staff status'),
@@ -66,12 +67,13 @@ class User(AbstractUser):
 
 	objects = UserManager()
 
-	mobile_number = models.CharField(max_length=20, blank=True, null=True)
-	img = models.ImageField(upload_to = 'img_user/', blank=False, null=False)
-	about = models.TextField(max_length=500)
-	age = models.PositiveSmallIntegerField(null=True)
-	city = models.CharField(max_length=50, blank=True, null=True)
-	price_per_hource = models.PositiveSmallIntegerField
+	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Мобильный номер телефона')
+	img = models.ImageField(upload_to = 'img_user/', blank=False, null=False, verbose_name='Фотография профиля')
+	about = models.TextField(max_length=500, verbose_name='О вас:')
+	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст')
+	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
+	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена занятия в час')
+
 
 	TEACHER = 'T'
 	STUDENT = 'S'
@@ -81,14 +83,14 @@ class User(AbstractUser):
 		)
 	type_persone = models.CharField(choices=TYPE_PERSONE, max_length=1, default=STUDENT)
 
-	skype = models.CharField(max_length=120, blank=True, null=True)
-	telegram = models.CharField(max_length=120, blank=True, null=True)
-	viber = models.CharField(max_length=120, blank=True, null=True)
-	instagram = models.CharField(max_length=120, blank=True, null=True)
+	skype = models.CharField(max_length=120, blank=True, null=True, verbose_name='Skype')
+	telegram = models.CharField(max_length=120, blank=True, null=True, verbose_name='Telegram')
+	viber = models.CharField(max_length=120, blank=True, null=True, verbose_name='Viber')
+	instagram = models.CharField(max_length=120, blank=True, null=True, verbose_name='Instagram')
 
-	type_lesson = models.ManyToManyField('TypeLesson', related_name='typelesson' ,blank=True)
+	type_lesson = models.ManyToManyField('TypeLesson', related_name='typelesson' ,blank=True, verbose_name='Вид преподования')
 
-	skill = models.ManyToManyField('Skill', related_name='skill',blank=True)
+	skill = models.ManyToManyField('Skill', related_name='skill',blank=True, verbose_name='Предмет')
 
 	like = models.ManyToManyField('Like', related_name='like',blank=True)
 
@@ -100,7 +102,7 @@ class User(AbstractUser):
 	# I am xz kak realizovat podpicky
 	start_subscription = models.DateTimeField(blank=True, null=True)
 	end_subscription = models.DateTimeField(blank=True, null=True)
-	subscription = models.BooleanField(default=False, null=False)
+	subscription = models.BooleanField(default=False, null=False, verbose_name='Подписка')
 
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email, [self.email], **kwargs)

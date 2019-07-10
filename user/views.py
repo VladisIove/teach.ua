@@ -29,7 +29,11 @@ class HomePageView(ListView):
 class ProfileUpdateView(UpdateView):
 	template_name = 'profile.html'
 	model = User 
-	fields = '__all__'
+	fields = ('name','email', 
+		'surname', 'email',	'valid_announcement', 
+		'mobile_number', 'img', 'about', 
+		'age', 'city','price_per_hource','skype',
+		'telegram',	'viber','instagram','type_lesson','skill')
 
 
 def help_message(request):
