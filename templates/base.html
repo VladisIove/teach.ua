@@ -6,57 +6,90 @@
 	<meta charset="UTF-8">
 	<title>
 		{% block title %}
-			Shelemakha
-		{% endblock %}
-	</title>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0 shrink-to-fit=no'>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" href="{% static 'css/base.css' %}" type='text/css'>
-  <style>
-    body{
-      background: #e4e0ee;
-    }
+   Shelemakha
+   {% endblock %}
+ </title>
+ <meta name='viewport' content='width=device-width, initial-scale=1.0 shrink-to-fit=no'>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ <link rel="stylesheet" href="{% static 'css/base.css' %}" type='text/css'>
+ <style>
+  body{
+      display: table;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+    background: #e4e0ee;
+  }
 
-    .navbar{
-      background: #401f68 !important;
-     
-    }
+main {
+  display: table-row;
+  /* Чтобы ряд занимал всё оставшееся пространство, так как табличная разметка не позволит ему вытолкнуть header и footer */
+  height: 100%;
 
-    .navbar > a, #navbarNavAltMarkup a{
-      color: #d8d6d6 !important;
-      font-size: 1.5rem;
-    }
-    
-    #navbarNavAltMarkup a:hover{
-      text-decoration: underline;
-      text-decoration-color: #716c6b;
-    }
-  </style>
-	{% block css %}
+}
 
-	{% endblock %}
+
+  .navbar{
+    background: #401f68 !important;
+
+  }
+
+  .navbar > a, #navbarNavAltMarkup a{
+    color: #d8d6d6 !important;
+    font-size: 1.5rem;
+  }
+
+  #navbarNavAltMarkup a:hover, footer a:hover{
+    text-decoration: underline;
+    text-decoration-color: #716c6b;
+  }
+
+  footer{
+    background: #401f68;
+  }
+
+  footer p ,h6, a{
+    color: #d8d6d6 !important;
+  }
+
+  .footer-copyright{
+    background-color: #836eaa;
+
+
+</style>
+{% block css %}
+
+{% endblock %}
 </head>
 <body>
-   <div class="ml-lg-5 mr-lg-5 ">
-       {% include 'includes/navbar.html' %}
-   </div>
-   
 
-  
+
+
+<header role="banner">
+   {% include 'includes/navbar.html' %}
+</header>
+<main role="main ">
   <div class="container">
-      {% block content %}
+    {% block content %}
   
   {% endblock %}
   </div>
+</main>
+<footer role="contentinfo">
+  {% include 'includes/footer.html' %}
+</footer>
 
 
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-  {% block js %}
 
-  {% endblock %}
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+{% block js %}
+
+{% endblock %}
 </body>
 </html>
