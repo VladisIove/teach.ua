@@ -3,9 +3,10 @@ __pycache__/
 */__pycache__/
 env 
 *.py[cod]
-migrations/
+
 
 .idea/
 
 media
+
 
