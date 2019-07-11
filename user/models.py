@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
@@ -67,12 +68,12 @@ class User(AbstractUser):
 
 	objects = UserManager()
 
-	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Мобильный номер телефона')
-	img = models.ImageField(upload_to = 'img_user/', blank=False, null=False, verbose_name='Фотография профиля')
+	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
+	img = models.ImageField(upload_to = '', blank=False, null=False, verbose_name='Фотография профиля')
 	about = models.TextField(max_length=500, verbose_name='О вас:')
 	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст')
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
-	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена занятия в час')
+	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена в час')
 
 
 	TEACHER = 'T'
@@ -97,7 +98,7 @@ class User(AbstractUser):
 	comment = models.ManyToManyField('Comment', related_name='comment',blank=True)
 
 	create_time = models.DateTimeField(auto_now_add=True)
-
+	last_change = models.DateTimeField(blank=True, null=True)
 
 	# I am xz kak realizovat podpicky
 	start_subscription = models.DateTimeField(blank=True, null=True)
@@ -107,9 +108,12 @@ class User(AbstractUser):
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email, [self.email], **kwargs)
 
+	def get_absolute_url(self):
+		return reverse('user:update_profile', args = [self.pk])
+
 
 	def __str__(self):
-		return 'User: {} {} , type: {}, sub: {}'.format(self.name, self.surname, self.type_persone, self.subscription)
+		return 'User: {} , type: {}, sub: {}'.format(self.name, self.surname, self.type_persone)
 
 	class Meta:
 		ordering = ['name', 'subscription']
@@ -117,8 +121,14 @@ class User(AbstractUser):
 class TypeLesson(models.Model):
 	type_lesson = models.CharField(max_length=120, blank=False, null=False)
 
+	def __str__(self):
+		return f'{self.type_lesson}'
+
 class Skill(models.Model):
 	skill_name = models.CharField(max_length=120, blank=False, null=False)
+
+	def __str__(self):
+		return f'{self.skill_name}'
 	
 class Like(models.Model):
 	raiting = models.PositiveSmallIntegerField()

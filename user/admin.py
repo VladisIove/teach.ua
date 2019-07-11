@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 	fieldsets = (
 			('Main info',{
 				'classes': ('wide',),
-				'fields': ( ('name','surname'),
+				'fields': ( ('name','surname', 'last_change'),
 			   			  ('img', 'city', 'type_persone' ,'about', ),
 			   			   ('subscription', 'start_subscription', 'end_subscription'))
 				}),
@@ -34,3 +34,4 @@ admin.site.register( User, UserAdmin)
 admin.site.register(Skill)
 admin.site.register(Like)
 admin.site.register(Comment)
+admin.site.register(TypeLesson)

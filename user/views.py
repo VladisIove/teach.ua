@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.list import ListView 
 from django.views.generic.edit import UpdateView
-
-from .models import User 
-from .forms import HelpForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
+from .models import User, TypeLesson
+from .forms import HelpForm, UpdateUserProfile
 # Create your views here.
 
 
@@ -26,14 +29,25 @@ class HomePageView(ListView):
 
 		return users
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(UpdateView, LoginRequiredMixin):
 	template_name = 'profile.html'
-	model = User 
-	fields = ('name','email', 
-		'surname', 'email',	'valid_announcement', 
-		'mobile_number', 'img', 'about', 
-		'age', 'city','price_per_hource','skype',
-		'telegram',	'viber','instagram','type_lesson','skill')
+	form_class = UpdateUserProfile 
+	model = User
+
+	def form_valid(self, form):
+		obj = form.save(commit=True)
+		obj.last_change = timezone.now()
+		obj.save()
+		return HttpResponseRedirect(self.request.path_info)
+
+	def dispatch(self, request, *args, **kwargs):
+		"""Return 403 if flag is not set in a user profile. """
+		if request.user.pk == kwargs['pk']:
+			return super().dispatch(request, *args, **kwargs)
+		return redirect('user:home')
+		
+
+
 
 
 def help_message(request):
