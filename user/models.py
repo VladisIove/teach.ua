@@ -48,7 +48,7 @@ class User(AbstractUser):
 	name = models.CharField(max_length=120, blank=True, null=True, verbose_name='Имя')
 	surname = models.CharField(max_length=120, blank=True, null=True, verbose_name='Фамилия')
 	email = models.EmailField(max_length=120, blank=False, null=False, unique=True, verbose_name='Email')
-	valid_announcement = models.BooleanField(default=True, verbose_name='Показывать ваш профиль другим пользователям?')
+	valid_announcement = models.BooleanField(default=False, verbose_name='Показывать ваш профиль другим пользователям?')
 
 	is_staff = models.BooleanField(
 		_('staff status'),
@@ -69,11 +69,11 @@ class User(AbstractUser):
 	objects = UserManager()
 
 	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
-	img = models.ImageField(upload_to = '', blank=False, null=False, verbose_name='Фотография профиля')
+	img = models.ImageField(upload_to = '', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
 	about = models.TextField(max_length=500, verbose_name='О вас:')
-	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст')
+	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст', blank=True)
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
-	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена в час')
+	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена в час', blank=True, null=True)
 
 
 	TEACHER = 'T'
@@ -131,7 +131,7 @@ class Skill(models.Model):
 		return f'{self.skill_name}'
 	
 class Like(models.Model):
-	raiting = models.PositiveSmallIntegerField()
+	raiting = models.PositiveSmallIntegerField(null=True)
 	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_like')
 
 class Comment(models.Model):

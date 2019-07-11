@@ -34,18 +34,25 @@ class ProfileUpdateView(UpdateView, LoginRequiredMixin):
 	form_class = UpdateUserProfile 
 	model = User
 
-	def form_valid(self, form):
-		obj = form.save(commit=True)
+	def success_url(self, request, *args, **kwargs):
+		pk = kwargs['pk']
+		return redirect(reverse('user:update_profile', args=[pk]))
+
+	def form_valid(self, form, *args, **kwargs):
+		
+		obj = form.save()
 		obj.last_change = timezone.now()
+		pk = obj.pk
 		obj.save()
-		return HttpResponseRedirect(self.request.path_info)
+		return redirect(reverse('user:update_profile', args=[pk]))
 
 	def dispatch(self, request, *args, **kwargs):
 		"""Return 403 if flag is not set in a user profile. """
-		if request.user.pk == kwargs['pk']:
-			return super().dispatch(request, *args, **kwargs)
-		return redirect('user:home')
 		
+		if request.user.pk == kwargs['pk']:
+			return super(ProfileUpdateView, self).dispatch(request, *args, **kwargs)
+		return redirect('user:home')
+
 
 
 
