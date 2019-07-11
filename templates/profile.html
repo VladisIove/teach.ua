@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<style>
+	.main{
+		background: white;
+		border-radius: 10px;
+		padding: 2%;
+	}
+
+	img{
+		
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+	}
+
+	.no-resize {
+		resize: none;
+	}
+
+	h2, label{
+		color: #401f68;
+	}
+
+	.form-check-label{
+		color: #495057;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main container mt-2 ">
+	<h2 class='h2 text-center '>Мой профиль</h2>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+
+	
+	<div class="form-row">
+		<div class="form-group col-md-6 ">	
+			<img src='{{ MEDIA_ROOT }}{{ form.img.value.url }}'  alt="" >
+		
+
+			{{ form.img | as_crispy_field }}
+			
+		</div>
+		<div class="form-group col-md-6 order-md-first">
+	
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					{{ form.name| as_crispy_field }}
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					{{ form.surname| as_crispy_field }}
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					{{ form.email| as_crispy_field }}
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					{{ form.age | as_crispy_field}} 
+				</div>
+				<div class="form-group col-md-6">
+					{{ form.price_per_hource | as_crispy_field}} 
+				</div>
+
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					{{ form.mobile_number| as_crispy_field }}
+				</div>
+								<div class="form-group col-md-6">
+					{{ form.city | as_crispy_field}} 
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					{{ form.type_lesson| as_crispy_field }}
+				</div>
+				<div class="form-group col-md-6">
+					{{ form.skill | as_crispy_field}} 
+				</div>
+			</div>
+			
+
+
+
+		</div>
+
+
+	</div>
+	
+	<div class="form-row">
+		<div class="form-group col-md-3">
+			{{ form.skype | as_crispy_field }}
+		</div>
+		<div class="form-group col-md-3">
+			{{ form.viber | as_crispy_field }}
+		</div>	
+		<div class="form-group col-md-3">
+			{{ form.telegram | as_crispy_field }}
+		</div>
+		<div class="form-group col-md-3">
+			{{ form.instagram | as_crispy_field }}
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-12">
+			{{ form.about | as_crispy_field }}
+		</div>
+	
+	</div>
+
+	<div class="form-row">
+
+		<div class="form-group col">
+			<div class="text-right">
+			{{ form.valid_announcement | as_crispy_field }}
+			
+			<button class='btn btn-primary mb-2' type=submit>Отправить</button></div>
+			</div>
+		</div>
+	</div>
+		
+
+	</form>
+	</div>
+
+
+{% endblock %}

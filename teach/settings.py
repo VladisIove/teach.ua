@@ -120,7 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIRS = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join('media/')
@@ -131,12 +131,15 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = '##'
-EMAIL_HOST_PASSWORD = "#"
+EMAIL_HOST_USER = 'vlad.shelemakha0302@gmail.com'
+EMAIL_HOST_PASSWORD = "thisismyemail"
 DEFAULT_FROM_EMAIL = 'Vlad'
-DEFAULT_TO_EMAIL = "#"
+DEFAULT_TO_EMAIL = "thisismyemail"
 
 
-LOGIN_REDIRECT_URL = 'user:home_page'
-LOGOUT_REDIRECT_URL = 'user:home_page'
+LOGIN_REDIRECT_URL = 'user:home'
+LOGOUT_REDIRECT_URL = 'user:home'
 
+AUTH_USER_MODEL = 'user.User'
+
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window

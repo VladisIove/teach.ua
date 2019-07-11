@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block css %}
+<style>
+	.main{
+		background: white;
+		border-radius: 10px;
+	}
+
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="container main mt-2">
+	<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Возможности</th>
+      <th scope="col">Обычный</th>
+      <th scope="col">Улучшеный</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Первая возможность</th>
+      <td>Есть</td>
+      <td>Есть</td>
+
+    </tr>
+    <tr>
+      <th scope="row">2 возможность</th>
+      <td>Есть</td>
+      <td>Есть</td>
+
+    </tr>
+    <tr>
+      <th scope="row">3 возможность</th>
+      <td>Есть</td>
+      <td>Есть</td>
+    </tr>  
+     <tr>
+      <th scope="row">4 возможность</th>
+      <td>Нету</td>
+      <td>Есть</td>
+    </tr>
+    <tr>
+      <th scope="row">5 возможность</th>
+      <td>Нету</td>
+      <td>Есть</td>
+    </tr>    
+    <tr>
+      <th scope="row">6 возможность</th>
+      <td>Нету</td>
+      <td>Есть</td>
+    </tr>
+  </tbody>
+</table>
+
+            <button type="button" class="btn btn-primary mb-2" >
+              Оформить подписку
+            </button>
+	</div>
+{% endblock %}

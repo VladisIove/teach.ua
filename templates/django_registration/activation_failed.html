@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block css %}
+<style>
+		.main{
+		background: white;
+		border-radius: 10px;
+		padding: 2%;
+		text-align: center;
+}
+
+#go_home{
+	color: #401f68 !important;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+	<div class="container main mt-5">
+		<div class="row">
+			<div class="col">
+				<div class="h2">Что-то пошло не так:(</div>
+				<a href="{% url 'user:home' %}" id='go_home' class='h3'>Перейти к объявлениям?</a>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

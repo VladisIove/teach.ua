@@ -1,0 +1,24 @@
+
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+  <a class="navbar-brand ml-lg-5" href="{% url 'user:home' %}">Teacher.ua</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+    <div class="navbar-nav align-self-end mr-lg-5"  >
+      <a class="nav-item nav-link active" href="{% url 'user:home' %}">Объявления <span class="sr-only">(current)</span></a>
+      {% if user.is_active %}
+      <a class="nav-item nav-link" href="{% url 'user:update_profile' user.pk %}">Мой профиль</a>
+      <a class="nav-item nav-link" href="{% url 'logout' %}">Выйти</a>
+      {% else %}
+      <a class="nav-item nav-link " href="{% url 'login' %}">Войти</a>
+      <a class="nav-item nav-link " href="{% url 'registration_register' %}">Зарегестрироваться</a>
+      {% endif %}
+
+    </div>
+  </div>
+</nav>
+
+
