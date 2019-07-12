@@ -36,7 +36,7 @@ class UpdateUserProfile( forms.ModelForm ):
 		widget=forms.TextInput(attrs={'readonly':'readonly'})
 		)
 
-	about = forms.CharField(required=False, label='О себе:', widget=forms.Textarea)
+	about = forms.CharField(required=True, label='О себе:', widget=forms.Textarea)
 
 	age = forms.CharField(required=True, label='Взораст:')
 
@@ -61,3 +61,17 @@ class HelpForm( forms.Form ):
 	name = forms.CharField(max_length=120, help_text='Имя и Фамилия')
 	email = forms.EmailField( max_length = 200)
 	message = forms.CharField(widget = forms.Textarea)
+
+
+class FilterForm( forms.Form ):
+
+	min_age = forms.IntegerField(label='Минимальный возраст', required=False, widget=forms.TextInput(attrs={'placeholder': '12'}))
+	max_age = forms.IntegerField(label='Максимальный возраст', required=False, widget=forms.TextInput(attrs={'placeholder': '90'}))
+	min_salary = forms.IntegerField(label='Минимальтая плата в час', required=False, widget=forms.TextInput(attrs={'placeholder': '0'}))
+	max_salary = forms.IntegerField(label='Максимальная плата в час', required=False, widget=forms.TextInput(attrs={'placeholder': '200'}))
+	city = forms.CharField(label='Город', required=False, widget=forms.TextInput(attrs={'placeholder': 'Search'}))
+	type_work = forms.ModelMultipleChoiceField(label = 'Вид занятости:',queryset=TypeLesson.objects.all(),
+												widget=forms.CheckboxSelectMultiple,required=False)
+	name_skill = forms.CharField(label='Название предмета', required=False, widget=forms.TextInput(attrs={'placeholder': 'Математика'}))
+	# rating = forms.BooleanField(label='Фильтровать по рейтингу', required=False) Dont working, becouse not like 
+	#comment = forms.BooleanField(label='Есть комментарии у пользователя', required=False) Dont working, becouse not comment

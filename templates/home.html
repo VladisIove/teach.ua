@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Teach.ua{% endblock %}
-{% block content %}
+{% load crispy_forms_tags %}
 {% block css %}
 <style>
 
-  .filter{
+  .main, .filter{
     background: white;
     border-radius: 10px;
   }
 
   .main{
     background: white;
- 
+
   }
 
   .modal-dialog {
@@ -26,82 +26,61 @@
     min-height: 100% ;
 
   }
-
+.form-check{
+  display: inline-block;
+}
 
 </style>
 {% endblock %}
+{% block content %}
+
 
 
 <div class="row">
   <div class="col-12 filter mt-3 mb-3">
     <h1>Filter:</h1>
     <div class="ml-lg-5">
-      <form>
-        <div class="form-row">
+      <form method="GET">
+        
+        <div class="form-group col-md-12 order-md-first">
 
-
-          <div class="form-group col-md-6 row">
-            <label for="inputEmail4" class="col-sm-1 col-form-label">Skill</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputEmail4" placeholder="скилл">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{ form.min_age| as_crispy_field }}
+            </div>
+                        <div class="form-group col-md-6">
+              {{ form.max_age| as_crispy_field }}
             </div>
           </div>
 
-          <div class="form-group col-md-6 row">
-            <label for="inputPassword4" class="col-sm-1 col-form-label">City</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputPassword4" placeholder="Город">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{ form.min_salary| as_crispy_field }}
+            </div> 
+                       <div class="form-group col-md-6">
+              {{ form.max_salary| as_crispy_field }}
             </div>
           </div>
 
-          <div class="form-group col-md-6 row">
-            <label for="inputEmail4" class="col-sm-1 col-form-label">Age</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control m-1" id="inputEmail4" placeholder="Минимум возраст">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{ form.city | as_crispy_field}} 
             </div>
-            <div class="col-sm-5">
-              <input type="text" class="form-control m-1" id="inputEmail4" placeholder="Максимум возраст">
+            <div class="form-group col-md-6">
+              {{ form.name_skill | as_crispy_field}} 
             </div>
-          </div>
 
-          <div class="form-group col-md-6 row">
-            <label for="inputEmail4" class="col-sm-3 col-form-label">Зарплата в час</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control m-1" id="inputEmail4" placeholder="Минимум">
-            </div>
-            <div class="col-sm-4">
-              <input type="text" class="form-control m-1" id="inputEmail4" placeholder="Максимум">
-            </div>
           </div>
-          
-          <div class="col-sm-2">Checkbox</div>
-          <div class="col-sm-10">
-            <div class=" row">
-              <div class="col-4">
-                <input class="form-check-input" type="checkbox" id="gridCheck1">
-                <label class="form-check-label" for="gridCheck1">
-                  Example checkbox
-                </label>
-              </div>
-              <div class="col-4">
-                <input class="form-check-input" type="checkbox" id="gridCheck1">
-                <label class="form-check-label" for="gridCheck1">
-                  Example checkbox
-                </label>
-              </div>
-              <div class="col-4">
-                <input class="form-check-input" type="checkbox" id="gridCheck1">
-                <label class="form-check-label" for="gridCheck1">
-                  Example checkbox
-                </label>
-              </div>
+            <div class="form-group col-md-12">
+              {{ form.type_work | as_crispy_field}} 
             </div>
-          </div>
+
+
+
         </div>
 
-         
-        </div>
-        <div class="form-group col-md-12 row  ">
+
+        <div class="form-group col-md-12 row  justify-content-end">
           <button type="submit" class="btn btn-primary">Фильтровать</button>
         </div>
       </form>
@@ -174,7 +153,8 @@
         </div>
       </div>
     </div>
-
+    {% empty %}
+    <h1>К сожелению такого объявления нету:(</h1>
     {% endfor %}
   </div>
 </div>
