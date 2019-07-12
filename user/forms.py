@@ -6,6 +6,9 @@ from django_registration.forms import RegistrationFormUniqueEmail
 from .models import User , TypeLesson, Skill
 
 class CustomFormRegistration(RegistrationFormUniqueEmail):
+	name = forms.CharField(required=True, label='Имя',  max_length=100)
+	surname = forms.CharField(required=True, label='Фамилия', max_length=100)
+	email = forms.CharField(required=True, label='E-mail',  max_length=100)
 
 	class Meta():
 		model = User 
@@ -35,9 +38,9 @@ class UpdateUserProfile( forms.ModelForm ):
 
 	about = forms.CharField(required=False, label='О себе:', widget=forms.Textarea)
 
-	age = forms.CharField(required=False, label='Взораст:')
+	age = forms.CharField(required=True, label='Взораст:')
 
-	price_per_hource = forms.CharField(required=False, label='Цена за час:')
+	price_per_hource = forms.CharField(required=True, label='Цена за час:')
 
 
 	def __init__(self, *args, **kwargs):

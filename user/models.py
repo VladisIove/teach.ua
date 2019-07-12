@@ -79,10 +79,10 @@ class User(AbstractUser):
 	TEACHER = 'T'
 	STUDENT = 'S'
 	TYPE_PERSONE = (
-		(TEACHER, 'teacher'),
-		(STUDENT, 'student'),
+		(TEACHER, 'Преподователь'),
+		(STUDENT, 'Студент'),
 		)
-	type_persone = models.CharField(choices=TYPE_PERSONE, max_length=1, default=STUDENT)
+	type_persone = models.CharField(choices=TYPE_PERSONE, max_length=1, default=STUDENT, verbose_name='Кем хотите быть на teach.ua')
 
 	skype = models.CharField(max_length=120, blank=True, null=True, verbose_name='Skype')
 	telegram = models.CharField(max_length=120, blank=True, null=True, verbose_name='Telegram')

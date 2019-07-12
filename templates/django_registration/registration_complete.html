@@ -1,11 +1,29 @@
 {% extends "base.html"  %}
+{% block title %}Регистрация завершена teach.ua{% endblock %}
+{% block css %}
+<style>
+		.main{
+		background: white;
+		border-radius: 10px;
+		padding: 2%;
+		text-align: center;
+}
+
+
+</style>
+{% endblock %}
 {% block content %}
-<div class="container text-center">
+
+<div class="container text-center main mt-5">
+	{% if user.is_authenticated}
+	<h1 class='text-center'>Что такое, {{ user.username }}? Вы же уже авторизорваны. </h1>
+  <p class='text-center'>Впрочем, всегда можно <a href="{% url 'logout' %}">выйти</p>
+{% else %}
 <h1>Регистрация завершена</h1>
 <p>Спасибо за уделённое время. На ваш e-mail отправлен 
 код подтверждения. Необходимо подтвердить регистрацию, 
 просто кликнув по указанной ссылке.</p><br/><br/>
-
+{% endif %}
 </div>
 {% endblock %}
 

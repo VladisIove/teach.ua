@@ -1,62 +1,476 @@
 {% extends 'base.html' %}
+{% block title %}Подписка teach.ua{% endblock %}
 {% block css %}
 <style>
 	.main{
 		background: white;
 		border-radius: 10px;
 	}
+.plans .page-content {
+  padding: 20px 0 20px;
+}
+@media (min-width: 768px) {
+  .plans .page-content {
+    padding: 30px 0 30px;
+  }
+}
+@media (min-width: 992px) {
+  .plans .page-content {
+    padding: 40px 0 100px;
+  }
+}
+.plans-grid {
+  zoom: 1;
+  opacity: 0;
+  min-height: 2561px;
+  transition: 0.3s;
+}
+.plans-grid::before,
+.plans-grid::after {
+  content: '';
+  display: table;
+}
+.plans-grid::after {
+  clear: both;
+}
+@media (min-width: 768px) {
+  .plans-grid {
+    max-width: 1000px;
+    min-height: 907px;
+    margin: 0 auto;
+    padding: 30px 0px 50px;
+  }
+}
+@media (min-width: 992px) {
+  .plans-grid {
+    max-width: 1230px;
+  }
+}
+@media (min-width: 1200px) {
+  .plans-grid {
+    min-height: 787px;
+    padding-left: 280px;
+  }
+}
+.plans-grid-show {
+  opacity: 1;
+  min-height: 0;
+}
+.plans-grid-plan,
+.plans-grid-plan-premium {
+  position: relative;
+  margin: 20px auto;
+  max-width: 335px;
+  background-color: #F4F8F9;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+@media (min-width: 768px) {
+  .plans-grid-plan,
+  .plans-grid-plan-premium {
+    margin: 0;
+    max-width: none;
+    width: 30.3333%;
+    float: left;
+    box-shadow: none;
+  }
+}
+@media (min-width: 1200px) {
+  .plans-grid-plan,
+  .plans-grid-plan-premium {
+    max-width: 300px;
+  }
+}
+@media (min-width: 768px) {
+  .plans-grid-plan-premium {
+    z-index: 1;
+    padding: 20px 0;
+    margin: -20px 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: white;
+  }
+}
+@media (min-width: 1200px) {
+  .plans-grid-plan-premium {
+    max-width: 335px;
+  }
+}
+.plans-grid-title {
+  padding: 40px 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'econ sans medium', Helvetica, Arial, Sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 16px;
+  color: black;
+}
+.plans-grid-price {
+  text-align: center;
+}
+.plans-grid-currency {
+  position: relative;
+  top: -10px;
+  font-family: 'econ sans light', Helvetica, Arial, Sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  color: black;
+}
+.plans-grid-amount{
+  font-family: 'econ sans light', Helvetica, Arial, Sans-serif;
+  font-size: 36px;
+  line-height: 28px;
+  color: black;
+}
+.plans-grid-oldamount {
+  font-family: 'econ sans light', Helvetica, Arial, Sans-serif;
+  font-size: 40px;
+  line-height: 28px;
+  color: black;
+}
+.plans-grid-oldamount {
+  position: relative;
+}
+
+.fixed_text_1 {
+    color:#FF0000;  /* цвет зачеркивающей линии */
+}
+.fixed_text_1 span {
+    color:#000000;  /* цвет зачеркиваемого текста */
+}
 
 
+.plans-grid-oldamount::before,
+.plans-grid-oldamount::after {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  height: 0;
+  
+}
+.plans-grid-oldamount::after {
+  top: 60%;
+}
+.plans-grid-duration {
+  padding-bottom: 30px;
+  text-align: center;
+  font-family: 'econ sans light', Helvetica, Arial, Sans-serif;
+  font-size: 17px;
+  line-height: 23px;
+  color: #401f68;
+}
+.plans-grid-buy {
+  padding-bottom: 30px;
+  text-align: center;
+}
+.plans-grid-buybutton {
+  display: inline-block;
+  padding: 14px 34px;
+  border-radius: 24px;
+  font-family: 'econ sans medium', Helvetica, Arial, Sans-serif;
+  font-size: 14px;
+  line-height: 1;
+  border: 2px solid #401f68;
+  background-color: #401f68;
+  color: white;
+  text-transform: uppercase;
+}
+.plans-grid-guarantee,
+.plans-grid-adaptive,
+.plans-grid-askatutor,
+.plans-grid-tutorsessions,
+.plans-grid-simtests,
+.plans-grid-essays,
+.plans-grid-questions,
+.plans-grid-mobile,
+.plans-grid-sections,
+.plans-grid-subscription {
+  padding: 10px 0;
+  border-top: 1px solid #D8D8D8;
+}
+@media (min-width: 1200px) {
+  .plans-grid-guarantee,
+  .plans-grid-adaptive,
+  .plans-grid-askatutor,
+  .plans-grid-tutorsessions,
+  .plans-grid-simtests,
+  .plans-grid-essays,
+  .plans-grid-questions,
+  .plans-grid-mobile,
+  .plans-grid-sections,
+  .plans-grid-subscription {
+    padding: 0;
+  }
+}
+.plans-grid-label {
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'econ sans light', Helvetica, Arial, Sans-serif;
+  font-size: 20px;
+  line-height: 25px;
+  color: #401f68;
+}
+@media (min-width: 1200px) {
+  .plans-grid-label {
+    display: none;
+  }
+}
+.plans-grid-value {
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'econ sans bold', Helvetica, Arial, Sans-serif;
+  font-size: 17px;
+  line-height: 25px;
+  color: black;
+}
+@media (min-width: 1200px) {
+  .plans-grid-value {
+    line-height: 55px;
+  }
+}
+.plans-grid .icon-yes,
+.plans-grid .icon-no {
+  margin-bottom: -8px;
+}
+.plans-grid-labels {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .plans-grid-labels {
+    display: block;
+    width: 275px;
+    float: left;
+    margin-left: -275px;
+    margin-top: 183px;
+  }
+  .plans-grid-hasbuynow .plans-grid-labels {
+    margin-top: 259px;
+  }
+}
+.plans-grid-labelslabel {
+  text-align: right;
+  font-weight: bold;
+  position: relative;
+}
+@media (min-width: 992px) {
+  .plans-grid-labelslabel {
+    border-top: 1px solid #D8D8D8;
+    white-space: nowrap;
+    font-size: 17px;
+    line-height: 55px;
+    color: #401f68;
+  }
+}
+.plans-grid-labelslabel .plans-grid-hover {
+  display: none;
+}
+@media (min-width: 992px) {
+  .plans-grid-labelslabel:hover .plans-grid-hover {
+    display: block;
+    position: absolute;
+    padding: 15px;
+    width: 220px;
+    top: 2px;
+    left: 95%;
+    white-space: normal;
+    text-align: center;
+    vertical-align: middle;
+    color: #646464;
+    font-size: 16px;
+    line-height: 25px;
+    border: 1px solid #8bc4da;
+    background-color: #ffffff;
+    z-index: 30;
+  }
+  .plans-grid-labelslabel:hover .plans-grid-hover:before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 20;
+    top: 17px;
+    left: -20px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: #8bc4da;
+    border-style: solid;
+    transform: rotate(90deg);
+  }
+}
+  h1, h2, label{
+    color: #401f68;
+  }
 </style>
 {% endblock %}
 {% block content %}
+
+
+
+
 <div class="container main mt-2">
-	<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Возможности</th>
-      <th scope="col">Обычный</th>
-      <th scope="col">Улучшеный</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Первая возможность</th>
-      <td>Есть</td>
-      <td>Есть</td>
+    
+      <h1 class="text-center p-2">Оформить подписку</h1>
+      <div class="plans-grid plans-grid-hasbuynow plans-grid-show">
+        <div class="plans-grid-labels">
+          <div class="plans-grid-labelslabel">Количество предметов&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Полный выбор фильтров&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Оценивай людей&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Оставляй комментарии&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Личная переписка&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Выделение объявления&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Объявление видно всем&nbsp;&nbsp;&nbsp;</div>
+          <div class="plans-grid-labelslabel">Выделенные комментарии&nbsp;&nbsp;&nbsp;</div>
+        </div>
+        <div class="plans-grid-plan">
+          <div class="plans-grid-title">Обычный</div>
+          <div class="plans-grid-price"><span class="plans-grid-currency">Доступна всем</span><s class="fixed_text_1"><span class="plans-grid-oldamount"></span></s> <span class="plans-grid-currency"></span><span class="plans-grid-amount"></span></div>
+          <div class="plans-grid-duration">на 1 месяц</div>
+          <div class="plans-grid-buy">
+            <a class="plans-grid-buybutton" href="#">Подключена</a>
+          </div>
 
-    </tr>
-    <tr>
-      <th scope="row">2 возможность</th>
-      <td>Есть</td>
-      <td>Есть</td>
+          <div class="plans-grid-guarantee">
+            <div class="plans-grid-label">Количество предметов</div>
+            <div class="plans-grid-value">3</div>
+          </div>
 
-    </tr>
-    <tr>
-      <th scope="row">3 возможность</th>
-      <td>Есть</td>
-      <td>Есть</td>
-    </tr>  
-     <tr>
-      <th scope="row">4 возможность</th>
-      <td>Нету</td>
-      <td>Есть</td>
-    </tr>
-    <tr>
-      <th scope="row">5 возможность</th>
-      <td>Нету</td>
-      <td>Есть</td>
-    </tr>    
-    <tr>
-      <th scope="row">6 возможность</th>
-      <td>Нету</td>
-      <td>Есть</td>
-    </tr>
-  </tbody>
-</table>
+          <div class="plans-grid-adaptive">
+            <div class="plans-grid-label">Полный выбор фильтров</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
 
-            <button type="button" class="btn btn-primary mb-2" >
-              Оформить подписку
-            </button>
+          <div class="plans-grid-simtests">
+            <div class="plans-grid-label">Оценивай людей</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-askatutor">
+            <div class="plans-grid-label">Оставляй комментарии</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-tutorsessions">
+            <div class="plans-grid-label">Личная переписка</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+          <div class="plans-grid-essays">
+            <div class="plans-grid-label">Выделение объявления</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+          <div class="plans-grid-questions">
+            <div class="plans-grid-label">Объявление видно всем</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+          <div class="plans-grid-subscription">
+            <div class="plans-grid-label">Выделенные комментарии</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+        </div>
+
+        <div class="plans-grid-plan-premium">
+          <div class="plans-grid-title">VIP</div>
+          <div class="plans-grid-price"><span class="plans-grid-currency">&#8372;</span><s class="fixed_text_1"><span class="plans-grid-oldamount">250</span></s> <span class="plans-grid-currency">&#8372;</span><span class="plans-grid-amount">150</span></div>
+          <div class="plans-grid-duration">Подключить на 1 месяц</div>
+          <div class="plans-grid-buy">
+            <a class="plans-grid-buybutton" href="#">Оформить подписку</a>
+          </div>
+
+                   <div class="plans-grid-guarantee">
+            <div class="plans-grid-label">Количество предметов</div>
+            <div class="plans-grid-value">10</div>
+          </div>
+
+          <div class="plans-grid-adaptive">
+            <div class="plans-grid-label">Полный выбор фильтров</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-simtests">
+            <div class="plans-grid-label">Оценивай людей</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-askatutor">
+            <div class="plans-grid-label">Оставляй комментарии</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-tutorsessions">
+            <div class="plans-grid-label">Личная переписка</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-essays">
+            <div class="plans-grid-label">Выделение объявления</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-questions">
+            <div class="plans-grid-label">Объявление видно всем</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-subscription">
+            <div class="plans-grid-label">Выделенные комментарии</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+        </div>
+
+        <div class="plans-grid-plan">
+          <div class="plans-grid-title">Повышенный</div>
+          <div class="plans-grid-price"><span class="plans-grid-currency">&#8372;</span><s class="fixed_text_1"><span class="plans-grid-oldamount">150</span></s> <span class="plans-grid-currency">&#8372;</span><span class="plans-grid-amount">100</span></div>
+          <div class="plans-grid-duration">Подключить на 1 месяц</div>
+          <div class="plans-grid-buy">
+            <a class="plans-grid-buybutton" href="#">Оформить подписку</a>
+          </div>
+
+                             <div class="plans-grid-guarantee">
+            <div class="plans-grid-label">Количество предметов</div>
+            <div class="plans-grid-value">5</div>
+          </div>
+
+          <div class="plans-grid-adaptive">
+            <div class="plans-grid-label">Полный выбор фильтров</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-simtests">
+            <div class="plans-grid-label">Оценивай людей</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-askatutor">
+            <div class="plans-grid-label">Оставляй комментарии</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-tutorsessions">
+            <div class="plans-grid-label">Личная переписка</div>
+            <div class="plans-grid-value"><span style='color: #401f68'>✓</span></div>
+          </div>
+
+          <div class="plans-grid-essays">
+            <div class="plans-grid-label">Выделение объявления</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+          <div class="plans-grid-questions">
+            <div class="plans-grid-label">Объявление видно всем</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+
+          <div class="plans-grid-subscription">
+            <div class="plans-grid-label">Выделенные комментарии</div>
+            <div class="plans-grid-value"><span style='color:red'>✗</span></div>
+          </div>
+        </div>
+      </div>
+
 	</div>
 {% endblock %}
