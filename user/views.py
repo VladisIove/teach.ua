@@ -25,14 +25,11 @@ class HomePageView(FormMixin,ListView):
 
 		if self.request.user.is_authenticated:
 			if self.request.user.type_persone == 'S':
-				users = User.objects.filter(type_persone = 'T', valid_announcement=False )
+				users = User.objects.filter(type_persone = 'T', valid_announcement=True )
 			else:
-				users = User.objects.filter(type_persone = 'S', valid_announcement=False )
+				users = User.objects.filter(type_persone = 'S', valid_announcement=True )
 		else:
-			users = User.objects.all().exclude(valid_announcement=False  )
-
-
-
+			users = User.objects.all().filter(valid_announcement=True  )
 
 		if self.request.GET :
 			min_age = self.request.GET['min_age'] if self.request.GET['min_age'] else 0 					
