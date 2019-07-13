@@ -4,42 +4,43 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
 
-
+import json 
+from datetime import datetime
 # Create your models here.
 
 
 class UserManager(BaseUserManager):
-    """Define a model manager for User model with no username field."""
+	"""Define a model manager for User model with no username field."""
 
-    use_in_migrations = True
+	use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
-        """Create and save a User with the given email and password."""
-        if not email:
-            raise ValueError('The given email must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+	def _create_user(self, email, password, **extra_fields):
+		"""Create and save a User with the given email and password."""
+		if not email:
+			raise ValueError('The given email must be set')
+		email = self.normalize_email(email)
+		user = self.model(email=email, **extra_fields)
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
 
-    def create_user(self, email, password=None, **extra_fields):
-        """Create and save a regular User with the given email and password."""
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
+	def create_user(self, email, password=None, **extra_fields):
+		"""Create and save a regular User with the given email and password."""
+		extra_fields.setdefault('is_staff', False)
+		extra_fields.setdefault('is_superuser', False)
+		return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
-        """Create and save a SuperUser with the given email and password."""
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+	def create_superuser(self, email, password, **extra_fields):
+		"""Create and save a SuperUser with the given email and password."""
+		extra_fields.setdefault('is_staff', True)
+		extra_fields.setdefault('is_superuser', True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+		if extra_fields.get('is_staff') is not True:
+			raise ValueError('Superuser must have is_staff=True.')
+		if extra_fields.get('is_superuser') is not True:
+			raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email, password, **extra_fields)
+		return self._create_user(email, password, **extra_fields)
 
 
 
@@ -69,7 +70,7 @@ class User(AbstractUser):
 	objects = UserManager()
 
 	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
-	img = models.ImageField(upload_to = '', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
+	img = models.ImageField(upload_to = 'media/', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
 	about = models.TextField(max_length=500, verbose_name='О вас:')
 	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст', blank=True)
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
@@ -93,9 +94,7 @@ class User(AbstractUser):
 
 	skill = models.ManyToManyField('Skill', related_name='skill',blank=True, verbose_name='Предмет')
 
-	like = models.ManyToManyField('Like', related_name='like',blank=True)
-
-	comment = models.ManyToManyField('Comment', related_name='comment',blank=True)
+	like = models.ManyToManyField('self', related_name='like')
 
 	create_time = models.DateTimeField(auto_now_add=True)
 	last_change = models.DateTimeField(blank=True, null=True)
@@ -111,6 +110,19 @@ class User(AbstractUser):
 	def get_absolute_url(self):
 		return reverse('user:update_profile', args = [self.pk])
 
+	def as_json(self):
+		context = {}
+		for key, value in self.__dict__.items():
+			if key != 'last_change' and key != 'valid_announcement' and key != 'start_subscription' and key != 'end_subscription' and key != 'first_name' and key != 'last_name' and key != "_state" and key != 'password' and key != 'last_login' and key != 'is_superuser' and key != 'date_joined' and key != 'is_staff' and key != 'is_active' and key != 'create_time':
+				context[key] = value
+				if key == 'subscription':
+					if context[key] == True:
+						context[key] = 'true'
+					else:
+						context[key] = 'false'
+				if context[key] == None:
+					context[key] = 'none'
+		return context
 
 	def __str__(self):
 		return 'User: {} , type: {}, sub: {}'.format(self.name, self.surname, self.type_persone)
@@ -130,11 +142,12 @@ class Skill(models.Model):
 	def __str__(self):
 		return f'{self.skill_name}'
 	
-class Like(models.Model):
-	raiting = models.PositiveSmallIntegerField(null=True)
-	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_like')
 
 class Comment(models.Model):
-	text = models.TextField(max_length=500)
+	text = models.TextField(max_length=500, null=True)
+	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_comment')
 	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_comment')
 	date = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['date']

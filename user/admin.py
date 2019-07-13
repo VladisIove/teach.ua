@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, TypeLesson, Skill, Like, Comment
+from .models import User, TypeLesson, Skill, Comment
 # Register your models here.
 
 
@@ -22,7 +22,7 @@ class UserAdmin(admin.ModelAdmin):
 				}),
 			('Other info', {
 				'classes': ('collapse',),
-				'fields': ('type_lesson','skill','like','comment')
+				'fields': ('type_lesson','skill','like')
 				}),
 
 				)
@@ -32,6 +32,6 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register( User, UserAdmin)
 admin.site.register(Skill)
-admin.site.register(Like)
+
 admin.site.register(Comment)
 admin.site.register(TypeLesson)
