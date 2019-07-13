@@ -2,56 +2,58 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container ">
-	<div class="row">
-		<div class="col-12">
-			<h1 class='text-center h1'>Авторизация</h1>
-{% if form.non_field_errors %}
-<div class="alert alert-danger" role="alert">
- {{ form.non_field_errors }}
-</div>
+    <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+    <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
+    <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+    <div class="container ">
+        <div class="row">
+            <div class="col-12">
+                <h1 class='text-center h1'>Авторизация</h1>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
 
-{% endif %}
-		</div>
-		<div class="col-12 d-flex justify-content-center">
-			{% if user.is_authenticated %}
-<p class='text-center h3'>Что такое, {{ user.username }}? Вы же уже авторизорваны. 
-Впрочем, всегда можно <a href="{% url 'user_profile:logout' %}">выйти</a>.<br/><br/></p>
-{% else %}
-<form method="post" action="">
-		{% csrf_token %}
-<dl class="register">   
-{% for field in form %}
-    <dd class="clearfix">{{ field | as_crispy_field}}
-    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Вход" class="btn btn-primary">
-</form>
-    
-
-
- <br/><br/>
-		</div>
-		<div class="col-12">
-		<div class="row">
-					<div class="col-12">
-						<a href="{% url 'password_reset' %}">Забыли пароль?</a>
-					</div>
-					<div class="col-12">
-						<a href="{% url 'registration_register' %}">Регистрация</a>
-					</div>
-				</div>		
-{% endif %}
-		</div>
-	</div>
+                {% endif %}
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                {% if user.is_authenticated %}
+                    <p class='text-center h3'>Что такое, {{ user.username }}? Вы же уже авторизорваны.
+                        Впрочем, всегда можно <a href="{% url 'user_profile:logout' %}">выйти</a>.<br/><br/></p>
+                {% else %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <dl class="register">
+                            {% for field in form %}
+                                <dd class="clearfix">{{ field | as_crispy_field }}
+                                    {% if field.help_text %}
+                                        <div class="clearfix">{{ field.help_text }}</div>{% endif %}
+                                    {% if field.errors %}
+                                        <div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
+                                </dd>
+                            {% endfor %}
+                        </dl>
+                        <input type="submit" value="Вход" class="btn btn-primary">
+                    </form>
 
 
 
+                    <br/><br/>
+                    </div>
+                    <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="{% url 'password_reset' %}">Забыли пароль?</a>
+                        </div>
+                        <div class="col-12">
+                            <a href="{% url 'registration_register' %}">Регистрация</a>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+        </div>
 
 
-</div>
+    </div>
 
 {% endblock %}

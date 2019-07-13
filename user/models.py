@@ -93,9 +93,7 @@ class User(AbstractUser):
 
 	skill = models.ManyToManyField('Skill', related_name='skill',blank=True, verbose_name='Предмет')
 
-	like = models.ManyToManyField('Like', related_name='like',blank=True)
-
-	comment = models.ManyToManyField('Comment', related_name='comment',blank=True)
+	like = models.ManyToManyField('self', related_name='like')
 
 	create_time = models.DateTimeField(auto_now_add=True)
 	last_change = models.DateTimeField(blank=True, null=True)
@@ -135,6 +133,7 @@ class Like(models.Model):
 	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_like')
 
 class Comment(models.Model):
-	text = models.TextField(max_length=500)
+	text = models.TextField(max_length=500, null=True)
+	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_comment')
 	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_comment')
 	date = models.DateTimeField(auto_now_add=True)
