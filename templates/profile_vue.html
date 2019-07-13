@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+	<div id="app">
+		<div class="search-wrapper">
+			<input type="text" v-model="search" placeholder="Search title.."/>
+			<label>Search title:</label>			
+			<input type="text" v-model="search_city" placeholder="Search title.."/>
+			<label>Search title:</label>
+		</div>
+
+
+		<div class="container" v-for='value in filteredList' style='background-color: white;'>
+			<p><%value.name%></p>
+			<p><%value.age%></p>
+			<p><%value.price%></p>
+			<p><%value.city%></p>
+
+		</div>
+	</div>
+	
+{% endblock %}
+
+{% block js %}
+<!-- production version, optimized for size and speed -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+
+
+
+
+	app = new Vue({
+		delimiters: ['<%', '%>'],
+		el: '#app',
+		data: {
+			search: '',
+			search_city: '',
+			userList: [
+				{'name': 'Vlad', 'age': 13, 'price': 120, 'city': 'Kiev'},
+				{'name': 'Vlad', 'age': 23, 'price': 240, 'city': 'Zaporizhya'},
+				{'name': 'Jora', 'age': 53, 'price': 20, 'city': 'Jitomir'},
+				],
+			price: 351.99
+		},
+
+  computed: {
+    filteredList() {
+      return this.userList.filter(user => {
+      	return user.first_name.indexOf(value) > -1 ||
+             user.last_name.indexOf(value) > -1 ||
+
+      })
+    }
+  }
+	})
+
+	console.log(app)
+</script>
+{% endblock %}

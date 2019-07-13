@@ -6,6 +6,8 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
+from django.http import JsonResponse
+
 from django.utils import timezone
 from .models import User, TypeLesson
 from .forms import HelpForm, UpdateUserProfile, FilterForm
@@ -14,8 +16,8 @@ from .forms import HelpForm, UpdateUserProfile, FilterForm
 
 
 
-class HomePageView(FormMixin,ListView):
-	template_name = 'home.html'
+class HomePageView(FormMixin,ListView, JsonResponse):
+	template_name = 'profile_vue.html'
 	context_object_name = 'users'
 	model = User
 	form_class = FilterForm
