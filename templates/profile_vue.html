@@ -11,10 +11,18 @@
 			<label>Search title:</label>			
 			<input type="text" v-model="search_city" placeholder="Search title.."/>
 			<label>Search title:</label>
+			<form>
+  <div class="form-group">
+    <label for="formControlRange">Example Range input</label>
+    <input type="range" class="form-control-range" id="formControlRange">
+    <input type="range" class="form-control-range" id="formControlRange">
+  </div>
+</form>
+
 		</div>
 
-
-		<div class="container" v-for='value in filteredList' style='background-color: white;'>
+	
+		<div class="container" v-for='value in filteredPerson' style='background-color: white;'>
 			<p><%value.name%></p>
 			<p><%value.age%></p>
 			<p><%value.price%></p>
@@ -48,13 +56,12 @@
 		},
 
   computed: {
-    filteredList() {
-      return this.userList.filter(user => {
-      	return user.first_name.indexOf(value) > -1 ||
-             user.last_name.indexOf(value) > -1 ||
-
-      })
-    }
+  	filteredPerson: function(){
+  		var self = this;
+  		return this.userList.filter(function(user){
+  			return user.name.toLowerCase().indexOf(self.search.toLowerCase()) != -1 && user.city.toLowerCase().indexOf(self.search_city.toLowerCase()) != -1;
+  		});
+  	}
   }
 	})
 
