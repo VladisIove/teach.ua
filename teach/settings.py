@@ -26,6 +26,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'teach.teacher.ua@gmail.com'
+EMAIL_HOST_PASSWORD = "thisismyemail"
+DEFAULT_FROM_EMAIL = 'teach.ua'
+DEFAULT_TO_EMAIL = "thisismyemail"
 # Application definition
 
 INSTALLED_APPS = [
@@ -75,7 +82,12 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',
     'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_auth.backends.contrib.instagram.InstagramBackend',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
 
@@ -93,6 +105,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
     'social_core.pipeline.social_auth.associate_by_email',
 )
+
+
 
 WSGI_APPLICATION = 'teach.wsgi.application'
 
@@ -148,13 +162,18 @@ MEDIA_ROOT = os.path.join('media/')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_USE_TLS = True
+"""EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'baturin.ivan9@gmail.com'
 EMAIL_HOST_PASSWORD = "ivanbaturin1999"
 DEFAULT_FROM_EMAIL = 'Vlad'
 DEFAULT_TO_EMAIL = "thisismyemail"
+"""
+
+
+
+
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'user:logout'
@@ -166,8 +185,15 @@ AUTH_USER_MODEL = 'user.User'
 SOCIAL_AUTH_GITHUB_KEY = '8ac1c176fd58a928f3fa'
 SOCIAL_AUTH_GITHUB_SECRET = '4162334d4c844feb92dd76d74e41d680e5ca5bb3'
 
-ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window
+SOCIAL_AUTH_FACEBOOK_KEY = '1991389170964913'      # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '77803a853ccdd15a06fbf602101d3178'  # App Secret
+
+ACCOUNT_ACTIVATION_DAYS = 7  
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+
+
+
+CORS_ORIGIN_ALLOW_ALL = True

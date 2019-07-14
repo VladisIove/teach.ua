@@ -31,8 +31,8 @@
 	<div class="row pb-3">
 		<div class="col-12">
 			    <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
-    <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
-    <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+			    <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
+			    <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
 			<h1 class='text-center h1 pt-2'>Авторизация</h1>
 			{% if form.non_field_errors %}
 			<div class="alert alert-danger" role="alert">
@@ -69,7 +69,7 @@
 						<a href="{% url 'password_reset' %}" class='login_link'>Забыли пароль?</a>
 					</div>
 					<div class="col-9">
-						<a href="{% url 'registration_register' %}" class='login_link'>Регистрация</a>
+						<a href="{% url 'user:django_registration_register' %}" class='login_link'>Регистрация</a>
 					</div>
 				</div>		
 				{% endif %}

@@ -1,17 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.views.generic.edit import FormMixin
-from django.http import JsonResponse
-
-from django.utils import timezone
-from .models import User, TypeLesson
-from .forms import HelpForm, UpdateUserProfile, FilterForm
-
-from django.contrib.auth import update_session_auth_hash
-
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -22,11 +14,106 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 from social_django.models import UserSocialAuth
 import json 
-
-from .forms import HelpForm, UpdateUserProfile
-from .models import User, Comment
-
+from django_registration.views import RegistrationView as BaseRegistrationView
+from django.urls import reverse_lazy
+from rest_framework.views import APIView
+from rest_framework.response import Response 
+from django.core import signing
+from django_registration import signals
+from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.csrf import requires_csrf_token
+from teach import settings 
+
+from django.core.mail import EmailMessage
+from django.contrib import messages
+
+
+from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterForm
+from .models import User, Comment
+from .serializers import Userserializer
+
+REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
+
+
+class RegistrationView(BaseRegistrationView):
+    """
+    Register a new (inactive) user account, generate an activation key
+    and email it to the user.
+    This is different from the model-based activation workflow in that
+    the activation key is the username, signed using Django's
+    TimestampSigner, with HMAC verification on activation.
+    """
+    email_body_template = 'django_registration/activation_email_body.txt'
+    email_subject_template = 'django_registration/activation_email_subject.txt'
+    success_url = reverse_lazy('django_registration_complete')
+    form_class = CustomFormRegistration
+
+    def register(self, form):
+        new_user = self.create_inactive_user(form)
+        signals.user_registered.send(
+            sender=self.__class__,
+            user=new_user,
+            request=self.request
+        )
+        return new_user
+
+    def create_inactive_user(self, form):
+        """
+        Create the inactive user account and send an email containing
+        activation instructions.
+        """
+        new_user = form.save(commit=False)
+        new_user.is_active = False
+        new_user.save()
+
+        self.send_activation_email(new_user)
+
+        return new_user
+
+    def get_activation_key(self, user):
+        """
+        Generate the activation key which will be emailed to the user.
+        """
+        return signing.dumps(
+            obj=user.get_username(),
+            salt=REGISTRATION_SALT
+        )
+
+    def get_email_context(self, activation_key):
+        """
+        Build the template context used for the activation email.
+        """
+        scheme = 'https' if self.request.is_secure() else 'http'
+
+        return {
+            'scheme': scheme,
+            'activation_key': activation_key,
+            'expiration_days': 7,
+            'site': get_current_site(self.request)
+        }
+
+    def send_activation_email(self, user):
+        """
+        Send the activation email. The activation key is the username,
+        signed using TimestampSigner.
+        """
+        activation_key = self.get_activation_key(user)
+        context = self.get_email_context(activation_key)
+        context['user'] = user
+        subject = render_to_string(
+            template_name=self.email_subject_template,
+            context=context,
+            request=self.request
+        )
+        # Force subject to a single line to avoid header-injection
+        # issues.
+        subject = ''.join(subject.splitlines())
+        message = render_to_string(
+            template_name=self.email_body_template,
+            context=context,
+            request=self.request
+        )
+        user.email_user(subject, message, 'teach.teacher.ua@gmail.com')
 
 
 @login_required
@@ -43,17 +130,17 @@ def settings(request):
 	# except UserSocialAuth.DoesNotExist:
 	#     twitter_login = None
 	#
-	# try:
-	#     facebook_login = user.social_auth.get(provider='facebook')
-	# except UserSocialAuth.DoesNotExist:
-	#     facebook_login = None
+	try:
+	    facebook_login = user.social_auth.get(provider='facebook')
+	except UserSocialAuth.DoesNotExist:
+	    facebook_login = None
 
 	can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
 
 	return render(request, 'settings.html', {
 		'github_login': github_login,
 		# 'twitter_login': twitter_login,
-		# 'facebook_login': facebook_login,
+		'facebook_login': facebook_login,
 		'can_disconnect': can_disconnect
 	})
 
@@ -78,7 +165,53 @@ def password(request):
 		form = PasswordForm(request.user)
 	return render(request, 'password.html', {'form': form})
 
+@csrf_exempt
+def add_like(request):
+	if request.is_ajax():
+		us_id = request.POST.get('user_id')
+		pr_id = request.POST.get('profile_id')
+		print(pr_id)
+		print(us_id)
+		user_who_add = User.objects.get(id=pr_id)
+		user_then_add = User.objects.get(id=us_id)
+		if user_who_add in user_then_add.like.all():
+			user_then_add.like.remove(user_who_add)
+		else:
+			user_then_add.like.add(user_who_add)
+		return JsonResponse({'status': 1, 'data': user_then_add.id, 'like': user_then_add.like.count()})
+	return JsonResponse({'status': 0, 'data': 'bad'})
 
+
+@csrf_exempt
+def add_comment(request):
+	if request.is_ajax():
+		us_id = request.POST.get('user_id')
+		pr_id = request.POST.get('profile_id')
+		user_who_add = User.objects.get(id=pr_id)
+		user_then_add = User.objects.get(id=us_id)
+		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
+		comment.save()
+		print(comment)
+		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text})
+	return JsonResponse({'status': 0, 'data': 'bad'})
+
+
+class UserView(APIView):
+	def get(self, request):
+		users = User.objects.filter(valid_announcement = True)
+
+		serializer = Userserializer(users, many = True)
+		print()
+		print(serializer.data)
+		print()
+		return Response({'data': serializer.data })
+
+	def post(self, request):
+		if request.command == 'like':
+			add_like(request)
+		if request.command == 'comment':
+			add_comment(request)
+		return Response({"status": "Add"})
 
 class HomePageView(FormMixin,ListView, JsonResponse):
 	template_name = 'home.html'
@@ -167,7 +300,7 @@ def help_message(request):
 			current_site = get_current_site(request)
 			mail_subject = 'Пришло письмо с поддержки'
 			message = request.POST.get('email') + ' ' + request.POST.get('name') + ' ' + request.POST.get('message')
-			to_email = 'vlad.shelemakha0302@gmail.com'
+			to_email = 'teach.teacher.ua@gmail.com'
 			email = EmailMessage(mail_subject, message, to=[to_email])
 			email.send()
 			message = 'Письмо отправлено'
@@ -185,6 +318,8 @@ def add_like(request):
 	if request.is_ajax():
 		us_id = request.POST.get('user_id')
 		pr_id = request.POST.get('profile_id')
+		print(pr_id)
+		print(us_id)
 		user_who_add = User.objects.get(id=pr_id)
 		user_then_add = User.objects.get(id=us_id)
 		if user_who_add in user_then_add.like.all():

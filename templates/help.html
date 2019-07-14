@@ -17,6 +17,16 @@
 {% endblock %}
 {% block content %}
 	<div class="main container mt-2 ">
+		{% if messages %}
+
+		<div class="messages p-2">
+			{% for message in messages %}
+			<div class="alert alert-success" role="alert">
+				<p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
 	<h2 class='h2 text-center'>Поддержка</h2>
 	<form method="POST">
 		{% csrf_token %}

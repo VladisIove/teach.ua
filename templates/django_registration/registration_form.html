@@ -38,7 +38,7 @@
 				Впрочем, всегда можно <a href="{% url 'logout' %}">выйти</a>.<br/><br/></p>
 				{% else %}
 				<form method="post" action="">
-					
+					{% csrf_token %} 
 					<div class="form-row">
 						
 						<div class="form-group col-md-6">

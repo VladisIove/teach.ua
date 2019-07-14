@@ -6,27 +6,27 @@
 {% block css %}
 <style>
 
-  .main, .filter{
-    background: white;
-    border-radius: 10px;
-  }
+.main, .filter{
+  background: white;
+  border-radius: 10px;
+}
 
-  .main{
-    background: white;
+.main{
+  background: white;
 
-  }
+}
 
-  .modal-dialog {
-    width: 100% ;
-    height: 100% ;
+.modal-dialog {
+  width: 100% ;
+  height: 100% ;
 
-  }
+}
 
-  .modal-content {
-    height: auto ;
-    min-height: 100% ;
+.modal-content {
+  height: auto ;
+  min-height: 100% ;
 
-  }
+}
 .form-check{
   display: inline-block;
 }
@@ -35,41 +35,131 @@
 {% endblock %}
 {% block content %}
 
-
-<div id="app">
+<div id="">
   <div class="container" v-for='user in users' style='background-color: white;'>
-      <p><%user.name%></p>
-      <p><%user.age%></p>
-      <p><%user.price%></p>
-      <p><%user.city%></p>
+    <p><%user.name%></p>
+    <p><%user.age%></p>
+    <p><%user.price%></p>
+    <p><%user.city%></p>
 
-    </div>
+  </div>
 </div>
 
+<div class="row" id='app'>
+  <div class="col-12 filter mt-3 mb-3">
+    <h1>Filter:</h1>
+    <div class="ml-lg-5">
+      <form method="GET">
+
+        <div class="form-group col-md-12 order-md-first">
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              min age
+            </div>
+            <div class="form-group col-md-6">
+              max age
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              min salary
+            </div> 
+            <div class="form-group col-md-6">
+              max salary
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+             city
+           </div>
+           <div class="form-group col-md-6">
+             name skill
+           </div>
+
+         </div>
+         <div class="form-group col-md-12">
+          type work
+        </div>
+
+      </div>
+
+      <div class="form-group col-md-12 row  justify-content-end">
+        <button type="submit" class="btn btn-primary">Фильтровать</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="col-12 main p-5" v-for='user in users'>
+
+  <div class="card mb-3 mt-1">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img :src="user.img" class="card-img" alt="...">
+      </div>
+
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%user.name%> <%user.surname%></h5>
+          <p class="card-text">Возраст: <%user.age%>, город: <%user.city%></p>
+          <p class="card-text"><%user.about%></p>
+          <p class="card-text"><small class="text-muted">Лайки: <% user.like %></small>
+
+          </p>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
 
 
 {% endblock %}
 
 {% block js %}
-  <script src="{% static 'js/vue.js' %}"></script>
+<script src="{% static 'js/vue.js' %}"></script>
 
-  <script>
-  var users = `{{ users|safe }}`
-  console.log(users)
-  filter = new Vue({
-    delimiters: ['<%', '%>'],
-    el: '#app',
-    data: {
-      users: users.split('}'),
-    },
-    created(){
-      for (i in this.users)
-        console.log(this.users[i])
+<script>
 
-      
-    },
+  Vue.component('ads', { 
+    template: `          <div>                  <p class="card-text">
+                                    <small class="text-muted">Like:
+                                        <spam id="like_{{ user_ad.id }}">{{ user_ad.like.count }}</spam>
+                                    </small>
+                                </p>
+                                <button onclick="addLike({{ user_ad.id }}, {{ user.id }})">like</button></div>`
+  });
 
-  })
+filter = new Vue({
+  delimiters: ['<%', '%>'],
+  el: '#app',
+  data: {
+    users: '',
+    user_id: `{{ user.id }}`
+  },
+  created(){
+    this.loadUsers()
+  },
+  methods: {
+    loadUsers(){
+      $.ajax({
+        url: '/users/',
+        type: "GET",
+        success: (response) => {
+          this.users = response.data
+          }
+        })
+      }
+    }
+  
+
+})
 
 </script>
 {% endblock %}

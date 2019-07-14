@@ -107,6 +107,15 @@ class User(AbstractUser):
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email, [self.email], **kwargs)
 
+	def get_full_name(self):
+		return self.email
+
+	def get_short_name(self):
+		return self.email
+
+	def get_count_like(self):
+		return len(self.like)
+		
 	def get_absolute_url(self):
 		return reverse('user:update_profile', args = [self.pk])
 

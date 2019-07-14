@@ -2,7 +2,7 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
-  <a class="navbar-brand ml-lg-5" href="{% url 'user:home' %}">Teacher.ua</a>
+  <a class="navbar-brand ml-lg-5" href="{% url 'user:home' %}">Teach.ua</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -14,7 +14,7 @@
       <a class="nav-item nav-link" href="{% url 'logout' %}">Выйти</a>
       {% else %}
       <a class="nav-item nav-link " href="{% url 'login' %}">Войти</a>
-      <a class="nav-item nav-link " href="{% url 'registration_register' %}">Зарегестрироваться</a>
+      <a class="nav-item nav-link " href="{% url 'user:django_registration_register' %}">Зарегестрироваться</a>
       {% endif %}
 
     </div>
