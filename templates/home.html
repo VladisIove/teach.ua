@@ -79,16 +79,69 @@ svg{
 <div class="row" id='app'>
 
   <div class="col-12 filter mt-3 mb-3">
-    <h1>Filter:</h1>
-    <div class="ml-lg-5">
-      <input type="text" v-model="search_skill" placeholder="Search title.."/>
-      <label>Search title:</label>      
-      <input type="text" v-model="search_city" placeholder="Search title.."/>
-      <label>Search city:</label>
-      <form>
-      </form>
+    <form action="" method='GET' class='m-2 p-2'>
+      <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" id='skill' placeholder="Название предмета">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" id='city' placeholder="Город">
+        </div>
+      </div> 
+      <div class="form-row">  
+      <div class="col">Зарплата</div>      
+        <div class="col form-inline">
+           <label for="min_salary">от</label>
+          <input type="text" class="form-control" id='min_salary' placeholder="0">
+        </div>
+        <div class="col form-inline">
+          <label for="min_salary">до</label>
+          <input type="text" class="form-control" id='max_salary' placeholder="100">
+        </div>
+      </div>
+      <div class="form-row">  
+        <div class="col">Возраст</div>   
+        <div class="col form-inline">
+           <label for="min_age">от</label>
+          <input type="text" class="form-control" id='min_age' placeholder="0">
+        </div>
+        <div class="col form-inline">
+          <label for="max_age">до</label>
+          <input type="text" class="form-control" id='max_age' placeholder="100">
+        </div>
+      </div>
+      <div class="form-row">     
+        <div class="col-12 form-inline ml-4">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline1">Ученик</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline2">Преподователь</label>
+          </div>
+       </div>
+       <div class="col-12 form-inline d-flex justify-content-around">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="customCheck1">
+          <label class="custom-control-label" for="customCheck1">Решаю на заказ</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="customCheck2">
+          <label class="custom-control-label" for="customCheck2">Репетиторство на дому</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="customCheck3">
+          <label class="custom-control-label" for="customCheck3">репетиторство у клиента дома</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="customCheck4">
+          <label class="custom-control-label" for="customCheck4">дистанционное преподавание</label>
+        </div>
+      </div>
+    </div>
+    </form>  
   </div>
-</div>
 
 <div class="col-12 main p-5" >
 
