@@ -44,6 +44,7 @@ class UserManager(BaseUserManager):
 
 
 
+
 class User(AbstractUser):
 	username = None 
 	name = models.CharField(max_length=120, blank=True, null=True, verbose_name='Имя')
@@ -71,7 +72,7 @@ class User(AbstractUser):
 
 	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
 	img = models.ImageField(upload_to = 'media/', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
-	about = models.TextField(max_length=500, verbose_name='О вас:')
+	about = models.TextField(max_length=140, verbose_name='О вас:')
 	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст', blank=True)
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
 	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена в час', blank=True, null=True)
@@ -102,7 +103,15 @@ class User(AbstractUser):
 	# I am xz kak realizovat podpicky
 	start_subscription = models.DateTimeField(blank=True, null=True)
 	end_subscription = models.DateTimeField(blank=True, null=True)
-	subscription = models.BooleanField(default=False, null=False, verbose_name='Подписка')
+	LOW = 'L'
+	MIDDLE = 'M'
+	VIP = 'V'
+	SUBSCRIPTION = (
+		(LOW, 'low'),
+		(MIDDLE, 'middle'),
+		(VIP, 'vip') ,
+		)
+	subscription = models.CharField(choices=SUBSCRIPTION, max_length=1, default=LOW)
 
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -152,6 +161,7 @@ class Skill(models.Model):
 		return f'{self.skill_name}'
 	
 
+
 class Comment(models.Model):
 	text = models.TextField(max_length=500, null=True)
 	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_comment')
@@ -160,3 +170,4 @@ class Comment(models.Model):
 
 	class Meta:
 		ordering = ['date']
+

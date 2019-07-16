@@ -1,18 +1,3 @@
-function addLike(user_id, profile_id) {
-    $.ajax({
-        type: 'post',
-        url: '/add_like/',
-        data: {
-            "user_id": user_id,
-            "profile_id": profile_id
-        },
-        success: function (data) {
-            console.log(data.data);
-            id = 'like_'+data.data.toString();
-            document.getElementById(id).innerText = data.like
-        }
-    });
-}
 
 
 function addComment(user_id, profile_id) {

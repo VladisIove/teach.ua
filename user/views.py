@@ -17,6 +17,7 @@ import json
 from django_registration.views import RegistrationView as BaseRegistrationView
 from django.urls import reverse_lazy
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from django.core import signing
 from django_registration import signals
@@ -32,8 +33,18 @@ from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterFo
 from .models import User, Comment
 from .serializers import Userserializer
 
+
+
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
+
+
+
+class UserView(APIView):
+	def get(self, request):
+		users = User.objects.filter(valid_announcement = True).exclude(id = request.user.id)
+		serializer = Userserializer(users, many = True)
+		return Response({'data': serializer.data })
 
 class RegistrationView(BaseRegistrationView):
     """
@@ -130,17 +141,17 @@ def settings(request):
 	# except UserSocialAuth.DoesNotExist:
 	#     twitter_login = None
 	#
-	try:
-	    facebook_login = user.social_auth.get(provider='facebook')
-	except UserSocialAuth.DoesNotExist:
-	    facebook_login = None
+	#try:
+	#    facebook_login = user.social_auth.get(provider='facebook')
+	#except UserSocialAuth.DoesNotExist:
+	#   facebook_login = None
 
 	can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
 
 	return render(request, 'settings.html', {
 		'github_login': github_login,
 		# 'twitter_login': twitter_login,
-		'facebook_login': facebook_login,
+		#'facebook_login': facebook_login,
 		'can_disconnect': can_disconnect
 	})
 
@@ -165,21 +176,6 @@ def password(request):
 		form = PasswordForm(request.user)
 	return render(request, 'password.html', {'form': form})
 
-@csrf_exempt
-def add_like(request):
-	if request.is_ajax():
-		us_id = request.POST.get('user_id')
-		pr_id = request.POST.get('profile_id')
-		print(pr_id)
-		print(us_id)
-		user_who_add = User.objects.get(id=pr_id)
-		user_then_add = User.objects.get(id=us_id)
-		if user_who_add in user_then_add.like.all():
-			user_then_add.like.remove(user_who_add)
-		else:
-			user_then_add.like.add(user_who_add)
-		return JsonResponse({'status': 1, 'data': user_then_add.id, 'like': user_then_add.like.count()})
-	return JsonResponse({'status': 0, 'data': 'bad'})
 
 
 @csrf_exempt
@@ -195,23 +191,6 @@ def add_comment(request):
 		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text})
 	return JsonResponse({'status': 0, 'data': 'bad'})
 
-
-class UserView(APIView):
-	def get(self, request):
-		users = User.objects.filter(valid_announcement = True)
-
-		serializer = Userserializer(users, many = True)
-		print()
-		print(serializer.data)
-		print()
-		return Response({'data': serializer.data })
-
-	def post(self, request):
-		if request.command == 'like':
-			add_like(request)
-		if request.command == 'comment':
-			add_comment(request)
-		return Response({"status": "Add"})
 
 class HomePageView(FormMixin,ListView, JsonResponse):
 	template_name = 'home.html'
@@ -316,10 +295,8 @@ def help_message(request):
 @csrf_exempt
 def add_like(request):
 	if request.is_ajax():
-		us_id = request.POST.get('user_id')
-		pr_id = request.POST.get('profile_id')
-		print(pr_id)
-		print(us_id)
+		us_id = request.POST.get('profile_id')
+		pr_id = request.POST.get('user_id')
 		user_who_add = User.objects.get(id=pr_id)
 		user_then_add = User.objects.get(id=us_id)
 		if user_who_add in user_then_add.like.all():

@@ -31,92 +31,225 @@
   display: inline-block;
 }
 
+.vip{
+  background-color: #e4e0ee;
+  border-left: 2px solid #401f68;
+  border-left-radius: 5px;
+}
+
+
+.card-body{
+  padding: 0 ;
+  padding-left: 1.5rem;
+}
+
 </style>
 {% endblock %}
 {% block content %}
 
-<div id="">
-  <div class="container" v-for='user in users' style='background-color: white;'>
-    <p><%user.name%></p>
-    <p><%user.age%></p>
-    <p><%user.price%></p>
-    <p><%user.city%></p>
-
-  </div>
-</div>
 
 <div class="row" id='app'>
   <div class="col-12 filter mt-3 mb-3">
     <h1>Filter:</h1>
     <div class="ml-lg-5">
-      <form method="GET">
-
-        <div class="form-group col-md-12 order-md-first">
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              min age
-            </div>
-            <div class="form-group col-md-6">
-              max age
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              min salary
-            </div> 
-            <div class="form-group col-md-6">
-              max salary
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-6">
-             city
-           </div>
-           <div class="form-group col-md-6">
-             name skill
-           </div>
-
-         </div>
-         <div class="form-group col-md-12">
-          type work
-        </div>
-
-      </div>
-
-      <div class="form-group col-md-12 row  justify-content-end">
-        <button type="submit" class="btn btn-primary">Фильтровать</button>
-      </div>
-    </form>
+      <input type="text" v-model="search_skill" placeholder="Search title.."/>
+      <label>Search title:</label>      
+      <input type="text" v-model="search_city" placeholder="Search title.."/>
+      <label>Search city:</label>
+      <form>
+      </form>
   </div>
 </div>
 
-<div class="col-12 main p-5" v-for='user in users'>
+<div class="col-12 main p-5" >
 
-  <div class="card mb-3 mt-1">
+
+  <div class="" v-for='user_ad in users' >
+    <div class="card mb-3 mt-1"  v-if='user_ad.subscription != "L"'>
+      <div class="row no-gutters vip" >
+      
+        <div class="col-md-2 ">
+          <img :src="user_ad.img" class="img-thumbnail" alt="...">
+          <p class="card-text pl-2"><small class="text-muted">Нравится: <% user_ad.like | countLike %> <i class="fas fa-heart"></i></small> </p>
+        </div>
+
+        <div class="col-md-6 ">
+          <div class="card-body">
+            <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
+            <p class="card-text">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span> </p>
+            <p class="card-text">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span> </p>
+             <button type="button" class="btn btn-primary" data-toggle="modal"
+                                      :data-target="'#demo' + user_ad.id" >
+                                    Подробнее...
+                                </button>
+
+          </div>
+            <p class="card-text pl-2 pt-3"><small class="text-muted">Город: <%user_ad.city%> <i class="fas fa-city"></i></small><small class="text-muted pl-5"> Возраст: <%user_ad.age%> <i class="fas fa-user-tie"></i></small><small class="text-muted pl-5"> Цена в час: <%user_ad.price_per_hource%> <i class="far fa-clock"></i></small></p>
+        </div>
+
+      </div> 
+    </div>
+
+    <div class="card mb-3 mt-1" v-else>
+      <div class="row no-gutters" >  
+        <div class="col-md-2 ">
+          <img :src="user_ad.img" class="img-thumbnail" alt="...">
+          <p class="card-text pl-2"><small class="text-muted">Нравится: <% user_ad.like | countLike %> <i class="fas fa-heart"></i></small> </p>
+        </div>
+
+        <div class="col-md-6 ">
+          <div class="card-body">
+            <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
+            <p class="card-text">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span> </p>
+            <p class="card-text">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span> </p>
+             <button type="button" class="btn btn-primary" data-toggle="modal"
+                                      :data-target="'#demo' + user_ad.id" >
+                                    Подробнее...
+                                </button>
+
+          </div>
+            <p class="card-text pl-2 pt-3"><small class="text-muted">Город: <%user_ad.city%> <i class="fas fa-city"></i></small><small class="text-muted pl-5"> Возраст: <%user_ad.age%> <i class="fas fa-user-tie"></i></small><small class="text-muted pl-5"> Цена в час: <%user_ad.price_per_hource%> <i class="far fa-clock"></i></small></p>
+        </div>
+      </div> 
+    </div>
+
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" :id="'demo' + user_ad.id">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+            <div class="row ">
+              <div class="col-1">
+                <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 300px'>
+              </div>
+              <div class="col-10">
+                <h3 class="modal-title" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
+                <p class="modal-title"> Город <i class="fas fa-city"></i>: <%user_ad.city%> <br/>Возраст <i class="fas fa-user-tie"></i>: <%user_ad.age%> <br/> Цена в час <i class="far fa-clock"></i>: <%user_ad.price_per_hource%> </p>
+                  <p class="modal-title">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span>  </p>
+                  <p class="modal-title">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span></p>
+
+                  <p class="modal-title">О себе: <%user_ad.about%></p>
+
+              </div>
+              <div class="col-12">
+                  <h4>Контактные данные: </h4>
+                  <p><i class="fas fa-phone-alt"></i> Номер телефона :<%user_ad.mobile_number%></p>
+                  <p><i class="fas fa-envelope"></i> Почта :<%user_ad.email%></p>
+                  <p><i class="fab fa-skype"></i> Skype :<%user_ad.skype%></p>
+                  <p><i class="fab fa-telegram"></i> Telegram :<%user_ad.telegram%></p>
+                  <p><i class="fab fa-viber"></i> Viber :<%user_ad.viber%></p>
+                  <p><i class="fab fa-instagram"></i> Instagram :<%user_ad.instagram%></p>
+              </div>
+                <p class="card-text" >Лайки:<small class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>  </small>
+                  <p  v-if='user_id == "None"'> зарегестрируйтесь, что бы поставить лайк</p>
+                  <button v-on:click="addLike(user_ad.id)" class="btn btn-primary " v-else>Поставить лайк</button>
+                </p>
+            </div>
+            <div class="col-12">
+              <h1 id="comment" >Comment part</h1>
+              <p><% user_ad.comments | countLike %></p>
+              <div class="" v-for="comment in user_ad.recipient_comment">
+                <p><%  comment.id %></p>
+              </div>
+              <p :id="'comment_' + user_ad.id" >sdf</p>
+              <input id="text_comment" type="text">
+              <button v-on:click="addComment(user_ad.id)">send</button>
+            </div>
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+   
+</div>
+
+
+<!-- <div class="col-12 main p-5" >
+
+  <div class="card mb-3 mt-1" v-for='user_ad in users'>
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img :src="user.img" class="card-img" alt="...">
+        <img :src="user_ad.img" class="card-img" alt="...">
       </div>
 
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title"><%user.name%> <%user.surname%></h5>
-          <p class="card-text">Возраст: <%user.age%>, город: <%user.city%></p>
-          <p class="card-text"><%user.about%></p>
-          <p class="card-text"><small class="text-muted">Лайки: <% user.like %></small>
+          <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
+          <p class="card-text">Возраст: <%user_ad.age%>, город: <%user_ad.city%></p>
+          <p class="card-text"><%user_ad.about%></p>
+               
+        </div>
+      </div>
+    </div>
 
+    <div class="modal fade" :id="'demo' + user_ad.id" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-4">
+              <img :src="user_ad.img" class="img-thumbnail"
+              alt="...">
+            </div>
+            <div class="col-8">
+              <h3 class="modal-title"
+              id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
+              <p>Возраст: <%user_ad.age%> , город: <%user_ad.city%>, занятие в
+              час: <%user_ad.price_per_hource%> </p>
+              <p>Тип работы:<%user_ad.type_lesson%>  </p>
+              <p>Тип предмета: <%user_ad.skill%>  </p>
+              <p>О себе: <%user_ad.about%></p>
+            </div>
+            <div class="col-12">
+              <h4>Контактные данные: </h4>
+              <p><%user_ad.mobile_number%></p>
+              <p><%user_ad.email%></p>
+              <p><%user_ad.skype%></p>
+              <p><%user_ad.telegram%></p>
+              <p><%user_ad.viber%></p>
+              <p><%user_ad.instagram%></p>
+            </div>
+            <div class="col-12">
+              <h1 id="comment" >Comment part</h1>
+              <p><% user_ad.comments | countLike %></p>
+              <p :id="'comment_' + user_ad.id" >sdf</p>
+              <input id="text_comment" type="text">
+              <button v-on:click="addComment(user_ad.id)">send</button>
+            </div>
+          </div>
+        </div>
+
+
+          <p class="card-text" >Лайки:<small class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>  </small>
+            <p  v-if='user_id == "None"'> зарегестрируйтесь, что бы поставить лайк</p>
+            <button v-on:click="addLike(user_ad.id)" class="btn btn-primary " v-else>Поставить лайк</button>
           </p>
-
-
+                          
+        <div class="modal-footer justify-content-between">
+          <div class="">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="#">Связаться</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
 </div>
-
+ -->
 </div>
 
 
@@ -127,24 +260,31 @@
 
 <script>
 
-  Vue.component('ads', { 
-    template: `          <div>                  <p class="card-text">
-                                    <small class="text-muted">Like:
-                                        <spam id="like_{{ user_ad.id }}">{{ user_ad.like.count }}</spam>
-                                    </small>
-                                </p>
-                                <button onclick="addLike({{ user_ad.id }}, {{ user.id }})">like</button></div>`
-  });
-
-filter = new Vue({
+new Vue({
   delimiters: ['<%', '%>'],
   el: '#app',
   data: {
     users: '',
-    user_id: `{{ user.id }}`
+    user_id: `{{ user.id }}`,
+    search_city: '',
+    search_skill: '',
+
   },
   created(){
     this.loadUsers()
+  },
+
+
+  filters: {
+    countLike: function(value){
+    var length = 0;
+    for( var key in value ) {
+        if( value.hasOwnProperty(key) ) {
+            ++length;
+        }
+    }
+    return length;
+    }
   },
   methods: {
     loadUsers(){
@@ -153,9 +293,49 @@ filter = new Vue({
         type: "GET",
         success: (response) => {
           this.users = response.data
+          console.log(this.users)
           }
-        })
-      }
+        });
+      },
+      addLike: function (user_ad_id) {
+      $.ajax({
+        type: 'post',
+        url: '/add_like/',
+        headers: {
+          'X-HTTP-Method-Override': 'PATCH'
+        },
+        data: {
+          "user_id": this.user_id,
+          "profile_id": user_ad_id
+        },
+        success: function (data) {
+            id = data.data.toString();
+            document.getElementById(id).innerText = data.like
+        }
+      });
+    },
+    addComment: function (user_ad_id) {
+        $.ajax({
+        type: 'post',
+        url: '/add_comment/',
+        headers: {
+          'X-HTTP-Method-Override': 'PATCH'
+        },
+        data: {
+            "user_id": user_ad_id,
+            "profile_id": this.user_id ,
+            "text": document.getElementById('text_comment').value
+        },
+        success: function (data) {
+            
+            id = 'comment_'+data.data.toString();
+            console.log(data.comment);
+            /*cur_com = document.getElementById(id).value;
+            console.log(cur_com)*/
+            document.getElementById(id).innerText = data.comment
+        }
+    });
+    }
     }
   
 
