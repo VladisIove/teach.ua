@@ -42,6 +42,34 @@
   padding: 0 ;
   padding-left: 1.5rem;
 }
+p{
+  margin-bottom: 0;
+}
+
+svg{
+  display: block;
+  width: 50px;
+  height: auto;
+}
+
+#svg_2{
+  fill:transparent; 
+  stroke:#e4e0ee;
+  fill: #e4e0ee;
+  stroke-width:6px;
+  cursor:pointer;
+  transition:fill .3s;
+}
+
+
+.modal-content{
+  min-height: 70%;
+}
+
+.vip-modal{
+  background-color: #e4e0ee;
+  border: #401f68;
+}
 
 </style>
 {% endblock %}
@@ -49,6 +77,7 @@
 
 
 <div class="row" id='app'>
+
   <div class="col-12 filter mt-3 mb-3">
     <h1>Filter:</h1>
     <div class="ml-lg-5">
@@ -65,108 +94,175 @@
 
 
   <div class="" v-for='user_ad in users' >
-    <div class="card mb-3 mt-1"  v-if='user_ad.subscription != "L"'>
+    <div class="card mb-3 mt-1 "  v-if='user_ad.subscription != "L"'>
       <div class="row no-gutters vip" >
       
-        <div class="col-md-2 ">
-          <img :src="user_ad.img" class="img-thumbnail" alt="...">
-          <p class="card-text pl-2"><small class="text-muted">Нравится: <% user_ad.like | countLike %> <i class="fas fa-heart"></i></small> </p>
+        <div class="col-md-2 p-2">
+          <img :src="user_ad.img" class="" alt="..." style='width: 100%; height: auto;'>          
         </div>
 
-        <div class="col-md-6 ">
+        <div class="col-md-10 ">
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
-            <p class="card-text">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span> </p>
-            <p class="card-text">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span> </p>
-             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                      :data-target="'#demo' + user_ad.id" >
-                                    Подробнее...
-                                </button>
-
+            <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+             <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+             <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+              <button type="button" class="btn btn-primary" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
-            <p class="card-text pl-2 pt-3"><small class="text-muted">Город: <%user_ad.city%> <i class="fas fa-city"></i></small><small class="text-muted pl-5"> Возраст: <%user_ad.age%> <i class="fas fa-user-tie"></i></small><small class="text-muted pl-5"> Цена в час: <%user_ad.price_per_hource%> <i class="far fa-clock"></i></small></p>
+        </div>
+
+        <div class="col">
+          <div class="row card-text d-flex justify-content-between">
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+        </div>         
         </div>
 
       </div> 
     </div>
 
     <div class="card mb-3 mt-1" v-else>
-      <div class="row no-gutters" >  
-        <div class="col-md-2 ">
-          <img :src="user_ad.img" class="img-thumbnail" alt="...">
-          <p class="card-text pl-2"><small class="text-muted">Нравится: <% user_ad.like | countLike %> <i class="fas fa-heart"></i></small> </p>
+      <div class="row no-gutters " >
+        <div class="col-md-2 p-2">
+          <img :src="user_ad.img" class="" alt="..." style='width: 100%; height: auto;'>
         </div>
 
-        <div class="col-md-6 ">
+        <div class="col-md-10 ">
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
-            <p class="card-text">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span> </p>
-            <p class="card-text">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span> </p>
-             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                      :data-target="'#demo' + user_ad.id" >
-                                    Подробнее...
-                                </button>
-
+            <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+             <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+             <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+              <button type="button" class="btn btn-primary" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
-            <p class="card-text pl-2 pt-3"><small class="text-muted">Город: <%user_ad.city%> <i class="fas fa-city"></i></small><small class="text-muted pl-5"> Возраст: <%user_ad.age%> <i class="fas fa-user-tie"></i></small><small class="text-muted pl-5"> Цена в час: <%user_ad.price_per_hource%> <i class="far fa-clock"></i></small></p>
         </div>
-      </div> 
+        <div class="col">
+          <div class="row card-text d-flex justify-content-between">
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+        </div>         
+      </div>
+    </div> 
     </div>
 
-    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" :id="'demo' + user_ad.id">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            
-          </div>
+    <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :id="'demo' + user_ad.id">
+      <div class="modal-dialog modal-lg" >
+        <div class="modal-content" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
           <div class="modal-body">
-            <div class="container-fluid">
-            <div class="row ">
-              <div class="col-1">
-                <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 300px'>
-              </div>
-              <div class="col-10">
-                <h3 class="modal-title" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
-                <p class="modal-title"> Город <i class="fas fa-city"></i>: <%user_ad.city%> <br/>Возраст <i class="fas fa-user-tie"></i>: <%user_ad.age%> <br/> Цена в час <i class="far fa-clock"></i>: <%user_ad.price_per_hource%> </p>
-                  <p class="modal-title">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span>  </p>
-                  <p class="modal-title">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span></p>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-lg-4 col-12 text-center">
+                    <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
+                  </div>
+                  <div class="col-lg-8 col-12">
+                    <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
 
-                  <p class="modal-title">О себе: <%user_ad.about%></p>
+                    <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user_ad.city%> </span></p>
+                    <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user_ad.age%> </span></p>
+                    <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user_ad.price_per_hource%></span></p>
+                    <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+                     <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+                          <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+                     <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+                  </div>
+                  <div class="col-10">
+                    <p class="modal-title "><span class="font-weight-bold">О себе:</span> <%user_ad.about%></p>
 
-              </div>
-              <div class="col-12">
-                  <h4>Контактные данные: </h4>
-                  <p><i class="fas fa-phone-alt"></i> Номер телефона :<%user_ad.mobile_number%></p>
-                  <p><i class="fas fa-envelope"></i> Почта :<%user_ad.email%></p>
-                  <p><i class="fab fa-skype"></i> Skype :<%user_ad.skype%></p>
-                  <p><i class="fab fa-telegram"></i> Telegram :<%user_ad.telegram%></p>
-                  <p><i class="fab fa-viber"></i> Viber :<%user_ad.viber%></p>
-                  <p><i class="fab fa-instagram"></i> Instagram :<%user_ad.instagram%></p>
-              </div>
-                <p class="card-text" >Лайки:<small class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>  </small>
-                  <p  v-if='user_id == "None"'> зарегестрируйтесь, что бы поставить лайк</p>
-                  <button v-on:click="addLike(user_ad.id)" class="btn btn-primary " v-else>Поставить лайк</button>
+                      <h4>Контактные данные: </h4>
+                      <p><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
+                      <p><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user_ad.email%></p>
+                      <p><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user_ad.skype%></p>
+                      <p><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user_ad.telegram%></p>
+                      <p><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
+                      <p><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
+
+                  </div>
+                  <div class="col-12 col-sm-2 align-self-end">
+                      <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>   </span>                 <button v-on:click="addLike(user_ad.id)" class="btn btn-primary">  
+                     <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+        
+                     <g>
+                      <title>Layer 1</title>
+                      <g id="layer1">
+                       <path id="svg_2" d="m219.28949,21.827393c-66.240005,0 -119.999954,53.76001 -119.999954,120c0,134.755524 135.933151,170.08728 228.562454,303.308044c87.574219,-132.403381 228.5625,-172.854584 228.5625,-303.308044c0,-66.23999 -53.759888,-120 -120,-120c-48.047913,0 -89.401611,28.370422 -108.5625,69.1875c-19.160797,-40.817078 -60.514496,-69.1875 -108.5625,-69.1875z"/>
+                      </g>
+                     </g>
+                    </svg>
+                  </button> 
                 </p>
-            </div>
-            <div class="col-12">
-              <h1 id="comment" >Comment part</h1>
-              <p><% user_ad.comments | countLike %></p>
-              <div class="" v-for="comment in user_ad.recipient_comment">
-                <p><%  comment.id %></p>
+                  </div>
+                </div>
               </div>
-              <p :id="'comment_' + user_ad.id" >sdf</p>
-              <input id="text_comment" type="text">
-              <button v-on:click="addComment(user_ad.id)">send</button>
-            </div>
           </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Send message</button>
+                    <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-primary">Связаться</button>
           </div>
         </div>
       </div>
     </div>
+
+
+<!--     <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+        <div class="row ">
+          <div class="col-1">
+            <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 300px'>
+          </div>
+          <div class="col-10">
+            <h3 class="modal-title" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
+            <p class="modal-title"> Город <i class="fas fa-city"></i>: <%user_ad.city%> <br/>Возраст <i class="fas fa-user-tie"></i>: <%user_ad.age%> <br/> Цена в час <i class="far fa-clock"></i>: <%user_ad.price_per_hource%> </p>
+              <p class="modal-title">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span>  </p>
+              <p class="modal-title">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span></p>
+
+              <p class="modal-title">О себе: <%user_ad.about%></p>
+
+          </div>
+          <div class="col-12">
+              <h4>Контактные данные: </h4>
+              <p><i class="fas fa-phone-alt"></i> Номер телефона :<%user_ad.mobile_number%></p>
+              <p><i class="fas fa-envelope"></i> Почта :<%user_ad.email%></p>
+              <p><i class="fab fa-skype"></i> Skype :<%user_ad.skype%></p>
+              <p><i class="fab fa-telegram"></i> Telegram :<%user_ad.telegram%></p>
+              <p><i class="fab fa-viber"></i> Viber :<%user_ad.viber%></p>
+              <p><i class="fab fa-instagram"></i> Instagram :<%user_ad.instagram%></p>
+          </div>
+            <p class="card-text" >Лайки:<small class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>  </small>
+              <p  v-if='user_id == "None"'> зарегестрируйтесь, что бы поставить лайк</p>
+              <button v-on:click="addLike(user_ad.id)" class="btn btn-primary " v-else>Поставить лайк</button>
+            </p>
+        </div>
+        <div class="col-12">
+          <h1 id="comment" >Comment part</h1>
+          <p><% user_ad.comments | countLike %></p>
+          <div class="" v-for="comment in user_ad.recipient_comment">
+            <p><%  comment.id %></p>
+          </div>
+          <p :id="'comment_' + user_ad.id" >sdf</p>
+          <input id="text_comment" type="text">
+          <button v-on:click="addComment(user_ad.id)">send</button>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div> -->
 
   </div>
 
@@ -250,6 +346,7 @@
   </div>
 </div>
  -->
+
 </div>
 
 
@@ -258,7 +355,10 @@
 {% block js %}
 <script src="{% static 'js/vue.js' %}"></script>
 
+
 <script>
+
+
 
 new Vue({
   delimiters: ['<%', '%>'],
@@ -268,12 +368,15 @@ new Vue({
     user_id: `{{ user.id }}`,
     search_city: '',
     search_skill: '',
-
+    Txt: '',
+     output: '',
   },
   created(){
     this.loadUsers()
   },
-
+  watch(){
+    this.loadUsers()
+  },
 
   filters: {
     countLike: function(value){
@@ -287,6 +390,10 @@ new Vue({
     }
   },
   methods: {
+    getFormValues () {
+      this.output = this.$refs.my_input.value
+      console.log(this.output)
+    },
     loadUsers(){
       $.ajax({
         url: '/users/',
@@ -298,7 +405,10 @@ new Vue({
         });
       },
       addLike: function (user_ad_id) {
-      $.ajax({
+      if (this.user_id == 'None'){
+        alert('Зарегистрируйтесь, что бы поставить лайк')
+      }else{
+              $.ajax({
         type: 'post',
         url: '/add_like/',
         headers: {
@@ -309,12 +419,15 @@ new Vue({
           "profile_id": user_ad_id
         },
         success: function (data) {
+            $(this).toggleClass('');
             id = data.data.toString();
             document.getElementById(id).innerText = data.like
         }
       });
+      }
+
     },
-    addComment: function (user_ad_id) {
+addComment: function (user_ad_id) {
         $.ajax({
         type: 'post',
         url: '/add_comment/',
@@ -332,7 +445,7 @@ new Vue({
             console.log(data.comment);
             /*cur_com = document.getElementById(id).value;
             console.log(cur_com)*/
-            document.getElementById(id).innerText = data.comment
+
         }
     });
     }

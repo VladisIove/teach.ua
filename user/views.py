@@ -178,18 +178,6 @@ def password(request):
 
 
 
-@csrf_exempt
-def add_comment(request):
-	if request.is_ajax():
-		us_id = request.POST.get('user_id')
-		pr_id = request.POST.get('profile_id')
-		user_who_add = User.objects.get(id=pr_id)
-		user_then_add = User.objects.get(id=us_id)
-		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
-		comment.save()
-		print(comment)
-		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text})
-	return JsonResponse({'status': 0, 'data': 'bad'})
 
 
 class HomePageView(FormMixin,ListView, JsonResponse):
@@ -316,6 +304,7 @@ def add_comment(request):
 		user_then_add = User.objects.get(id=us_id)
 		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
 		comment.save()
-		print(comment)
+
+		print(comment.text)
 		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text})
 	return JsonResponse({'status': 0, 'data': 'bad'})
