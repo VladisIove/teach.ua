@@ -6,7 +6,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 	class Meta:
-		model = Comment 
+		model = Comment
+		depth = 2 
 		fields = ['id','text','recipient','owner','date',]
 
 class Userserializer(serializers.ModelSerializer):
