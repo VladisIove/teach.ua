@@ -71,6 +71,15 @@ svg{
   border: #401f68;
 }
 
+.alert-success{
+  background-color: #e4e0ee;
+  border: 2px solid #401f68;
+  color: #716c6b;
+}
+.alert-success hr{
+  background-color: #401f68;
+  border-top-color: #401f68;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -118,20 +127,20 @@ svg{
 
             <div class="form-check ">
               <div class="custom-control custom-checkbox mt-1 ">
-                <input type="checkbox" class="custom-control-input" id="customDistanceTeaching" name='option1' value='дистанционное преподавание' v-model='checkTypeWork'>
-                <label class="custom-control-label" for="customDistanceTeaching" >дистанционное преподавание</label>
+                <input type="checkbox" class="form-check-input" id="customDistanceTeaching" name='option1' value='дистанционное преподавание' v-model='checkTypeWork'>
+                <label class="form-check-label" for="customDistanceTeaching" >дистанционное преподавание</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customTutoringClientHome" name='option2' value='репетиторство у клиента дома' v-model='checkTypeWork'>
-                <label class="custom-control-label" for="customTutoringClientHome" >репетиторство у клиента дома</label>
+                <input type="checkbox" class="form-check-input" id="customTutoringClientHome" name='option2' value='репетиторство у клиента дома' v-model='checkTypeWork'>
+                <label class="form-check-label" for="customTutoringClientHome" >репетиторство у клиента дома</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customTutoringTeacherHome" name='option3' value='репетиторство на дому' v-model='checkTypeWork'>
-                <label class="custom-control-label" for="customTutoringTeacherHome" >репетиторство на дому</label>
+                <input type="checkbox" class="form-check-input" id="customTutoringTeacherHome" name='option3' value='репетиторство на дому' v-model='checkTypeWork'>
+                <label class="form-check-label" for="customTutoringTeacherHome" >репетиторство на дому</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customDecideOrder" name='option4' value='решаю на заказ' v-model='checkTypeWork'>
-                <label class="custom-control-label" for="customDecideOrder" >решаю на заказ</label>
+                <input type="checkbox" class="form-check-input" id="customDecideOrder" name='option4' value='решаю на заказ' v-model='checkTypeWork'>
+                <label class="form-check-label" for="customDecideOrder" >решаю на заказ</label>
               </div>
             </div>
           </div>
@@ -201,20 +210,20 @@ svg{
                           <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
                      <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
                   </div>
-                  <div class="col-10">
+                  <div class="col-8">
                     <p class="modal-title "><span class="font-weight-bold">О себе:</span> <%user_ad.about%></p>
 
                       <h4>Контактные данные: </h4>
-                      <p><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
-                      <p><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user_ad.email%></p>
-                      <p><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user_ad.skype%></p>
-                      <p><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user_ad.telegram%></p>
-                      <p><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
-                      <p><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
+                      <p v-if='user_ad.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
+                      <p v-if='user_ad.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user_ad.email%></p>
+                      <p v-if='user_ad.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user_ad.skype%></p>
+                      <p v-if='user_ad.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user_ad.telegram%></p>
+                      <p v-if='user_ad.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
+                      <p v-if='user_ad.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
 
                   </div>
-                  <div class="col-12 col-sm-2 align-self-end">
-                    <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>   </span>                 <button v-on:click="addLike(user_ad.id)" class="btn btn-primary">  
+                  <div class="col-12 col-sm-4  align-self-end">
+                    <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>   </span>                 <button v-on:click="addLike(user_ad.id)" class="btn btn-primary ml-sm-3">  
                      <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
 
                        <g>
@@ -232,20 +241,43 @@ svg{
               </div>
           </div>
           <div class="modal-body">
-            <div class="input-group mb-3">
-  <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button" v-on:click="addComment(user_ad.id)">Button</button>
+<div class="accordion" id="accordionExample">
+             <div class="card">
+                <div class="card-header" id="headingOne" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Комментарии
+                    </button>
+                  </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                  <div class="card-body mr-3">
+                    <div class="input-group mb-3 mt-3 ">
+                      <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Button</button>
+                      </div>
+                    </div>
+
+                    <div class="alert alert-success" v-for="comment in user_ad.recipient_comment">
+                      <p><% comment.text %></p>
+                      <hr>
+                      <p class="mb-0"><span class=" text-left"><% comment.date | dateParse %></span><span class="mb-0 text-right"> <% comment.owner.name %> <% comment.owner.surname %></span></p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+  <div class="card">
+
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      
+    </div>
   </div>
 </div>
 
-                    <div class="alert alert-success" v-for="comment in user_ad.recipient_comment">
-  <p><% comment.text %></p>
-  <hr>
-  <p class="mb-0"><% comment.date %> <% comment.owner.name %></p>
-
-          </div>
-          </div>
+</div>
                     <div class="modal-footer">
 
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -255,67 +287,9 @@ svg{
       </div>
     </div>
 
-
-<!--     <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-        <div class="row ">
-          <div class="col-1">
-            <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 300px'>
-          </div>
-          <div class="col-10">
-            <h3 class="modal-title" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
-            <p class="modal-title"> Город <i class="fas fa-city"></i>: <%user_ad.city%> <br/>Возраст <i class="fas fa-user-tie"></i>: <%user_ad.age%> <br/> Цена в час <i class="far fa-clock"></i>: <%user_ad.price_per_hource%> </p>
-              <p class="modal-title">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %></span>  </p>
-              <p class="modal-title">Название предмета <i class="fas fa-graduation-cap"></i>: <span v-for='skill in user_ad.skill'> <% skill.skill_name %></span></p>
-
-              <p class="modal-title">О себе: <%user_ad.about%></p>
-
-          </div>
-          <div class="col-12">
-              <h4>Контактные данные: </h4>
-              <p><i class="fas fa-phone-alt"></i> Номер телефона :<%user_ad.mobile_number%></p>
-              <p><i class="fas fa-envelope"></i> Почта :<%user_ad.email%></p>
-              <p><i class="fab fa-skype"></i> Skype :<%user_ad.skype%></p>
-              <p><i class="fab fa-telegram"></i> Telegram :<%user_ad.telegram%></p>
-              <p><i class="fab fa-viber"></i> Viber :<%user_ad.viber%></p>
-              <p><i class="fab fa-instagram"></i> Instagram :<%user_ad.instagram%></p>
-          </div>
-            <p class="card-text" >Лайки:<small class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>  </small>
-              <p  v-if='user_id == "None"'> зарегестрируйтесь, что бы поставить лайк</p>
-              <button v-on:click="addLike(user_ad.id)" class="btn btn-primary " v-else>Поставить лайк</button>
-            </p>
-        </div>
-        <div class="col-12">
-          <h1 id="comment" >Comment part</h1>
-          <p><% user_ad.comments | countLike %></p>
-          <div class="" v-for="comment in user_ad.recipient_comment">
-            <p><%  comment.id %></p>
-          </div>
-          <p :id="'comment_' + user_ad.id" >sdf</p>
-          <input id="text_comment" type="text">
-          <button v-on:click="addComment(user_ad.id)">send</button>
-        </div>
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
   </div>
-</div> -->
-
-  </div>
-
-   
+  
 </div>
-
 
 </div>
 
@@ -338,10 +312,7 @@ new Vue({
     user_id: `{{ user.id }}`,
     searchCity: '',
     searchSkill: '',
-    checkTypeWork: ['дистанционное преподавание',
-'репетиторство у клиента дома',
-'репетиторство на дому',
-'решаю на заказ'],
+    checkTypeWork: ['дистанционное преподавание','репетиторство у клиента дома','репетиторство на дому','решаю на заказ'],
     minAge: 1,
     maxAge: 100,
     minSalary: 0,
@@ -427,6 +398,9 @@ new Vue({
         }
     }
     return length;
+    },
+    dateParse: function(value){
+     return value.slice(0,-17)
     }
   },
   methods: {
@@ -435,12 +409,13 @@ new Vue({
       console.log(this.output)
     },
     loadUsers(){
+
       $.ajax({
         url: '/users/',
         type: "GET",
         success: (response) => {
           this.users = response.data
-
+          console.log(this.users)
           }
         });
       },
@@ -481,13 +456,8 @@ addComment: function (user_ad_id) {
             "profile_id": this.user_id ,
             "text": document.getElementById(comment).value
         },
-        success: function (data) {
-            
+        success: function (data) {           
             id = 'comment_'+data.data.toString();
-            console.log(data.comment);
-            /*cur_com = document.getElementById(id).value;
-            console.log(cur_com)*/
-
         }
     });
     }
