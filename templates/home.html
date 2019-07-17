@@ -77,70 +77,90 @@ svg{
 
 
 <div class="row" id='app'>
+  <div class="col-12 filter mt-3 mb-3 p-5">
+    <p class="h2 text-center  mb-4 ">Найти человека</p>
+<form method='GET'>
+  <div class="form-group row">
+    <label for="inputSkill" class="col-sm-2 col-form-label mt-sm-1">Предмет: </label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name' required>
+    </div>
+    <label for="inputCity" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Город: </label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city'>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputMinSalary" class="col-sm-2 col-form-label mt-sm-1">Зарплата в час: </label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary'>
+    </div>
+    <div class="col-sm-2">
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary'>
+    </div>
 
-  <div class="col-12 filter mt-3 mb-3">
-    <form action="" method='GET' class='m-2 p-2'>
-      <div class="form-row">
-        <div class="col">
-          <input type="text" class="form-control" id='skill' placeholder="Название предмета">
-        </div>
-        <div class="col">
-          <input type="text" class="form-control" id='city' placeholder="Город">
-        </div>
-      </div> 
-      <div class="form-row">  
-      <div class="col">Зарплата</div>      
-        <div class="col form-inline">
-           <label for="min_salary">от</label>
-          <input type="text" class="form-control" id='min_salary' placeholder="0">
-        </div>
-        <div class="col form-inline">
-          <label for="min_salary">до</label>
-          <input type="text" class="form-control" id='max_salary' placeholder="100">
-        </div>
-      </div>
-      <div class="form-row">  
-        <div class="col">Возраст</div>   
-        <div class="col form-inline">
-           <label for="min_age">от</label>
-          <input type="text" class="form-control" id='min_age' placeholder="0">
-        </div>
-        <div class="col form-inline">
-          <label for="max_age">до</label>
-          <input type="text" class="form-control" id='max_age' placeholder="100">
-        </div>
-      </div>
-      <div class="form-row">     
-        <div class="col-12 form-inline ml-4">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-            <label class="custom-control-label" for="customRadioInline1">Ученик</label>
+  
+    <label for="inputMinSalary" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Возраст: </label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin'>
+    </div>
+    <div class="col-sm-2">
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax'>
+    </div>
+  </div>
+
+ 
+
+  <div class="form-group row">
+    <div class="col-sm-6 col-12">
+          <div class="mt-sm-1">Вид занятости:</div>
+          <div class="col-sm-10">
+
+            <div class="form-check ">
+              <div class="custom-control custom-checkbox mt-1">
+                <input type="checkbox" class="custom-control-input" id="customDistanceTeaching" name='option1' value='DistanceTeaching'>
+                <label class="custom-control-label" for="customDistanceTeaching" >дистанционное преподавание</label>
+              </div>
+              <div class="custom-control custom-checkbox mt-1">
+                <input type="checkbox" class="custom-control-input" id="customTutoringClientHome" name='option2' value='TutoringClientHome'>
+                <label class="custom-control-label" for="customTutoringClientHome" >репетиторство у клиента дома</label>
+              </div>
+              <div class="custom-control custom-checkbox mt-1">
+                <input type="checkbox" class="custom-control-input" id="customTutoringTeacherHome" name='option3' value='TutoringTeacherHome'>
+                <label class="custom-control-label" for="customTutoringTeacherHome" >репетиторство на дому</label>
+              </div>
+              <div class="custom-control custom-checkbox mt-1">
+                <input type="checkbox" class="custom-control-input" id="customDecideOrder" name='option4' value='DecideOrder'>
+                <label class="custom-control-label" for="customDecideOrder" >решаю на заказ</label>
+              </div>
+            </div>
           </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-            <label class="custom-control-label" for="customRadioInline2">Преподователь</label>
+    </div>
+    <div class="col-sm-6 col-12">
+      <div class="offset-sm-2 pl-2 mt-2 mt-sm-1">Категория:</div>
+      <div class="col-sm-10 pl-4">
+        <div class="form-check offset-sm-2 ">
+          <div class="custom-control custom-radio mt-1">
+            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked value='T'>
+            <label class="custom-control-label" for="customRadio1" >Преподователь</label>
           </div>
-       </div>
-       <div class="col-12 form-inline d-flex justify-content-around">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="customCheck1">
-          <label class="custom-control-label" for="customCheck1">Решаю на заказ</label>
+        
+        <div class="custom-control custom-radio mt-1">
+          <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value='S'>
+          <label class="custom-control-label" for="customRadio2" >Ученик</label>
         </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="customCheck2">
-          <label class="custom-control-label" for="customCheck2">Репетиторство на дому</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="customCheck3">
-          <label class="custom-control-label" for="customCheck3">репетиторство у клиента дома</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="customCheck4">
-          <label class="custom-control-label" for="customCheck4">дистанционное преподавание</label>
         </div>
       </div>
     </div>
-    </form>  
+  </div>
+
+
+  <div class="form-group row">
+    <div class="col-sm-12 text-right">
+      <button type="submit" class="btn btn-primary">Найти</button>
+    </div>
+  </div>
+</form>
   </div>
 
 <div class="col-12 main p-5" >
