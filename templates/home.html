@@ -83,90 +83,70 @@ svg{
   <div class="form-group row">
     <label for="inputSkill" class="col-sm-2 col-form-label mt-sm-1">Предмет: </label>
     <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name' required>
+      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name'  v-model="searchSkill">
     </div>
     <label for="inputCity" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Город: </label>
     <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city'>
+      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city' v-model="searchCity">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputMinSalary" class="col-sm-2 col-form-label mt-sm-1">Зарплата в час: </label>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary'>
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary' v-model='minSalary'>
     </div>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary'>
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary' v-model='maxSalary'>
     </div>
 
   
     <label for="inputMinSalary" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Возраст: </label>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin'>
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin' v-model='minAge'>
     </div>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax'>
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax' v-model='maxAge'>
     </div>
   </div>
 
  
 
   <div class="form-group row">
-    <div class="col-sm-6 col-12">
+    <div class="col-sm-12 col-12">
           <div class="mt-sm-1">Вид занятости:</div>
-          <div class="col-sm-10">
+          <div class="col-sm-12 ">
 
             <div class="form-check ">
-              <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customDistanceTeaching" name='option1' value='DistanceTeaching'>
+              <div class="custom-control custom-checkbox mt-1 ">
+                <input type="checkbox" class="custom-control-input" id="customDistanceTeaching" name='option1' value='дистанционное преподавание' v-model='checkTypeWork'>
                 <label class="custom-control-label" for="customDistanceTeaching" >дистанционное преподавание</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customTutoringClientHome" name='option2' value='TutoringClientHome'>
+                <input type="checkbox" class="custom-control-input" id="customTutoringClientHome" name='option2' value='репетиторство у клиента дома' v-model='checkTypeWork'>
                 <label class="custom-control-label" for="customTutoringClientHome" >репетиторство у клиента дома</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customTutoringTeacherHome" name='option3' value='TutoringTeacherHome'>
+                <input type="checkbox" class="custom-control-input" id="customTutoringTeacherHome" name='option3' value='репетиторство на дому' v-model='checkTypeWork'>
                 <label class="custom-control-label" for="customTutoringTeacherHome" >репетиторство на дому</label>
               </div>
               <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="custom-control-input" id="customDecideOrder" name='option4' value='DecideOrder'>
+                <input type="checkbox" class="custom-control-input" id="customDecideOrder" name='option4' value='решаю на заказ' v-model='checkTypeWork'>
                 <label class="custom-control-label" for="customDecideOrder" >решаю на заказ</label>
               </div>
             </div>
           </div>
     </div>
-    <div class="col-sm-6 col-12">
-      <div class="offset-sm-2 pl-2 mt-2 mt-sm-1">Категория:</div>
-      <div class="col-sm-10 pl-4">
-        <div class="form-check offset-sm-2 ">
-          <div class="custom-control custom-radio mt-1">
-            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked value='T'>
-            <label class="custom-control-label" for="customRadio1" >Преподователь</label>
-          </div>
-        
-        <div class="custom-control custom-radio mt-1">
-          <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value='S'>
-          <label class="custom-control-label" for="customRadio2" >Ученик</label>
-        </div>
-        </div>
-      </div>
-    </div>
+
   </div>
 
 
-  <div class="form-group row">
-    <div class="col-sm-12 text-right">
-      <button type="submit" class="btn btn-primary">Найти</button>
-    </div>
-  </div>
 </form>
   </div>
 
 <div class="col-12 main p-5" >
 
 
-  <div class="" v-for='user_ad in users' >
+  <div class="" v-for='user_ad in filteredPerson' >
     <div class="card mb-3 mt-1 "  v-if='user_ad.subscription != "L"'>
       <div class="row no-gutters vip" >
       
@@ -437,12 +417,81 @@ new Vue({
   delimiters: ['<%', '%>'],
   el: '#app',
   data: {
-    users: '',
+    users: [],
     user_id: `{{ user.id }}`,
-    search_city: '',
-    search_skill: '',
-    Txt: '',
-     output: '',
+    searchCity: '',
+    searchSkill: '',
+    checkTypeWork: ['дистанционное преподавание',
+'репетиторство у клиента дома',
+'репетиторство на дому',
+'решаю на заказ'],
+    minAge: 1,
+    maxAge: 100,
+    minSalary: 0,
+    maxSalary: 20000,
+  },
+    computed: {
+    filteredPerson: function(){
+      var self = this;
+/*      return this.users.filter(function(user){
+        console.log(self.searchCity)
+        return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 ;
+      });*/
+      var self = this;
+
+      return this.users.filter(function(user){
+        /*&& user.skill.includes(self.searchSkill.toLowerCase()) != -1*/
+        skill_name_user = []
+        for (i in user.skill){
+          skill_name_user.push(user.skill[i].skill_name)  
+        }
+        type_les_user = []
+        
+        for(i in user.type_lesson){
+          type_les_user.push(user.type_lesson[i].type_lesson)
+        }
+
+        check = false
+        for( i in self.checkTypeWork){
+
+          if (type_les_user.includes(self.checkTypeWork[i])){
+            check = true;
+            break;
+          }
+        }
+        console.log(check)
+        console.log(typeof self.checkTypeWork)
+        if(self.checkTypeWork == {}){
+          console.log('all')
+
+        if (self.searchSkill.toLowerCase() != ''){
+          return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
+          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
+          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && skill_name_user.includes(self.searchSkill.toLowerCase());
+        }else{
+                    return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
+          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
+          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) ;
+        }
+      }else{
+                if (self.searchSkill.toLowerCase() != ''){
+          return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
+          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
+          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
+        }else{
+                    return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
+          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
+          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && check;
+        }
+      }
+ 
+
+
+
+        
+      });
+
+    }
   },
   created(){
     this.loadUsers()
@@ -473,7 +522,7 @@ new Vue({
         type: "GET",
         success: (response) => {
           this.users = response.data
-          console.log(this.users)
+
           }
         });
       },

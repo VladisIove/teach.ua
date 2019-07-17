@@ -188,14 +188,14 @@ class HomePageView(FormMixin,ListView, JsonResponse):
 
 
 	def get_queryset(self):
-		"""
+	
 		if self.request.user.is_authenticated:
 			if self.request.user.type_persone == 'S':
 				users = User.objects.filter(type_persone = 'T', valid_announcement=True )
 			else:
 				users = User.objects.filter(type_persone = 'S', valid_announcement=True )
-		else:"""
-		users = User.objects.filter(valid_announcement=True  )
+		else:
+			users = User.objects.filter(valid_announcement=True  )
 		return users
 		"""
 		if self.request.GET :

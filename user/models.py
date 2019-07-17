@@ -95,7 +95,7 @@ class User(AbstractUser):
 
 	skill = models.ManyToManyField('Skill', related_name='skill',blank=True, verbose_name='Предмет')
 
-	like = models.ManyToManyField('self', related_name='like')
+	like = models.ManyToManyField('self', related_name='like', null=True, blank=True)
 
 	create_time = models.DateTimeField(auto_now_add=True)
 	last_change = models.DateTimeField(blank=True, null=True)
