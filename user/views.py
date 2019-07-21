@@ -303,8 +303,8 @@ def add_comment(request):
 		user_who_add = User.objects.get(id=pr_id)
 		user_then_add = User.objects.get(id=us_id)
 		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
-		comment.save()
 
+		print(user_who_add.name)
 		print(comment.text)
-		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text})
+		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text, 'owner_name': user_who_add.name,'owner_surname': user_who_add.surname , 'date': comment.date})
 	return JsonResponse({'status': 0, 'data': 'bad'})
