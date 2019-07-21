@@ -7,8 +7,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Comment
-		depth = 2 
-		fields = ['id','text','recipient','owner','date',]
+		depth = 1 
+		fields = ['text','owner','date',]
 
 class Userserializer(serializers.ModelSerializer):
 	""" Сериализация юзеров для главной страници """

@@ -72,14 +72,22 @@ svg{
 }
 
 .alert-success{
+  background-color: white;
+  border: 2px solid #b6acd1;
+  color: black;
+}
+
+
+.vip-comment{
   background-color: #e4e0ee;
   border: 2px solid #401f68;
   color: #716c6b;
 }
-.alert-success hr{
+.vip-comment hr{
   background-color: #401f68;
   border-top-color: #401f68;
 }
+
 </style>
 {% endblock %}
 {% block content %}
@@ -92,70 +100,143 @@ svg{
   <div class="form-group row">
     <label for="inputSkill" class="col-sm-2 col-form-label mt-sm-1">Предмет: </label>
     <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name'  v-model="searchSkill">
+      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name'  v-model.lazy.trem="searchSkill">
     </div>
     <label for="inputCity" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Город: </label>
     <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city' v-model="searchCity">
+      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city' v-model.lazy.trem="searchCity">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputMinSalary" class="col-sm-2 col-form-label mt-sm-1">Зарплата в час: </label>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary' v-model='minSalary'>
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary' v-model.lazy.trem='minSalary'>
     </div>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary' v-model='maxSalary'>
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary' v-model.lazy.trem='maxSalary'>
     </div>
 
   
     <label for="inputMinSalary" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Возраст: </label>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin' v-model='minAge'>
+      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin' v-model.lazy.trem='minAge'>
     </div>
     <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax' v-model='maxAge'>
+      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax' v-model.lazy.trem='maxAge'>
     </div>
   </div>
 
- 
+ <p class='text-right mt-1'>
+  <a class="btn btn-primary " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Расширенный поиск
+  </a>
+
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
 
   <div class="form-group row">
-    <div class="col-sm-12 col-12">
-          <div class="mt-sm-1">Вид занятости:</div>
-          <div class="col-sm-12 ">
-
-            <div class="form-check ">
-              <div class="custom-control custom-checkbox mt-1 ">
-                <input type="checkbox" class="form-check-input" id="customDistanceTeaching" name='option1' value='дистанционное преподавание' v-model='checkTypeWork'>
-                <label class="form-check-label" for="customDistanceTeaching" >дистанционное преподавание</label>
-              </div>
-              <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="form-check-input" id="customTutoringClientHome" name='option2' value='репетиторство у клиента дома' v-model='checkTypeWork'>
-                <label class="form-check-label" for="customTutoringClientHome" >репетиторство у клиента дома</label>
-              </div>
-              <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="form-check-input" id="customTutoringTeacherHome" name='option3' value='репетиторство на дому' v-model='checkTypeWork'>
-                <label class="form-check-label" for="customTutoringTeacherHome" >репетиторство на дому</label>
-              </div>
-              <div class="custom-control custom-checkbox mt-1">
-                <input type="checkbox" class="form-check-input" id="customDecideOrder" name='option4' value='решаю на заказ' v-model='checkTypeWork'>
-                <label class="form-check-label" for="customDecideOrder" >решаю на заказ</label>
-              </div>
-            </div>
+    <div class="col-sm-6 col-12">
+      <div class="mt-sm-1">Вид занятости:</div>
+      <div class="col-sm-12 ">
+        <div class="form-check ">
+          <div class="custom-control custom-checkbox mt-1 " v-for='(value, name) in checkTypeWork'>
+            <input type="checkbox" class="form-check-input" :id="'customDistanceTeaching' + name" name='option1' v-model='checkTypeWork[name]'>
+            <label class="form-check-label" :for="'customDistanceTeaching' + name" ><% name %></label>
           </div>
-    </div>
+        </div>
+      </div>
+    </div> 
 
+   <div class="col-sm-5 col-12 offset-sm-1 mt-2 mt-sm-1">
+     <div class="mt-sm-1">Сортировать по :</div>
+    <template v-if='user_status == "V" || user_status == "M" '>
+     
+      <div class="col-sm-12 row">
+        <div class="form-check mt-1 col-12">
+          <input class="form-check" type="radio" id="exampleRadiosLike" value="like" v-model='radioSort'>
+          <label class="form-check-label" for="exampleRadiosLike" >
+            По количеству лаиков
+          </label>
+        </div>
+        <div class="form-check mt-1 col-12">
+          <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" v-model='radioSort' >
+          <label class="form-check-label" for="exampleRadiosComment">
+            По количеству комментариев
+          </label>
+        </div>
+
+
+      </div>
+    </div>
+    </template>
+    <template v-else>
+      <div class="col-sm-12 row">
+        <div class="form-check mt-1 col-12">
+          <input class="form-check" type="radio" id="exampleRadiosLike" value="like" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');">
+          <label class="form-check-label" for="exampleRadiosLike" >
+            По количеству лаиков
+          </label>
+        </div>
+        <div class="form-check mt-1 col-12">
+          <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');" >
+          <label class="form-check-label" for="exampleRadiosComment">
+            По количеству комментариев
+          </label>
+        </div>
+    </template>
   </div>
 
+
+  </div>
+</div>
 
 </form>
   </div>
+</div>
 
+
+<div class="col-12 main p-5 mb-2" >
+
+
+  <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' v-if='user_ad.subscription == "V"'>
+    <div class="card mb-3 mt-1 " >
+      <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
+
+        <div class="col-md-2 p-2">
+          <img :src="user_ad.img" class="" alt="..." style='width: 100%; height: auto;'>          
+        </div>
+
+        <div class="col-md-10 mt-sm-1">
+          <div class="card-body">
+            <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
+            <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+             <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+             <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+              <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="row card-text d-flex justify-content-between m-sm-1">
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
+          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
+          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+
+          </div>         
+        </div>
+
+
+      </div> 
+    </div>
+  </div>
+</div>
 <div class="col-12 main p-5" >
 
 
-  <div class="" v-for='user_ad in filteredPerson' >
+  <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' >
     <div class="card mb-3 mt-1 " >
       <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
 
@@ -211,7 +292,7 @@ svg{
                      <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
                   </div>
                   <div class="col-8">
-                    <p class="modal-title "><span class="font-weight-bold">О себе:</span> <%user_ad.about%></p>
+                    
 
                       <h4>Контактные данные: </h4>
                       <p v-if='user_ad.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
@@ -240,18 +321,20 @@ svg{
                 </div>
               </div>
           </div>
-          <div class="modal-body">
-<div class="accordion" id="accordionExample">
+          <div class="modal-body ml-3">
+            <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
+            <p class="modal-title mb-3"> <%user_ad.about%></p>
+            <div class="accordion" id="accordionExample">
              <div class="card">
                 <div class="card-header" id="headingOne" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
                   <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user_ad.id" aria-expanded="true" aria-controls="collapseOne">
                       Комментарии
                     </button>
                   </h2>
                 </div>
 
-                <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div :id="'collapseOne' + user_ad.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
                   <div class="card-body mr-3">
                     <div class="input-group mb-3 mt-3 ">
                       <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
@@ -259,12 +342,14 @@ svg{
                         <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Button</button>
                       </div>
                     </div>
-
-                    <div class="alert alert-success" v-for="comment in user_ad.recipient_comment">
+                              <% user_ad.recipient_comment.subscription %>
+                    <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
                       <p><% comment.text %></p>
-                      <hr>
-                      <p class="mb-0"><span class=" text-left"><% comment.date | dateParse %></span><span class="mb-0 text-right"> <% comment.owner.name %> <% comment.owner.surname %></span></p>
-
+                      <div class="row">
+                        <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
+                        <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
+                      </div>
+      
                     </div>
                   </div>
                 </div>
@@ -276,6 +361,7 @@ svg{
     </div>
   </div>
 </div>
+
 
 </div>
                     <div class="modal-footer">
@@ -301,7 +387,17 @@ svg{
 
 
 <script>
-
+function count(value){
+    var length = 0;
+    for( var key in value ) {
+        if( value.hasOwnProperty(key) ) {
+            ++length;
+        }
+    }
+    return length;
+    }
+var sortByLike = function (u1, u2) { return (count(u1.like) < count(u2.like)) ? 1 : -1; };
+var sortByComment = function (u1, u2) { return (count(u1.recipient_comment) < count(u2.recipient_comment)) ? 1 : -1; };
 
 
 new Vue({
@@ -310,30 +406,42 @@ new Vue({
   data: {
     users: [],
     user_id: `{{ user.id }}`,
+    user_status: `{{user.subscription}}` || null,
     searchCity: '',
     searchSkill: '',
-    checkTypeWork: ['дистанционное преподавание','репетиторство у клиента дома','репетиторство на дому','решаю на заказ'],
+    checkTypeWork: {
+      'дистанционное преподавание': false,
+      'репетиторство у клиента дома': false,
+      'репетиторство на дому': false,
+      'решаю на заказ': false,
+    },
+    radioSort: '',
     minAge: 1,
     maxAge: 100,
     minSalary: 0,
     maxSalary: 20000,
   },
-  updated: function(){
-    console.log(1)
-        $.ajax({
-        url: '/users/',
-        type: "GET",
-        success: (response) => {
-          this.users = response.data
+      mounted: function() {
+        axios
+            .get('/users/')
+            .then(response => {
 
-          }
-        });
-  },
+              this.users = response.data.data
+
+            });
+    },
+
     computed: {
     filteredPerson: function(){
-
       var self = this;
-      return this.users.filter(function(user){
+      var checkTypeWork = true 
+      for (i in self.checkTypeWork){
+        if(self.checkTypeWork[i] == true){
+          checkTypeWork = false
+        }
+      }
+
+      users = this.users.filter(function(user){
         skill_name_user = []
         for (i in user.skill){
           skill_name_user.push(user.skill[i].skill_name)  
@@ -343,82 +451,62 @@ new Vue({
         for(i in user.type_lesson){
           type_les_user.push(user.type_lesson[i].type_lesson)
         }
-
-        check = false
+        let check = false
         for( i in self.checkTypeWork){
-
-          if (type_les_user.includes(self.checkTypeWork[i])){
+          if (type_les_user.includes(i) && self.checkTypeWork[i]==true){
             check = true;
             break;
           }
         }
-        if(self.checkTypeWork == {}){
-          console.log('all')
 
+      if(checkTypeWork){
         if (self.searchSkill.toLowerCase() != ''){
-          return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
-          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
-          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && skill_name_user.includes(self.searchSkill.toLowerCase());
+
+          return skill_name_user.includes(self.searchSkill.toLowerCase());
         }else{
-                    return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
-          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
-          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) ;
+          return user
         }
       }else{
-                if (self.searchSkill.toLowerCase() != ''){
-          return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
-          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
-          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
+        if (self.searchSkill.toLowerCase() != ''){
+          return  skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
         }else{
-                    return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1 && 
-          (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge)) && 
-          (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary)) && check;
+          return  check;
         }
-      }
- 
-
-
-
-        
+      }   
+      })
+      .filter(function(user){
+        return (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge))
+      })
+      .filter(function(user){
+        return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1
+      })
+      .filter(function(user){
+        return (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary))
       });
 
-    }
-  },
-  created(){
-    this.loadUsers()
-  },
 
+      if(this.radioSort == 'like'){
+        users = users.sort(sortByLike)
+      } 
+      if(this.radioSort == 'comment'){
+        users = users.sort(sortByComment)
+      }
+      return users;
+
+    },
+
+  },
 
   filters: {
     countLike: function(value){
-    var length = 0;
-    for( var key in value ) {
-        if( value.hasOwnProperty(key) ) {
-            ++length;
-        }
-    }
-    return length;
+    return count(value);
     },
     dateParse: function(value){
      return value.slice(0,-17)
     }
   },
   methods: {
-    getFormValues () {
-      this.output = this.$refs.my_input.value
-      console.log(this.output)
-    },
-    loadUsers(){
 
-      $.ajax({
-        url: '/users/',
-        type: "GET",
-        success: (response) => {
-          this.users = response.data
-          console.log(this.users)
-          }
-        });
-      },
       addLike: function (user_ad_id) {
       if (this.user_id == 'None'){
         alert('Зарегистрируйтесь, что бы поставить лайк')
@@ -444,7 +532,9 @@ new Vue({
     },
 addComment: function (user_ad_id) {
     let comment = 'text_comment' + user_ad_id
-    console.log(comment)
+      if (this.user_id == 'None'){
+        alert('Зарегистрируйтесь, что бы оставить комментарий')
+      }else{
         $.ajax({
         type: 'post',
         url: '/add_comment/',
