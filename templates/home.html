@@ -6,200 +6,200 @@
 {% block css %}
 <style>
 
-.main, .filter{
-  background: white;
-  border-radius: 10px;
-}
+  .main, .filter{
+    background: white;
+    border-radius: 10px;
+  }
 
-.main{
-  background: white;
+  .main{
+    background: white;
 
-}
+  }
 
-.modal-dialog {
-  width: 100% ;
-  height: 100% ;
+  .modal-dialog {
+    width: 100% ;
+    height: 100% ;
 
-}
+  }
 
-.modal-content {
-  height: auto ;
-  min-height: 100% ;
+  .modal-content {
+    height: auto ;
+    min-height: 100% ;
 
-}
-.form-check{
-  display: inline-block;
-}
+  }
+  .form-check{
+    display: inline-block;
+  }
 
-.vip{
-  background-color: #e4e0ee;
-  border-left: 2px solid #401f68;
-  border-left-radius: 5px;
-}
-
-
-.card-body{
-  padding: 0 ;
-  padding-left: 1.5rem;
-}
-p{
-  margin-bottom: 0;
-}
-
-svg{
-  display: block;
-  width: 50px;
-  height: auto;
-}
-
-#svg_2{
-  fill:transparent; 
-  stroke:#e4e0ee;
-  fill: #e4e0ee;
-  stroke-width:6px;
-  cursor:pointer;
-  transition:fill .3s;
-}
+  .vip{
+    background-color: #e4e0ee;
+    border-left: 2px solid #401f68;
+    border-left-radius: 5px;
+  }
 
 
-.modal-content{
-  min-height: 70%;
-}
+  .card-body{
+    padding: 0 ;
+    padding-left: 1.5rem;
+  }
+  p{
+    margin-bottom: 0;
+  }
 
-.vip-modal{
-  background-color: #e4e0ee;
-  border: #401f68;
-}
+  svg{
+    display: block;
+    width: 50px;
+    height: auto;
+  }
 
-.alert-success{
-  background-color: white;
-  border: 2px solid #b6acd1;
-  color: black;
-}
+  #svg_2{
+    fill:transparent; 
+    stroke:#e4e0ee;
+    fill: #e4e0ee;
+    stroke-width:6px;
+    cursor:pointer;
+    transition:fill .3s;
+  }
 
 
-.vip-comment{
-  background-color: #e4e0ee;
-  border: 2px solid #401f68;
-  color: #716c6b;
-}
-.vip-comment hr{
-  background-color: #401f68;
-  border-top-color: #401f68;
-}
+  .modal-content{
+    min-height: 70%;
+  }
+
+  .vip-modal{
+    background-color: #e4e0ee;
+    border: #401f68;
+  }
+
+  .alert-success{
+    background-color: white;
+    border: 2px solid #b6acd1;
+    color: black;
+  }
+
+
+  .vip-comment{
+    background-color: #e4e0ee;
+    border: 2px solid #401f68;
+    color: #716c6b;
+  }
+  .vip-comment hr{
+    background-color: #401f68;
+    border-top-color: #401f68;
+  }
 
 </style>
 {% endblock %}
 {% block content %}
 
-
 <div class="row" id='app'>
   <div class="col-12 filter mt-3 mb-3 p-5">
     <p class="h2 text-center  mb-4 ">Найти человека</p>
-<form method='GET'>
-  <div class="form-group row">
-    <label for="inputSkill" class="col-sm-2 col-form-label mt-sm-1">Предмет: </label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name'  v-model.lazy.trem="searchSkill">
-    </div>
-    <label for="inputCity" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Город: </label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city' v-model.lazy.trem="searchCity">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputMinSalary" class="col-sm-2 col-form-label mt-sm-1">Зарплата в час: </label>
-    <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary' v-model.lazy.trem='minSalary'>
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary' v-model.lazy.trem='maxSalary'>
-    </div>
+    <form method='GET'>
+      <div class="form-group row">
+        <label for="inputSkill" class="col-sm-2 col-form-label mt-sm-1">Предмет: </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control mt-sm-1" id="inputSkill" placeholder="математика" name='name'  v-model.lazy.trem="searchSkill">
+        </div>
+        <label for="inputCity" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Город: </label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control mt-sm-1" id="inputCity" placeholder="Киев" name='city' v-model.lazy.trem="searchCity">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputMinSalary" class="col-sm-2 col-form-label mt-sm-1">Зарплата в час: </label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='minSalary' v-model.lazy.trem='minSalary'>
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='maxSalary' v-model.lazy.trem='maxSalary'>
+        </div>
 
-  
-    <label for="inputMinSalary" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Возраст: </label>
-    <div class="col-sm-2">
-      <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin' v-model.lazy.trem='minAge'>
-    </div>
-    <div class="col-sm-2">
-      <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax' v-model.lazy.trem='maxAge'>
-    </div>
-  </div>
 
- <p class='text-right mt-1'>
-  <a class="btn btn-primary " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Расширенный поиск
-  </a>
+        <label for="inputMinSalary" class="col-sm-1 offset-sm-1 mt-2 mt-sm-1 col-form-label ">Возраст: </label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control mt-sm-1" id="inputMinSalary" placeholder="от" name='ageMin' v-model.lazy.trem='minAge'>
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control mt-2 mt-sm-1" id="inputMaxSalary" placeholder="до" name='ageMax' v-model.lazy.trem='maxAge'>
+        </div>
+      </div>
 
-</p>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body">
+      <p class='text-right mt-1'>
+        <a class="btn btn-primary " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Расширенный поиск
+        </a>
 
-  <div class="form-group row">
-    <div class="col-sm-6 col-12">
-      <div class="mt-sm-1">Вид занятости:</div>
-      <div class="col-sm-12 ">
-        <div class="form-check ">
-          <div class="custom-control custom-checkbox mt-1 " v-for='(value, name) in checkTypeWork'>
-            <input type="checkbox" class="form-check-input" :id="'customDistanceTeaching' + name" name='option1' v-model='checkTypeWork[name]'>
-            <label class="form-check-label" :for="'customDistanceTeaching' + name" ><% name %></label>
+      </p>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+
+          <div class="form-group row">
+            <div class="col-sm-6 col-12">
+              <div class="mt-sm-1">Вид занятости:</div>
+              <div class="col-sm-12 ">
+                <div class="form-check ">
+                  <div class="custom-control custom-checkbox mt-1 " v-for='(value, name) in checkTypeWork'>
+                    <input type="checkbox" class="form-check-input" :id="'customDistanceTeaching' + name" name='option1' v-model='checkTypeWork[name]'>
+                    <label class="form-check-label" :for="'customDistanceTeaching' + name" ><% name %></label>
+                  </div>
+                </div>
+              </div>
+            </div> 
+
+            <div class="col-sm-5 col-12 offset-sm-1 mt-2 mt-sm-1">
+             <div class="mt-sm-1">Сортировать по :</div>
+             <template v-if='user_status == "V" || user_status == "M" '>
+
+              <div class="col-sm-12 row">
+                <div class="form-check mt-1 col-12">
+                  <input class="form-check" type="radio" id="exampleRadiosLike" value="like" v-model='radioSort'>
+                  <label class="form-check-label" for="exampleRadiosLike" >
+                    По количеству лаиков
+                  </label>
+                </div>
+                <div class="form-check mt-1 col-12">
+                  <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" v-model='radioSort' >
+                  <label class="form-check-label" for="exampleRadiosComment">
+                    По количеству комментариев
+                  </label>
+                </div>
+
+
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="col-sm-12 row">
+              <div class="form-check mt-1 col-12">
+                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');">
+                <label class="form-check-label" for="exampleRadiosLike" >
+                  По количеству лаиков
+                </label>
+              </div>
+              <div class="form-check mt-1 col-12">
+                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');" >
+                <label class="form-check-label" for="exampleRadiosComment">
+                  По количеству комментариев
+                </label>
+              </div>
+            </template>
           </div>
+
+
         </div>
       </div>
-    </div> 
 
-   <div class="col-sm-5 col-12 offset-sm-1 mt-2 mt-sm-1">
-     <div class="mt-sm-1">Сортировать по :</div>
-    <template v-if='user_status == "V" || user_status == "M" '>
-     
-      <div class="col-sm-12 row">
-        <div class="form-check mt-1 col-12">
-          <input class="form-check" type="radio" id="exampleRadiosLike" value="like" v-model='radioSort'>
-          <label class="form-check-label" for="exampleRadiosLike" >
-            По количеству лаиков
-          </label>
-        </div>
-        <div class="form-check mt-1 col-12">
-          <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" v-model='radioSort' >
-          <label class="form-check-label" for="exampleRadiosComment">
-            По количеству комментариев
-          </label>
-        </div>
-
-
-      </div>
-    </div>
-    </template>
-    <template v-else>
-      <div class="col-sm-12 row">
-        <div class="form-check mt-1 col-12">
-          <input class="form-check" type="radio" id="exampleRadiosLike" value="like" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');">
-          <label class="form-check-label" for="exampleRadiosLike" >
-            По количеству лаиков
-          </label>
-        </div>
-        <div class="form-check mt-1 col-12">
-          <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');" >
-          <label class="form-check-label" for="exampleRadiosComment">
-            По количеству комментариев
-          </label>
-        </div>
-    </template>
-  </div>
-
-
-  </div>
-</div>
-
-</form>
+    </form>
   </div>
 </div>
 
 
 <div class="col-12 main p-5 mb-2" >
 
-
+  <!--  Start vip block -->
   <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' v-if='user_ad.subscription == "V"'>
+    <!-- Start card -->
     <div class="card mb-3 mt-1 " >
       <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
 
@@ -211,32 +211,34 @@ svg{
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-             <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-             <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
-              <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
+            <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+            <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
         </div>
 
         <div class="col">
           <div class="row card-text d-flex justify-content-between m-sm-1">
-          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
-          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
-          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
-          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
-
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
           </div>         
         </div>
-
-
       </div> 
     </div>
+    <!-- End card -->
   </div>
+  <!-- End vip block -->
 </div>
+
+
 <div class="col-12 main p-5" >
-
-
+  
+  <!--  Start block -->
   <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' >
+    <!-- Start card -->
     <div class="card mb-3 mt-1 " >
       <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
 
@@ -248,189 +250,181 @@ svg{
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-             <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-             <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
-              <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
+            <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+            <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
         </div>
 
         <div class="col">
           <div class="row card-text d-flex justify-content-between m-sm-1">
-          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
-          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
-          <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
-          <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
-
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
           </div>         
         </div>
-
-
       </div> 
+      <!-- End card -->
     </div>
 
 
-
+    <!-- Start modal block -->
     <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :id="'demo' + user_ad.id">
       <div class="modal-dialog modal-lg" >
         <div class="modal-content" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+          <!-- Header modal block -->
           <div class="modal-header">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-lg-4 col-12 text-center">
-                    <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
-                  </div>
-                  <div class="col-lg-8 col-12">
-                    <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
-
-                    <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user_ad.city%> </span></p>
-                    <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user_ad.age%> </span></p>
-                    <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user_ad.price_per_hource%></span></p>
-                    <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-                     <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
-                          <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-                     <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
-                  </div>
-                  <div class="col-8">
-                    
-
-                      <h4>Контактные данные: </h4>
-                      <p v-if='user_ad.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
-                      <p v-if='user_ad.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user_ad.email%></p>
-                      <p v-if='user_ad.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user_ad.skype%></p>
-                      <p v-if='user_ad.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user_ad.telegram%></p>
-                      <p v-if='user_ad.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
-                      <p v-if='user_ad.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
-
-                  </div>
-                  <div class="col-12 col-sm-4  align-self-end">
-                    <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %>   </span>                 <button v-on:click="addLike(user_ad.id)" class="btn btn-primary ml-sm-3">  
-                     <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
-
-                       <g>
-                        <title>Layer 1</title>
-                        <g id="layer1">
-                         <path id="svg_2" d="m219.28949,21.827393c-66.240005,0 -119.999954,53.76001 -119.999954,120c0,134.755524 135.933151,170.08728 228.562454,303.308044c87.574219,-132.403381 228.5625,-172.854584 228.5625,-303.308044c0,-66.23999 -53.759888,-120 -120,-120c-48.047913,0 -89.401611,28.370422 -108.5625,69.1875c-19.160797,-40.817078 -60.514496,-69.1875 -108.5625,-69.1875z"/>
-                       </g>
-                     </g>
-                   </svg>
-                    </button> 
-                    </p>
-                  </div>
-                  <hr>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-4 col-12 text-center">
+                  <img :src="user_ad.img" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
                 </div>
+                
+                <div class="col-lg-8 col-12">
+                  <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user_ad.name%> <%user_ad.surname%></h3>
+                  <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user_ad.city%> </span></p>
+                  <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user_ad.age%> </span></p>
+                  <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user_ad.price_per_hource%></span></p>
+                  <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+                  <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+                  <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+                  <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+                </div>
+                <div class="col-8">
+                  <h4>Контактные данные: </h4>
+                  <p v-if='user_ad.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user_ad.mobile_number%></p>
+                  <p v-if='user_ad.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user_ad.email%></p>
+                  <p v-if='user_ad.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user_ad.skype%></p>
+                  <p v-if='user_ad.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user_ad.telegram%></p>
+                  <p v-if='user_ad.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
+                  <p v-if='user_ad.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
+                </div>
+                <div class="col-12 col-sm-4  align-self-end">
+                  <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %> </span>                 
+                    <button v-on:click="addLike(user_ad.id)" class="btn btn-primary ml-sm-3">  
+                      <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                          <title>Layer 1</title>
+                          <g id="layer1">
+                           <path id="svg_2" d="m219.28949,21.827393c-66.240005,0 -119.999954,53.76001 -119.999954,120c0,134.755524 135.933151,170.08728 228.562454,303.308044c87.574219,-132.403381 228.5625,-172.854584 228.5625,-303.308044c0,-66.23999 -53.759888,-120 -120,-120c-48.047913,0 -89.401611,28.370422 -108.5625,69.1875c-19.160797,-40.817078 -60.514496,-69.1875 -108.5625,-69.1875z"/>
+                          </g>
+                        </g>
+                      </svg>
+                   </button> 
+                  </p>
+                </div>
+                <hr>
               </div>
+            </div>
           </div>
-          <div class="modal-body ml-3">
-            <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
-            <p class="modal-title mb-3"> <%user_ad.about%></p>
-            <div class="accordion" id="accordionExample">
-             <div class="card">
-                <div class="card-header" id="headingOne" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user_ad.id" aria-expanded="true" aria-controls="collapseOne">
-                      Комментарии
-                    </button>
-                  </h2>
+          <!-- End header block -->
+      <!-- Start body block -->
+      <div class="modal-body ml-3">
+        <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
+        <p class="modal-title mb-3"> <%user_ad.about%></p>
+        <div class="accordion" id="accordionExample">
+         <div class="card">
+            <div class="card-header" id="headingOne" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user_ad.id" aria-expanded="true" aria-controls="collapseOne">
+                  Комментарии
+                </button>
+              </h2>
+            </div>
+
+            <div :id="'collapseOne' + user_ad.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body mr-3">
+                <div class="input-group mb-3 mt-3 ">
+                  <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Отправить</button>
+                  </div>
                 </div>
-
-                <div :id="'collapseOne' + user_ad.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
-                  <div class="card-body mr-3">
-                    <div class="input-group mb-3 mt-3 ">
-                      <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Button</button>
-                      </div>
+                <div :id="'comments_' + user_ad.id">
+                  <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
+                    <p><% comment.text %></p>
+                    <div class="row">
+                      <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
+                      <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
                     </div>
-                    <div :id="'comments_' + user_ad.id">
-                    <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
-                      <p><% comment.text %></p>
-                      <div class="row">
-                        <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
-                        <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
-                      </div>
-      
-                    </div>
-                  </div>
-
-                  </div>
                 </div>
               </div>
-  <div class="card">
-
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      
-    </div>
-  </div>
-</div>
-
-
-</div>
-                    <div class="modal-footer">
-
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="button" class="btn btn-primary">Связаться</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            </div>
           </div>
         </div>
       </div>
+      <!-- End body block -->
+      <!-- Start footer block -->
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary">Связаться</button>
+      </div>
+      <!-- End footer block -->
     </div>
-
+    <!-- End modal block -->
   </div>
-  
+  <!-- End card block -->
 </div>
 
-</div>
 
 
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/vue.js' %}"></script>
+
 
 
 <script>
-function count(value){
+  function count(value){
     var length = 0;
     for( var key in value ) {
-        if( value.hasOwnProperty(key) ) {
-            ++length;
-        }
+      if( value.hasOwnProperty(key) ) {
+        ++length;
+      }
     }
     return length;
-    }
-var sortByLike = function (u1, u2) { return (count(u1.like) < count(u2.like)) ? 1 : -1; };
-var sortByComment = function (u1, u2) { return (count(u1.recipient_comment) < count(u2.recipient_comment)) ? 1 : -1; };
+  }
+  var sortByLike = function (u1, u2) { return (count(u1.like) < count(u2.like)) ? 1 : -1; };
+  var sortByComment = function (u1, u2) { return (count(u1.recipient_comment) < count(u2.recipient_comment)) ? 1 : -1; };
 
 
-new Vue({
-  delimiters: ['<%', '%>'],
-  el: '#app',
-  data: {
-    users: [],
-    user_id: `{{ user.id }}`,
-    user_status: `{{user.subscription}}` || null,
-    searchCity: '',
-    searchSkill: '',
-    checkTypeWork: {
-      'дистанционное преподавание': false,
-      'репетиторство у клиента дома': false,
-      'репетиторство на дому': false,
-      'решаю на заказ': false,
+  new Vue({
+    delimiters: ['<%', '%>'],
+    el: '#app',
+    data: {
+      users: [],
+      user_id: `{{ user.id }}`,
+      user_status: `{{user.subscription}}` || null,
+      searchCity: '',
+      searchSkill: '',
+      checkTypeWork: {
+        'дистанционное преподавание': false,
+        'репетиторство у клиента дома': false,
+        'репетиторство на дому': false,
+        'решаю на заказ': false,
+      },
+      radioSort: '',
+      minAge: 1,
+      maxAge: 100,
+      minSalary: 0,
+      maxSalary: 20000,
     },
-    radioSort: '',
-    minAge: 1,
-    maxAge: 100,
-    minSalary: 0,
-    maxSalary: 20000,
-  },
-      mounted: function() {
-        axios
-            .get('/users/')
-            .then(response => {
+    mounted: function() {
+      axios
+      .get('/users/')
+      .then(response => {
 
-              this.users = response.data.data
+        this.users = response.data.data
 
-            });
+      });
     },
 /*  updated: function(){
     console.log(1)
@@ -442,141 +436,141 @@ new Vue({
 
           }
         });
-  },*/
-    computed: {
-    filteredPerson: function(){
-      var self = this;
-      var checkTypeWork = true 
-      for (i in self.checkTypeWork){
-        if(self.checkTypeWork[i] == true){
-          checkTypeWork = false
-        }
-      }
-
-      users = this.users.filter(function(user){
-        skill_name_user = []
-        for (i in user.skill){
-          skill_name_user.push(user.skill[i].skill_name)  
-        }
-        type_les_user = []
-        
-        for(i in user.type_lesson){
-          type_les_user.push(user.type_lesson[i].type_lesson)
-        }
-        let check = false
-        for( i in self.checkTypeWork){
-          if (type_les_user.includes(i) && self.checkTypeWork[i]==true){
-            check = true;
-            break;
+      },*/
+      computed: {
+        filteredPerson: function(){
+          var self = this;
+          var checkTypeWork = true 
+          for (i in self.checkTypeWork){
+            if(self.checkTypeWork[i] == true){
+              checkTypeWork = false
+            }
           }
-        }
 
-      if(checkTypeWork){
-        if (self.searchSkill.toLowerCase() != ''){
+          users = this.users.filter(function(user){
+            skill_name_user = []
+            for (i in user.skill){
+              skill_name_user.push(user.skill[i].skill_name)  
+            }
+            type_les_user = []
 
-          return skill_name_user.includes(self.searchSkill.toLowerCase());
-        }else{
-          return user
-        }
-      }else{
-        if (self.searchSkill.toLowerCase() != ''){
-          return  skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
-        }else{
-          return  check;
-        }
-      }   
-      })
-      .filter(function(user){
-        return (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge))
-      })
-      .filter(function(user){
-        return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1
-      })
-      .filter(function(user){
-        return (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary))
-      });
+            for(i in user.type_lesson){
+              type_les_user.push(user.type_lesson[i].type_lesson)
+            }
+            let check = false
+            for( i in self.checkTypeWork){
+              if (type_les_user.includes(i) && self.checkTypeWork[i]==true){
+                check = true;
+                break;
+              }
+            }
+
+            if(checkTypeWork){
+              if (self.searchSkill.toLowerCase() != ''){
+
+                return skill_name_user.includes(self.searchSkill.toLowerCase());
+              }else{
+                return user
+              }
+            }else{
+              if (self.searchSkill.toLowerCase() != ''){
+                return  skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
+              }else{
+                return  check;
+              }
+            }   
+          })
+          .filter(function(user){
+            return (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge))
+          })
+          .filter(function(user){
+            return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1
+          })
+          .filter(function(user){
+            return (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary))
+          });
 
 
-      if(this.radioSort == 'like'){
-        users = users.sort(sortByLike)
-      } 
-      if(this.radioSort == 'comment'){
-        users = users.sort(sortByComment)
-      }
-      return users;
+          if(this.radioSort == 'like'){
+            users = users.sort(sortByLike)
+          } 
+          if(this.radioSort == 'comment'){
+            users = users.sort(sortByComment)
+          }
+          return users;
 
-    },
+        },
 
-  },
+      },
 
-  filters: {
-    countLike: function(value){
-    return count(value);
-    },
-    dateParse: function(value){
-     return value.slice(0,-17)
-    }
-  },
-  methods: {
+      filters: {
+        countLike: function(value){
+          return count(value);
+        },
+        dateParse: function(value){
+         return value.slice(0,-17)
+       }
+     },
+     methods: {
 
       addLike: function (user_ad_id) {
-      if (this.user_id == 'None'){
-        alert('Зарегистрируйтесь, что бы поставить лайк')
-      }else{
-              $.ajax({
-        type: 'post',
-        url: '/add_like/',
-        headers: {
-          'X-HTTP-Method-Override': 'PATCH'
-        },
-        data: {
-          "user_id": this.user_id,
-          "profile_id": user_ad_id
-        },
-        success: function (data) {
-            $(this).toggleClass('');
-            id = data.data.toString();
-            document.getElementById(id).innerText = data.like
+        if (this.user_id == 'None'){
+          alert('Зарегистрируйтесь, что бы поставить лайк')
+        }else{
+          $.ajax({
+            type: 'post',
+            url: '/add_like/',
+            headers: {
+              'X-HTTP-Method-Override': 'PATCH'
+            },
+            data: {
+              "user_id": this.user_id,
+              "profile_id": user_ad_id
+            },
+            success: function (data) {
+              $(this).toggleClass('');
+              id = data.data.toString();
+              document.getElementById(id).innerText = data.like
+            }
+          });
         }
-      });
+
+      },
+      addComment: function (user_ad_id) {
+        var comment = 'text_comment' + user_ad_id
+        var comments = 'comments_' + user_ad_id
+        if (this.user_id == 'None'){
+          alert('Зарегистрируйтесь, что бы оставить комментарий')
+        }else{
+          $.ajax({
+            type: 'post',
+            url: '/add_comment/',
+            headers: {
+              'X-HTTP-Method-Override': 'PATCH'
+            },
+            data: {
+              "user_id": user_ad_id,
+              "profile_id": this.user_id ,
+              "text": document.getElementById(comment).value
+            },
+            success: function (data) {           
+              id = 'comment_'+data.data.toString();
+              const itemsHTML = `<div class="alert alert-success" >
+              <p>${data.comment}</p>
+              <div class="row">
+              <div class="col-6  text-left">${data.owner_name} ${data.owner_surname}</div>
+              <div class="col-6 text-right"><span class=" ">${data.date.slice(0,-14)}</span></div>
+              </div>`
+              document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
+
+            }
+          });
+        }
       }
-
-    },
-addComment: function (user_ad_id) {
-    var comment = 'text_comment' + user_ad_id
-    var comments = 'comments_' + user_ad_id
-     if (this.user_id == 'None'){
-      alert('Зарегистрируйтесь, что бы оставить комментарий')
-    }else{
-        $.ajax({
-          type: 'post',
-          url: '/add_comment/',
-          headers: {
-            'X-HTTP-Method-Override': 'PATCH'
-          },
-          data: {
-            "user_id": user_ad_id,
-            "profile_id": this.user_id ,
-            "text": document.getElementById(comment).value
-          },
-          success: function (data) {           
-            id = 'comment_'+data.data.toString();
-            const itemsHTML = `<div class="alert alert-success" >
-                      <p>${data.comment}</p>
-                      <div class="row">
-                        <div class="col-6  text-left">${data.owner_name} ${data.owner_surname}</div>
-                        <div class="col-6 text-right"><span class=" ">${data.date.slice(0,-14)}</span></div>
-                      </div>`
-            document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
-
-          }
-        });
     }
-    }
-    }
-  
 
-})
+
+  })
 
 </script>
 {% endblock %}

@@ -9,16 +9,20 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 from social_django.models import UserSocialAuth
 import json 
+
 from django_registration.views import RegistrationView as BaseRegistrationView
 from django.urls import reverse_lazy
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
+from rest_framework import mixins, generics, permissions, viewsets
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from django.core import signing
 from django_registration import signals
 from django.contrib.auth import update_session_auth_hash
@@ -31,7 +35,8 @@ from django.contrib import messages
 
 from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterForm
 from .models import User, Comment
-from .serializers import Userserializer
+from .serializers import Userserializer, UserProfileSerializer
+from .permissions import IsOwnerOrReadOnly
 
 
 
@@ -45,6 +50,23 @@ class UserView(APIView):
 		users = User.objects.filter(valid_announcement = True).exclude(id = request.user.id)
 		serializer = Userserializer(users, many = True)
 		return Response({'data': serializer.data })
+
+
+class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserProfileSerializer
+	parser_classes = (FormParser, JSONParser, MultiPartParser)
+	#permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+	def get(self, request, *args, **kwargs):
+		return self.retrieve(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
+
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
 
 class RegistrationView(BaseRegistrationView):
     """

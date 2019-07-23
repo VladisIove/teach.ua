@@ -4,6 +4,48 @@
 {% block title %}Профаил teach.ua{% endblock %}
 {% block css %}
 <style>
+
+  .vip{
+    background-color: #e4e0ee;
+    border-left: 2px solid #401f68;
+    border-left-radius: 5px;
+  }
+
+
+  .card-body{
+    padding: 0 ;
+    padding-left: 1.5rem;
+  }
+  p{
+    margin-bottom: 0;
+  }
+
+	  .modal-content{
+    min-height: 70%;
+  }
+
+  .vip-modal{
+    background-color: #e4e0ee;
+    border: #401f68;
+  }
+
+  .alert-success{
+    background-color: white;
+    border: 2px solid #b6acd1;
+    color: black;
+  }
+
+
+  .vip-comment{
+    background-color: #e4e0ee;
+    border: 2px solid #401f68;
+    color: #716c6b;
+  }
+  .vip-comment hr{
+    background-color: #401f68;
+    border-top-color: #401f68;
+  }
+
 	.main{
 		background: white;
 		border-radius: 10px;
@@ -32,109 +74,377 @@
 {% endblock %}
 
 {% block content %}
-<div class="main container mt-2 ">
+
+<div class="main container mt-2 " id='app-profile'>
 	<h2 class='h2 text-center '>Мой профиль</h2>
-	<form method="POST" enctype="multipart/form-data">
-		{% csrf_token %}
+	<form method="POST" enctype="multipart/form-data" runat="server" >
+		<div class="form-row">
+			<div class="form-group col-md-6 ">	
+				<img :src='user.img'  alt="" id="blah">
+				<input type="file" class="form-control-file mt-2" id="imgInp" @change="onFileChange" >	
+			</div>
 
-	
-	<div class="form-row">
-		<div class="form-group col-md-6 ">	
-			<img src='{{ MEDIA_ROOT }}{{ form.img.value.url }}'  alt="" >
+			<div class="form-group col-md-6 order-md-first">
+
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="name">Имя</label>
+						<input type="text" class="form-control" id="name" :v-model.lazy.trem='user.name' pattern="^\D [^0-9]+$" required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="surname">Фамилия</label>
+						<input type="text" class="form-control" id="surname" v-model.lazy.trem='user.surname' pattern="^\D [^0-9]+$" required>
+
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="email">Email</label>
+						<input type="email" class="form-control" id="email" :value='user.email' disabled>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="email">Возраст</label>
+						<input type="number"  class="form-control" id="email" v-model.lazy.trem='user.age' min="0" max='100' required>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="email">Цена за 1 час</label>
+						<input type="number"  class="form-control" id="email" v-model.lazy.trem='user.price_per_hource' min="0" required>
+					</div>
+
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="phone">Номер телефона</label>
+						<input class='form-control' type="tel" id="phone" name="phone" v-modal.lazy.trem='user.mobile_number'
+						pattern="[+0-9]{10,13}"
+						required>
+
+					</div>
+					<div class="form-group col-md-6">
+						<label for="city">Город</label>
+						<input type="text" class="form-control" id="city" v-model.lazy.trem='user.city' pattern="^\D [^0-9]+$" required>
+
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-12">
+						<p>Вид преподования:</p>
+						<div v-for='(value, name) in type_lesson_all' class='ml-5 '>
+							<input type="checkbox" class="form-check-input" :id='"checkType"+name' v-model='type_lesson_all[name]'>
+							<label class='form-check-label' :for='"checkType"+name'><% name %></label>	
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div class="form-row">
+			<div class="form-group">
+				<label>Уроки</label>
+				<input type="button" 
+				class="btn btn-primary" 
+				value="Добавить урок"
+				@click="addLesson"
+				>
+
+			</div>
+		</div>
 		
-
-			{{ form.img | as_crispy_field }}
-			
+		<div class="form-row" >
+			<div class="form-group col-md-4" v-for="(guest, index) in lessons">
+				<label @dblclick="deleteGuest(index)">
+					Предмет <% index + 1  %>
+				</label>
+				                <a сlass=""  @click="deleteLesson(index)" ><i class="fas fa-times" style='color:red'></i></a>
+                <input type="text" class="form-control" v-model.lazy.trem="lessons[index]">
+			</div>
 		</div>
-		<div class="form-group col-md-6 order-md-first">
-	
-			<div class="form-row">
-				<div class="form-group col-md-12">
-					{{ form.name| as_crispy_field }}
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-12">
-					{{ form.surname| as_crispy_field }}
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-12">
-					{{ form.email| as_crispy_field }}
-				</div>
-			</div>
 
-			<div class="form-row">
-				<div class="form-group col-md-6">
-					{{ form.age | as_crispy_field}} 
-				</div>
-				<div class="form-group col-md-6">
-					{{ form.price_per_hource | as_crispy_field}} 
-				</div>
-
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="skype">Skype</label>
+				<input type="text" class="form-control" id="skype" v-model.lazy.trem='user.skype'>
 			</div>
-
-			<div class="form-row">
-				<div class="form-group col-md-6">
-					{{ form.mobile_number| as_crispy_field }}
-				</div>
-								<div class="form-group col-md-6">
-					{{ form.city | as_crispy_field}} 
-				</div>
+			<div class="form-group col-md-3">
+				<label for="viber">Viber</label>
+				<input type="text" class="form-control" id="viber" v-model.lazy.trem='user.viber'>
+			</div>	
+			<div class="form-group col-md-3">
+				<label for="telegram">Telegram</label>
+				<input type="text" class="form-control" id="telegram" v-model.lazy.trem='user.telegram'>
 			</div>
-
-			<div class="form-row">
-				<div class="form-group col-md-6">
-					{{ form.type_lesson| as_crispy_field }}
-				</div>
-				<div class="form-group col-md-6">
-					{{ form.skill | as_crispy_field}} 
-				</div>
+			<div class="form-group col-md-3">
+				<label for="instagram">Instagram</label>
+				<input type="text" class="form-control" id="instagram" v-model.lazy.trem='user.instagram'>
 			</div>
-			
-
-
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12">
+				<label for="about">О себе</label>
+				<textarea name="" id="" cols="5" rows="3" required class='no-resize textarea form-control' maxlength="140" v-model.lazy.trem=' user.about'></textarea>
+			</div>
 
 		</div>
 
+		<div class="form-row">
 
-	</div>
-	
-	<div class="form-row">
-		<div class="form-group col-md-3">
-			{{ form.skype | as_crispy_field }}
-		</div>
-		<div class="form-group col-md-3">
-			{{ form.viber | as_crispy_field }}
-		</div>	
-		<div class="form-group col-md-3">
-			{{ form.telegram | as_crispy_field }}
-		</div>
-		<div class="form-group col-md-3">
-			{{ form.instagram | as_crispy_field }}
-		</div>
-	</div>
-	<div class="form-row">
-		<div class="form-group col-md-12">
-			{{ form.about | as_crispy_field }}
-		</div>
-	
-	</div>
-
-	<div class="form-row">
-
-		<div class="form-group col">
-			<div class="text-right">
-			{{ form.valid_announcement | as_crispy_field }}
-			
-			<button class='btn btn-primary mb-2' type=submit>Отправить</button></div>
+			<div class="form-group col">
+				<div  class='ml-5 text-right mb-2'>
+					<input type="checkbox" class="form-check-input" id='checkTypeValid' v-model='user.valid_announcement'>
+					<label class='form-check-label' for='checkTypeValid'>Показывать ваш профиль другим пользователям?</label>	
+				</div>
+				<div class="text-right">
+					<button class='btn btn-primary mb-2' type='submit' @click.prevent='submit($event)'>Сохранить изменения</button></div>
+				</div>
 			</div>
-		</div>
-	</div>
 		
 
 	</form>
-	</div>
+
+<!-- Start block -->
+   <div class=""  >
+     <!--Start card-->
+     <div class="card mb-3 mt-1 " >
+       <div class="row no-gutters "  :class="user.subscription != 'L' ? 'vip' : 'low'">
+ 
+         <div class="col-md-2 p-2">
+           <img :src="user.img" class="" alt="..." style='width: 100%; height: auto;'>          
+         </div>
+ 
+         <div class="col-md-10 mt-sm-1">
+           <div class="card-body">
+             <h5 class="card-title"><%user.name%> <%user.surname%></h5>
+             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+             <span v-for='(value, name) in type_lesson_all' v-if='type_lesson_all[name] == true'> <% name %>,</span>
+             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+             <span v-for='skill in lessons'> <% skill %> </span> </p>
+             <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user.id" > Подробнее...</button> 
+           </div>
+         </div>
+ 
+         <div class="col">
+           <div class="row card-text d-flex justify-content-between m-sm-1">
+             <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user.like | countLike %> </small></div>
+             <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user.city%> </small></div>
+             <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user.age%> </small></div>
+             <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user.price_per_hource%> </small></div>
+           </div>         
+         </div>
+       </div> 
+       <!-- End card -->
+     </div>
+ 
+ 
+     <!-- Start modal block -->
+     <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :id="'demo' + user.id">
+       <div class="modal-dialog modal-lg" >
+         <div class="modal-content" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+           <!-- Header modal block -->
+           <div class="modal-header">
+             <div class="container-fluid">
+               <div class="row">
+                 <div class="col-lg-4 col-12 text-center">
+                   <img :src="user.img" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
+                 </div>
+                 
+                 <div class="col-lg-8 col-12">
+                   <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user.name%> <%user.surname%></h3>
+                   <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user.city%> </span></p>
+                   <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user.age%> </span></p>
+                   <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user.price_per_hource%></span></p>
+                   <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+                   <span v-for='type in user.type_lesson'> <% type.type_lesson %>,</span>
+                   <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+                   <span v-for='skill in lessons'> <% skill %> </span> </p>
+                 </div>
+                 <div class="col-8">
+                   <h4>Контактные данные: </h4>
+                   <p v-if='user.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user.mobile_number%></p>
+                   <p v-if='user.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user.email%></p>
+                   <p v-if='user.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user.skype%></p>
+                   <p v-if='user.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user.telegram%></p>
+                   <p v-if='user.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user.viber%></p>
+                   <p v-if='user.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user.instagram%></p>
+                 </div>
+                 <div class="col-12 col-sm-4  align-self-end">
+                   <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user.id"> <% user.like | countLike %> </span>                 
+                     
+                   </p>
+                 </div>
+                 <hr>
+               </div>
+             </div>
+           </div>
+           <!-- End header block -->
+       <!-- Start body block -->
+       <div class="modal-body ml-3">
+         <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
+         <p class="modal-title mb-3"> <%user.about%></p>
+         <div class="accordion" id="accordionExample">
+          <div class="card">
+             <div class="card-header" id="headingOne" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+               <h2 class="mb-0">
+                 <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user.id" aria-expanded="true" aria-controls="collapseOne">
+                   Комментарии
+                 </button>
+               </h2>
+             </div>
+ 
+             <div :id="'collapseOne' + user.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+               <div class="card-body mr-3">
+                 <div class="input-group mb-3 mt-3 ">
+                   <input type="text" class="form-control"    disabled>
+                   <div class="input-group-append">
+                     <button class="btn btn-outline-secondary btn-primary" type="button" disabled>Отправить</button>
+                   </div>
+                 </div>
+                 <div :id="'comments_' + user.id">
+                   <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user.recipient_comment">
+                     <p><% comment.text %></p>
+                     <div class="row">
+                       <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
+                       <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
+                     </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="card">
+             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+             </div>
+           </div>
+         </div>
+       </div>
+       <!-- End body block -->
+       <!-- Start footer block -->
+       <div class="modal-footer">
+ 
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+         <button type="button" class="btn btn-primary">Связаться</button>
+       </div>
+       <!-- End footer block -->
+     </div>
+     <!-- End modal block -->
+   </div>  
+   <!-- End card block -->
+</div> 
 
 
+
+
+{% endblock %}
+
+{% block js %}
+
+
+
+<script>
+	function count(value){
+		var length = 0;
+		for( var key in value ) {
+			if( value.hasOwnProperty(key) ) {
+				++length;
+			}
+		}
+		return length;
+	}
+
+	$("#imgInp").change(function() {
+		readURL(this);
+	});
+
+	new Vue({
+		delimiters: ['<%', '%>'],
+		el: '#app-profile',
+		data: {
+			user: [] ,
+			type_lesson_all: {
+				'дистанционное преподавание': false,
+				'репетиторство у клиента дома': false,
+				'репетиторство на дому': false,
+				'решаю на заказ': false,
+			},
+			lessons: ['', '', '']
+		},
+		created: function() {
+			axios
+			.get(`/user_profile/{{user.id}}/`)
+			.then(response => {
+				this.user = response.data
+
+				
+
+				for(let i_all in this.type_lesson_all){
+					for(let i in this.user.type_lesson ){
+						if(this.user.type_lesson[i].type_lesson === i_all){
+							this.type_lesson_all[i_all] = true
+						}
+					}
+				}
+
+			});
+		},
+		methods:{
+			onFileChange(e) {
+				const file = e.target.files[0];
+				this.user.img = URL.createObjectURL(file);
+			},
+			addLesson(){
+
+				if(this.lessons.length == 3 && this.user.subscription == 'L'){
+					alert('Оформите подписку, что бы получить больше уроков')
+				}
+				else if(this.lessons.length == 6 && this.user.subscription == 'M'){
+					alert('Повысте уровоень подписки что бы продолжить')
+				}else if(this.lessons.length == 9 && this.user.subscription == 'V'){
+					alert('Нельзя добавить больше уроков')
+				}else{
+					this.lessons.push('')
+				}
+				
+			},
+			deleteLesson(index){
+				this.lessons.splice(index, 1);
+			},
+
+			submit(e){
+				this.user.type_lesson = []
+				for(let i in this.type_lesson_all){
+					if(this.type_lesson_all[i] == true) 
+						this.user.type_lesson.push(i)
+				}
+				this.user.skill = []
+				for(let i in this.lessons){
+					if(this.lessons[i].length > 0 )
+						this.user.skill.push(this.lessons[i])
+				}
+				console.log(this.user.skill)
+
+				axios
+				.put(`/user_profile/{{user.id}}/`,
+					this.user,	
+				)	
+			}
+		},
+		filters: {
+			countLike: function(value){
+				return count(value);
+			},
+			dateParse: function(value){
+				return value.slice(0,-17)
+			}
+		},
+		
+	})
+</script>
 {% endblock %}
