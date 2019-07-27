@@ -72,6 +72,7 @@ class User(AbstractUser):
 
 	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
 	img = models.ImageField(upload_to = 'media/', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
+	#img = models.URLField( verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
 	about = models.TextField(max_length=140, verbose_name='О вас:')
 	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст', blank=True)
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
@@ -95,7 +96,7 @@ class User(AbstractUser):
 
 	skill = models.ManyToManyField('Skill', related_name='skill',blank=True, verbose_name='Предмет')
 
-	like = models.ManyToManyField('self', related_name='like', null=True, blank=True)
+	like = models.ManyToManyField('self', related_name='like', blank=True)
 
 	create_time = models.DateTimeField(auto_now_add=True)
 	last_change = models.DateTimeField(blank=True, null=True)
@@ -142,10 +143,13 @@ class Skill(models.Model):
 
 
 class Comment(models.Model):
-	text = models.TextField(max_length=500, null=True)
-	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_comment')
-	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_comment')
+	text = models.TextField(max_length=500, null=True, blank=True)
+	recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_comment', blank=True, null=True)
+	owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_comment', blank=True, null=True)
 	date = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return f'{self.owner} - {self.text}'
 
 	class Meta:
 		ordering = ['-date']

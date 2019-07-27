@@ -15,10 +15,14 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 from social_django.models import UserSocialAuth
 import json 
-
+import os
 from django_registration.views import RegistrationView as BaseRegistrationView
 from django.urls import reverse_lazy
 from rest_framework.views import APIView
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import mixins, generics, permissions, viewsets
@@ -34,7 +38,7 @@ from django.contrib import messages
 
 
 from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterForm
-from .models import User, Comment
+from .models import User, Comment, TypeLesson
 from .serializers import Userserializer, UserProfileSerializer
 from .permissions import IsOwnerOrReadOnly
 
@@ -52,7 +56,7 @@ class UserView(APIView):
 		return Response({'data': serializer.data })
 
 
-class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserProfileSerializer
 	parser_classes = (FormParser, JSONParser, MultiPartParser)
@@ -61,92 +65,103 @@ class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixin
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
 
-	def delete(self, request, *args, **kwargs):
-		return self.destroy(request, *args, **kwargs)
+	def update(self, request, *args, **kwargs):
+		partial = kwargs.pop('partial', False)
+		instance = self.get_object()
+		request.data._mutable = True
+		#data = {	}
+		serializer = self.get_serializer(instance, data=request.data, partial=partial)
+		if serializer.is_valid():
+			self.perform_update(serializer)
+			return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
+		return Response(serializer.data, status = status.HTTP_400_BAD_REQUEST)
+
 
 	def put(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
 
 
+
+
 class RegistrationView(BaseRegistrationView):
-    """
-    Register a new (inactive) user account, generate an activation key
-    and email it to the user.
-    This is different from the model-based activation workflow in that
-    the activation key is the username, signed using Django's
-    TimestampSigner, with HMAC verification on activation.
-    """
-    email_body_template = 'django_registration/activation_email_body.txt'
-    email_subject_template = 'django_registration/activation_email_subject.txt'
-    success_url = reverse_lazy('django_registration_complete')
-    form_class = CustomFormRegistration
+	"""
+	Register a new (inactive) user account, generate an activation key
+	and email it to the user.
+	This is different from the model-based activation workflow in that
+	the activation key is the username, signed using Django's
+	TimestampSigner, with HMAC verification on activation.
+	"""
+	email_body_template = 'django_registration/activation_email_body.txt'
+	email_subject_template = 'django_registration/activation_email_subject.txt'
+	success_url = reverse_lazy('django_registration_complete')
+	form_class = CustomFormRegistration
 
-    def register(self, form):
-        new_user = self.create_inactive_user(form)
-        signals.user_registered.send(
-            sender=self.__class__,
-            user=new_user,
-            request=self.request
-        )
-        return new_user
+	def register(self, form):
+		new_user = self.create_inactive_user(form)
+		signals.user_registered.send(
+			sender=self.__class__,
+			user=new_user,
+			request=self.request
+		)
+		return new_user
 
-    def create_inactive_user(self, form):
-        """
-        Create the inactive user account and send an email containing
-        activation instructions.
-        """
-        new_user = form.save(commit=False)
-        new_user.is_active = False
-        new_user.save()
+	def create_inactive_user(self, form):
+		"""
+		Create the inactive user account and send an email containing
+		activation instructions.
+		"""
+		new_user = form.save(commit=False)
+		new_user.is_active = False
+		new_user.save()
 
-        self.send_activation_email(new_user)
+		self.send_activation_email(new_user)
 
-        return new_user
+		return new_user
 
-    def get_activation_key(self, user):
-        """
-        Generate the activation key which will be emailed to the user.
-        """
-        return signing.dumps(
-            obj=user.get_username(),
-            salt=REGISTRATION_SALT
-        )
+	def get_activation_key(self, user):
+		"""
+		Generate the activation key which will be emailed to the user.
+		"""
+		return signing.dumps(
+			obj=user.get_username(),
+			salt=REGISTRATION_SALT
+		)
 
-    def get_email_context(self, activation_key):
-        """
-        Build the template context used for the activation email.
-        """
-        scheme = 'https' if self.request.is_secure() else 'http'
+	def get_email_context(self, activation_key):
+		"""
+		Build the template context used for the activation email.
+		"""
+		scheme = 'https' if self.request.is_secure() else 'http'
 
-        return {
-            'scheme': scheme,
-            'activation_key': activation_key,
-            'expiration_days': 7,
-            'site': get_current_site(self.request)
-        }
+		return {
+			'scheme': scheme,
+			'activation_key': activation_key,
+			'expiration_days': 7,
+			'site': get_current_site(self.request)
+		}
 
-    def send_activation_email(self, user):
-        """
-        Send the activation email. The activation key is the username,
-        signed using TimestampSigner.
-        """
-        activation_key = self.get_activation_key(user)
-        context = self.get_email_context(activation_key)
-        context['user'] = user
-        subject = render_to_string(
-            template_name=self.email_subject_template,
-            context=context,
-            request=self.request
-        )
-        # Force subject to a single line to avoid header-injection
-        # issues.
-        subject = ''.join(subject.splitlines())
-        message = render_to_string(
-            template_name=self.email_body_template,
-            context=context,
-            request=self.request
-        )
-        user.email_user(subject, message, 'teach.teacher.ua@gmail.com')
+	def send_activation_email(self, user):
+		"""
+		Send the activation email. The activation key is the username,
+		signed using TimestampSigner.
+		"""
+		activation_key = self.get_activation_key(user)
+		context = self.get_email_context(activation_key)
+		context['user'] = user
+		subject = render_to_string(
+			template_name=self.email_subject_template,
+			context=context,
+			request=self.request
+		)
+		# Force subject to a single line to avoid header-injection
+		# issues.
+		subject = ''.join(subject.splitlines())
+		message = render_to_string(
+			template_name=self.email_body_template,
+			context=context,
+			request=self.request
+		)
+		user.email_user(subject, message, 'teach.teacher.ua@gmail.com')
 
 
 @login_required

@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 	fieldsets = (
 			('Main info',{
 				'classes': ('wide',),
-				'fields': ( ('name','surname', 'last_change', 'valid_announcement', 'age'),
+				'fields': ( ('name','surname', 'last_change', 'valid_announcement', 'age',),
 			   			  ('img', 'city', 'type_persone' ,'about', 'price_per_hource'),
 			   			   ('subscription', 'start_subscription', 'end_subscription'))
 				}),
