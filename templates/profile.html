@@ -89,31 +89,31 @@
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="name">Имя</label>
-						<input type="text" class="form-control" id="name" v-model.lazy.trem='user.name' pattern="^\D [^0-9]+$" required>
+						<input type="text" class="form-control" @change="isNameValid" id="name"  v-model.lazy.trem='user.name' required>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="surname">Фамилия</label>
-						<input type="text" class="form-control" id="surname" v-model.lazy.trem='user.surname' pattern="^\D [^0-9]+$" required>
+						<input type="text" class="form-control" @change="isNameValid" id="surname" v-model.lazy.trem='user.surname' required>
 
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="email">Email</label>
-						<input type="email" class="form-control" id="email" :value='user.email' disabled>
+						<input type="email" class="form-control" id="email" :placeholder='user.email' disabled>
 					</div>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col-md-6">
-						<label for="email">Возраст</label>
-						<input type="number"  class="form-control" id="email" v-model.lazy.trem='user.age' min="0" max='100' required>
+						<label for="age">Возраст</label>
+						<input type="number"  class="form-control" id="age" v-model.lazy.trem='user.age' min="0" max='100' required>
 					</div>
 					<div class="form-group col-md-6">
-						<label for="email">Цена за 1 час</label>
-						<input type="number"  class="form-control" id="email" v-model.lazy.trem='user.price_per_hource' min="0" required>
+						<label for="price">Цена за 1 час</label>
+						<input type="number"  class="form-control" id="price" v-model.lazy.trem='user.price_per_hource' min="0" required>
 					</div>
 
 				</div>
@@ -373,8 +373,8 @@
 				{id: 3, type_lesson: 'репетиторство на дому', checked: false },
 				{id: 2, type_lesson: 'решаю на заказ', checked: false },
 			],
-			lessons: [''],
-			data: new FormData()
+			lessons: [],
+			
 		},
 		created: function() {
 
@@ -391,18 +391,47 @@
 						}
 					}
 				}
+				for(let i in this.user.skill){
+					this.lessons.push(this.user.skill[i]['skill_name'])
+				}
 			console.log(this.user.type_lesson)
 
 
 			});
 		},
 		methods:{
+			isNameValid() {
+				const namePattern = '/\D/'
+				if (namePattern.test(this.user.name)) {
+					this.wrongEmail = false;
+				} else {
+					this.wrongEmail = true;
+				}
+			},
 			
 			onFileChange(e) {
 				const file = e.target.files[0];
 				this.img_url = URL.createObjectURL(file);
-				this.user.img = event.target.files[0];
-				this.data.append('img', event.target.files[0]); 
+				data =  new FormData()
+				data.append('img', event.target.files[0]); 
+				data.append('email', this.user.email); 
+
+				const URL_axios = `/user_profile/{{user.id}}/`; 
+
+				let config = {
+					header : {
+						'Content-Type' : 'application/form-data'
+					}
+				}
+
+				axios
+				.put(
+					URL_axios,
+					data,
+					config,
+					)
+				.then(resp => console.log(resp.data))
+				.catch(err => console.log(err.response.data))
 			},
 			addLesson(){
 
@@ -427,34 +456,35 @@
 				e.stopPropagation();
 				e.preventDefault();
 
-				this.user.skill = [{}]
+				this.user.skill = []
 				for(let i in this.lessons){
 					if(this.lessons[i].length > 0 )
 						this.user.skill.push(this.lessons[i])
 				}
-
+				this.user.type_lesson = []
+				for( i in this.type_lesson_all){
+					if (this.type_lesson_all[i].checked == true){
+						this.user.type_lesson.push(this.type_lesson_all[i].id)
+					}
+				}
 				const URL = `/user_profile/{{user.id}}/`; 
-				
-
-				console.log(typeof this.user.type_lesson)
-				console.log(this.user.type_lesson)
-				this.data.append('name', this.user.name);
-				this.data.append('surname', this.user.surname);
-				this.data.append('mobile_number', this.user.mobile_number);
-				this.data.append('about', this.user.about);
-				this.data.append('age', this.user.age);
-				this.data.append('city', this.user.city);
-				this.data.append('price_per_hource', this.user.price_per_hource);
-				this.data.append('type_persone', this.user.type_persone);
-				this.data.append('skype', this.user.skype);
-				this.data.append('telegram', this.user.telegram);
-				this.data.append('viber', this.user.viber);
-				this.data.append('instagram', this.user.instagram);
-				this.data.append('type_lesson', this.user.type_lesson);
-				this.data.append('valid_announcement', this.user.valid_announcement);
-				this.data.append('email', this.user.email);
-			
-
+				data = {
+					'name': this.user.name,
+					'surname': this.user.surname,
+					'email': this.user.email,
+					'mobile_number': this.user.mobile_number,
+					'about': this.user.about,
+					'age': this.user.age,
+					'price_per_hource': this.user.price_per_hource,
+					'city': this.user.city,
+					'skype': this.user.skype,
+					'instagram': this.user.instagram,
+					'telegram': this.user.telegram,
+					'viber': this.user.viber,
+					'valid_announcement': this.user.valid_announcement,
+					'skill': this.user.skill,
+					'type_lesson': this.user.type_lesson,
+				}
 				let config = {
 					header : {
 						'Content-Type' : 'application/form-data'
@@ -464,7 +494,7 @@
 				axios
 				.put(
 					URL,
-					this.data,
+					data,
 					config,
 				)
 				.then(resp => console.log(resp.data))

@@ -83,7 +83,7 @@ class TypeSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
 	""" Сериализация профаила юзера"""
 	recipient_comment = CommentSerializer(many=True, required=False)
-	type_lesson = TypeSerializer(many=True)
+	type_lesson = TypeSerializer(many=True, required=False)
 
 	class Meta:	
 		model = User 

@@ -38,7 +38,7 @@ from django.contrib import messages
 
 
 from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterForm
-from .models import User, Comment, TypeLesson
+from .models import User, Comment, TypeLesson, Skill
 from .serializers import Userserializer, UserProfileSerializer
 from .permissions import IsOwnerOrReadOnly
 
@@ -65,22 +65,41 @@ class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, gener
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
 
-	def update(self, request, *args, **kwargs):
-		partial = kwargs.pop('partial', False)
-		instance = self.get_object()
-		request.data._mutable = True
-		#data = {	}
-		serializer = self.get_serializer(instance, data=request.data, partial=partial)
-		if serializer.is_valid():
-			self.perform_update(serializer)
-			return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
-		return Response(serializer.data, status = status.HTTP_400_BAD_REQUEST)
-
 
 	def put(self, request, *args, **kwargs):
-		return self.update(request, *args, **kwargs)
+		
+		print(request.data)
+		try:
+			user = User.objects.get(email = request.data['email'])
+			user_up = User.objects.filter(email = request.data['email'])
+		except User.DoesNotExist:
+			return Response({'data': 'fail'}, status = status.HTTP_400_BAD_REQUEST)
+		
+		if request.FILES:
+			return self.update(request, *args, **kwargs)
+
+		user.type_lesson.clear()
+		for type_lesson_id in request.data['type_lesson']:
+			user.type_lesson.add(TypeLesson.objects.get(id = type_lesson_id))
+		user.skill.clear()
+		for skill_name in request.data['skill']:
+			obj, _ =Skill.objects.get_or_create(skill_name = skill_name)
+			user.skill.add(obj)
+		user_up.update(name = request.data['name'], 
+				surname=request.data['surname'],
+				mobile_number=request.data['mobile_number'],
+				about=request.data['about'],
+				age=request.data['age'],
+				price_per_hource=request.data['price_per_hource'],
+				city=request.data['city'],
+				skype=request.data['skype'],
+				instagram=request.data['instagram'],
+				telegram=request.data['telegram'],
+				viber=request.data['viber'],
+				valid_announcement=request.data['valid_announcement'])
 
 
+		return Response({'data': 'good'}, status = status.HTTP_200_OK)
 
 
 class RegistrationView(BaseRegistrationView):
@@ -220,9 +239,6 @@ def password(request):
 class HomePageView(FormMixin,ListView, JsonResponse):
 	template_name = 'home.html'
 	context_object_name = 'users'
-	model = User
-	form_class = FilterForm
-
 
 	def get_queryset(self):
 	
@@ -234,42 +250,6 @@ class HomePageView(FormMixin,ListView, JsonResponse):
 		else:
 			users = User.objects.filter(valid_announcement=True  )
 		return users
-		"""
-		if self.request.GET :
-			min_age = self.request.GET['min_age'] if self.request.GET['min_age'] else 0 					
-			max_age = self.request.GET['max_age'] if self.request.GET['max_age'] else 110 					
-			min_salary = self.request.GET['min_salary'] if self.request.GET['min_salary'] else 0 
-			max_salary = self.request.GET['max_salary'] if self.request.GET['max_salary'] else 1000000  
-			city = self.request.GET['city'] if self.request.GET['city'] else None 
-			type_work_number = self.request.GET.getlist('type_work') if self.request.GET.getlist('type_work') else None 
-			name_skill = self.request.GET['name_skill'] if self.request.GET['name_skill'] else None 
-
-			users = users.filter(age__gte = min_age, age__lte = max_age, price_per_hource__gte = min_salary, price_per_hource__lte = max_salary )
-			
-			if city is not None:
-				users = users.filter(city__in = city)	
-			if name_skill is not None:
-				users = users.filter(name_skill__in = name_skill)
-			if type_work_number is not None:
-				type_work = []
-				user = []
-				for number in type_work_number:
-					type_work.append(TypeLesson.objects.get(pk = int(number)))
-				
-				users = users.filter(type_lesson__in = type_work).distinct()"
-		"""
-
-	def get_context_data(self, *, object_list=None, **kwargs):
-		users = super(HomePageView, self).get_queryset()
-		user = self.request.user
-		return {'users': [i.as_json() for i in users], 'user': user}
-
-
-	'''
-	def success_url(self, request, *args, **kwargs):
-		pk = kwargs['pk']
-		return redirect(reverse('user:update_profile', args=[pk]))
-	'''
 
 
 class ProfileUpdateView(UpdateView, LoginRequiredMixin):
@@ -340,8 +320,5 @@ def add_comment(request):
 		user_who_add = User.objects.get(id=pr_id)
 		user_then_add = User.objects.get(id=us_id)
 		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
-
-		print(user_who_add.name)
-		print(comment.text)
 		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text, 'owner_name': user_who_add.name,'owner_surname': user_who_add.surname , 'date': comment.date})
 	return JsonResponse({'status': 0, 'data': 'bad'})

@@ -73,7 +73,7 @@ class User(AbstractUser):
 	mobile_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Номер телефона')
 	img = models.ImageField(upload_to = 'media/', verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
 	#img = models.URLField( verbose_name='Фотография профиля', default='../static/img/noimage.jpg')
-	about = models.TextField(max_length=140, verbose_name='О вас:')
+	about = models.TextField(max_length=140, verbose_name='О вас:', blank=True, null=True)
 	age = models.PositiveSmallIntegerField(null=True , verbose_name='Возраст', blank=True)
 	city = models.CharField(max_length=50, blank=True, null=True , verbose_name='Город')
 	price_per_hource = models.PositiveSmallIntegerField(default=0, verbose_name='Цена в час', blank=True, null=True)
