@@ -172,13 +172,13 @@
           <template v-else>
             <div class="col-sm-12 row">
               <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');">
+                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" @click = 'showModalSub'>
                 <label class="form-check-label" for="exampleRadiosLike" >
                   По количеству лаиков
                 </label>
               </div>
               <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" onclick="alert('Оформите подписку, что бы воспользоваться фильтром');" >
+                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" @click = 'showModalSub' >
                 <label class="form-check-label" for="exampleRadiosComment">
                   По количеству комментариев
                 </label>
@@ -194,12 +194,12 @@
   </div>
 </div>
 
-
-<div class="col-12 main p-5 mb-2" >
+<div class="col-12 main p-5 mb-2" v-if='filteredPerson.length > 0'>
 
   <!--  Start vip block -->
-  <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' v-if='user_ad.subscription == "V"'>
+  <div class="" v-for='user_ad in filteredVIPPerson' :key='user_ad.id' >
     <!-- Start card -->
+    
     <div class="card mb-3 mt-1 " >
       <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
 
@@ -211,9 +211,9 @@
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-            <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <span v-for='(type, index) in user_ad.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user_ad.type_lesson.length">, </span></span>
             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-            <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+            <span v-for='(skill, index) in user_ad.skill'> <% skill.skill_name %><span v-if="index+1 < user_ad.skill.length">, </span></span> </p>
             <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
         </div>
@@ -234,10 +234,12 @@
 </div>
 
 
-<div class="col-12 main p-5" >
-  
+<div class="col-12 main p-5"  >
+     <div class=""  v-if='filteredPerson.length == 0' >
+    <h1 class="text-center">Подходящих людей сейчас нету. Попробуйте изменить фильтры </h1>
+  </div>
   <!--  Start block -->
-  <div class="" v-for='user_ad in filteredPerson' :key='user_ad.id' >
+  <div class="" v-for='(user_ad, index) in filteredPerson' :key='user_ad.id' v-else>
     <!-- Start card -->
     <div class="card mb-3 mt-1 " >
       <div class="row no-gutters "  :class="user_ad.subscription != 'L' ? 'vip' : 'low'">
@@ -250,9 +252,9 @@
           <div class="card-body">
             <h5 class="card-title"><%user_ad.name%> <%user_ad.surname%></h5>
             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-            <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+            <span v-for='(type, index) in user_ad.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user_ad.type_lesson.length">, </span></span>
             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-            <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+            <span v-for='(skill, index) in user_ad.skill'> <% skill.skill_name %><span v-if="index+1 < user_ad.skill.length">, </span></span> </p>
             <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user_ad.id" > Подробнее...</button> 
           </div>
         </div>
@@ -288,9 +290,9 @@
                   <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user_ad.age%> </span></p>
                   <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user_ad.price_per_hource%></span></p>
                   <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-                  <span v-for='type in user_ad.type_lesson'> <% type.type_lesson %>,</span>
+                  <span v-for='(type, index) in user_ad.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user_ad.type_lesson.length">, </span></span>
                   <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-                  <span v-for='skill in user_ad.skill'> <% skill.skill_name %>,</span> </p>
+                  <span v-for='(skill, index) in user_ad.skill'> <% skill.skill_name %><span v-if="index+1 < user_ad.skill.length">, </span></span> </p>
                 </div>
                 <div class="col-8">
                   <h4>Контактные данные: </h4>
@@ -365,24 +367,82 @@
       <div class="modal-footer">
 
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <button type="button" class="btn btn-primary">Связаться</button>
+       <!--  <button type="button" class="btn btn-primary">Связаться</button> -->
       </div>
       <!-- End footer block -->
     </div>
     <!-- End modal block -->
   </div>
   <!-- End card block -->
+
+
 </div>
 
+</div>
+  <div class="container">
 
+    <reg-modal ref="modal"></reg-modal>
+    <sub-modal ref="modal"></sub-modal>
+  </div>
+</div>
+
+<template id="reg-modal">
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content text-center" style='min-height: 10%'>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Внимание!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h1">Зарегестрируйтесь, что бы продолжить!</h1>
+          <a class="btn btn-primary " href="{% url 'login' %}">Войти</a>
+          <a class="btn btn-primary " href="{% url 'user:django_registration_register' %}">Зарегестрироваться</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template id="sub-modal">
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content text-center" style='min-height: 10%'>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Внимание!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h1">Оформите подписку, что бы продолжить!</h1>
+            <a class="btn btn-primary" href="{% url 'user:subscribe' %}">Оформить подписку</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 {% endblock %}
 
 {% block js %}
 
 
-
 <script>
+
+Vue.component('reg-modal', {
+  template: '#reg-modal',
+})
+Vue.component('sub-modal', {
+  template: '#sub-modal',
+})
+
+
   function count(value){
     var length = 0;
     for( var key in value ) {
@@ -416,27 +476,17 @@
       maxAge: 100,
       minSalary: 0,
       maxSalary: 20000,
+
     },
     mounted: function() {
       axios
       .get('/users/')
       .then(response => {
-
-        this.users = response.data.data
+        this.users = response.data.data;
 
       });
     },
-/*  updated: function(){
-    console.log(1)
-        $.ajax({
-        url: '/users/',
-        type: "GET",
-        success: (response) => {
-          this.users = response.data
 
-          }
-        });
-      },*/
       computed: {
         filteredPerson: function(){
           var self = this;
@@ -501,6 +551,71 @@
 
         },
 
+        filteredVIPPerson: function(){
+
+          var self = this;
+          var checkTypeWork = true 
+          for (i in self.checkTypeWork){
+            if(self.checkTypeWork[i] == true){
+              checkTypeWork = false
+            }
+          }
+
+          users = this.users.filter(function(user){
+            skill_name_user = []
+            for (i in user.skill){
+              skill_name_user.push(user.skill[i].skill_name)  
+            }
+            type_les_user = []
+
+            for(i in user.type_lesson){
+              type_les_user.push(user.type_lesson[i].type_lesson)
+            }
+            let check = false
+            for( i in self.checkTypeWork){
+              if (type_les_user.includes(i) && self.checkTypeWork[i]==true){
+                check = true;
+                break;
+              }
+            }
+
+            if(checkTypeWork){
+              if (self.searchSkill.toLowerCase() != ''){
+
+                return skill_name_user.includes(self.searchSkill.toLowerCase());
+              }else{
+                return user
+              }
+            }else{
+              if (self.searchSkill.toLowerCase() != ''){
+                return  skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
+              }else{
+                return  check;
+              }
+            }   
+          })
+          .filter(function(user){
+            return user.subscription == 'V';
+          })
+          .filter(function(user){
+            return (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge))
+          })
+          .filter(function(user){
+            return user.city.toLowerCase().indexOf(self.searchCity.toLowerCase()) != -1
+          })
+          .filter(function(user){
+            return (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary))
+          });
+
+
+          if(this.radioSort == 'like'){
+            users = users.sort(sortByLike)
+          } 
+          if(this.radioSort == 'comment'){
+            users = users.sort(sortByComment)
+          }
+          return users;
+        },
       },
 
       filters: {
@@ -512,61 +627,69 @@
        }
      },
      methods: {
-
+    showModalReg() {
+      let element = this.$refs.modal.$el
+      $(element).modal('show')
+    },
+    showModalSub() {
+      let element = this.$refs.modal.$el
+      $(element).modal('show')
+    },
       addLike: function (user_ad_id) {
         if (this.user_id == 'None'){
-          alert('Зарегистрируйтесь, что бы поставить лайк')
+          this.showModalReg()
         }else{
-          $.ajax({
-            type: 'post',
+
+
+          const params = new URLSearchParams();
+          params.append('user_id', this.user_id);
+          params.append('profile_id', user_ad_id);
+          axios({
+            method: 'post',
             url: '/add_like/',
-            headers: {
-              'X-HTTP-Method-Override': 'PATCH'
-            },
-            data: {
-              "user_id": this.user_id,
-              "profile_id": user_ad_id
-            },
-            success: function (data) {
+            data: params
+          })
+          .then(function(response){
+            console.log(response.data)
               $(this).toggleClass('');
-              id = data.data.toString();
-              document.getElementById(id).innerText = data.like
-            }
-          });
+              id = response.data.data.toString();
+              document.getElementById(id).innerText = response.data.like
+              })
         }
 
       },
       addComment: function (user_ad_id) {
         var comment = 'text_comment' + user_ad_id
+        console.log('text_comment' + user_ad_id)
         var comments = 'comments_' + user_ad_id
         if (this.user_id == 'None'){
-          alert('Зарегистрируйтесь, что бы оставить комментарий')
+          this.showModalReg()
         }else{
-          $.ajax({
-            type: 'post',
+         
+          const params = new URLSearchParams();
+          params.append('user_id', user_ad_id);
+          params.append('profile_id', this.user_id);
+          params.append('text', document.getElementById(comment).value);
+          axios({
+            method: 'post',
             url: '/add_comment/',
-            headers: {
-              'X-HTTP-Method-Override': 'PATCH'
-            },
-            data: {
-              "user_id": user_ad_id,
-              "profile_id": this.user_id ,
-              "text": document.getElementById(comment).value
-            },
-            success: function (data) {           
-              id = 'comment_'+data.data.toString();
-              const itemsHTML = `<div class="alert alert-success" >
-              <p>${data.comment}</p>
-              <div class="row">
-              <div class="col-6  text-left">${data.owner_name} ${data.owner_surname}</div>
-              <div class="col-6 text-right"><span class=" ">${data.date.slice(0,-14)}</span></div>
-              </div>`
-              document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
+            data: params
+          })
+          .then(function(response){
+            id = 'comment_'+response.data.data.toString();
+            const itemsHTML = `<div class="alert alert-success" >
+            <p>${response.data.comment}</p>
+            <div class="row">
+            <div class="col-6  text-left">${response.data.owner_name} ${response.data.owner_surname}</div>
+            <div class="col-6 text-right"><span class=" ">${response.data.date.slice(0,-14)}</span></div>
+            </div>`
+            document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
+              })
 
-            }
-          });
+          
+
         }
-      }
+      },
     }
 
 

@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -49,11 +50,6 @@ REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
 
 
-class UserView(APIView):
-	def get(self, request):
-		users = User.objects.filter(valid_announcement = True).exclude(id = request.user.id)
-		serializer = Userserializer(users, many = True)
-		return Response({'data': serializer.data })
 
 
 class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
@@ -67,8 +63,7 @@ class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, gener
 
 
 	def put(self, request, *args, **kwargs):
-		
-		print(request.data)
+
 		try:
 			user = User.objects.get(email = request.data['email'])
 			user_up = User.objects.filter(email = request.data['email'])
@@ -235,38 +230,19 @@ def password(request):
 
 
 
+class UserView(APIView):
 
-class HomePageView(FormMixin,ListView, JsonResponse):
+	def get(self, request):
+		users = User.objects.filter(valid_announcement = True).exclude(id = request.user.id)
+		serializer = Userserializer(users, many = True)
+		return Response({'data': serializer.data })
+
+class HomePageView(TemplateView):
 	template_name = 'home.html'
-	context_object_name = 'users'
-
-	def get_queryset(self):
-	
-		if self.request.user.is_authenticated:
-			if self.request.user.type_persone == 'S':
-				users = User.objects.filter(type_persone = 'T', valid_announcement=True )
-			else:
-				users = User.objects.filter(type_persone = 'S', valid_announcement=True )
-		else:
-			users = User.objects.filter(valid_announcement=True  )
-		return users
 
 
-class ProfileUpdateView(UpdateView, LoginRequiredMixin):
+class ProfileUpdateView(TemplateView, LoginRequiredMixin):
 	template_name = 'profile.html'
-	form_class = UpdateUserProfile
-	model = User
-
-	def success_url(self, request, *args, **kwargs):
-		pk = kwargs['pk']
-		return redirect(reverse('user:update_profile', args=[pk]))
-
-	def form_valid(self, form, *args, **kwargs):
-		obj = form.save()
-		obj.last_change = timezone.now()
-		pk = obj.pk
-		obj.save()
-		return redirect(reverse('user:update_profile', args=[pk]))
 
 	def dispatch(self, request, *args, **kwargs):
 		"""Return 403 if flag is not set in a user profile. """
@@ -299,26 +275,26 @@ def help_message(request):
 
 @csrf_exempt
 def add_like(request):
-	if request.is_ajax():
-		us_id = request.POST.get('profile_id')
-		pr_id = request.POST.get('user_id')
-		user_who_add = User.objects.get(id=pr_id)
-		user_then_add = User.objects.get(id=us_id)
-		if user_who_add in user_then_add.like.all():
-			user_then_add.like.remove(user_who_add)
-		else:
-			user_then_add.like.add(user_who_add)
-		return JsonResponse({'status': 1, 'data': user_then_add.id, 'like': user_then_add.like.count()})
-	return JsonResponse({'status': 0, 'data': 'bad'})
+	print(request.POST)
+	us_id = request.POST.get('profile_id')
+	pr_id = request.POST.get('user_id')
+	user_who_add = User.objects.get(id=pr_id)
+	user_then_add = User.objects.get(id=us_id)
+	if user_who_add in user_then_add.like.all():
+		user_then_add.like.remove(user_who_add)
+	else:
+		user_then_add.like.add(user_who_add)
+	return JsonResponse({'status': 1, 'data': user_then_add.id, 'like': user_then_add.like.count()})
+
 
 
 @csrf_exempt
 def add_comment(request):
-	if request.is_ajax():
-		us_id = request.POST.get('user_id')
-		pr_id = request.POST.get('profile_id')
-		user_who_add = User.objects.get(id=pr_id)
-		user_then_add = User.objects.get(id=us_id)
-		comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
-		return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text, 'owner_name': user_who_add.name,'owner_surname': user_who_add.surname , 'date': comment.date})
-	return JsonResponse({'status': 0, 'data': 'bad'})
+	us_id = request.POST.get('user_id')
+	pr_id = request.POST.get('profile_id')
+	user_who_add = User.objects.get(id=pr_id)
+	user_then_add = User.objects.get(id=us_id)
+
+	comment = Comment.objects.create(text=request.POST.get('text'), owner=user_who_add, recipient=user_then_add)
+	return JsonResponse({'status': 1, 'data': user_then_add.id, 'comment': comment.text, 'owner_name': user_who_add.name,'owner_surname': user_who_add.surname , 'date': comment.date})
+

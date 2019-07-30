@@ -9,8 +9,8 @@ from .views import UserProfailView, HomePageView, ProfileUpdateView, help_messag
 app_name = 'user'
 
 urlpatterns = [
-	#path('home/', HomePageView.as_view(), name='home'),
-	path('home/', TemplateView.as_view(template_name='home.html'), name='home'),
+	path('home/', HomePageView.as_view(), name='home'),
+	#path('home/', TemplateView.as_view(template_name='home.html'), name='home'),
 	path('users/', UserView.as_view(), name='users'),
 	path('user_profile/<int:pk>/', csrf_exempt(UserProfailView.as_view()), name='user_profile'),
 	path('profile/<int:pk>/', login_required(ProfileUpdateView.as_view()), name='update_profile'),
