@@ -89,13 +89,13 @@
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="name">Имя</label>
-						<input type="text" class="form-control" @change="isNameValid" id="name"  v-model.lazy.trem='user.name' required>
+						<input type="text" class="form-control" id="name"  v-model.lazy.trem='user.name' required>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="surname">Фамилия</label>
-						<input type="text" class="form-control" @change="isNameValid" id="surname" v-model.lazy.trem='user.surname' required>
+						<input type="text" class="form-control"  id="surname" v-model.lazy.trem='user.surname' required>
 
 					</div>
 				</div>
@@ -109,11 +109,11 @@
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="age">Возраст</label>
-						<input type="number"  class="form-control" id="age" v-model.lazy.trem='user.age' min="0" max='100' required>
+						<input type="number"  class="form-control" id="age" v-model.lazy.trem='user.age' required>
 					</div>
 					<div class="form-group col-md-6">
 						<label for="price">Цена за 1 час</label>
-						<input type="number"  class="form-control" id="price" v-model.lazy.trem='user.price_per_hource' min="0" required>
+						<input type="number"  class="form-control" id="price" v-model.lazy.trem='user.price_per_hource'  required>
 					</div>
 
 				</div>
@@ -122,13 +122,12 @@
 					<div class="form-group col-md-6">
 						<label for="phone">Номер телефона</label>
 						<input class='form-control' type="tel" id="phone" name="phone" v-model.lazy.trem='user.mobile_number'
-						pattern="[+0-9]{10,13}"
 						required>
 
 					</div>
 					<div class="form-group col-md-6">
 						<label for="city">Город</label>
-						<input type="text" class="form-control" id="city" v-model.lazy.trem='user.city' pattern="^\D [^0-9]+$" required>
+						<input type="text" class="form-control" id="city" v-model.lazy.trem='user.city' required>
 
 					</div>
 				</div>
@@ -204,7 +203,7 @@
 					<label class='form-check-label' for='checkTypeValid'>Показывать ваш профиль другим пользователям?</label>	
 				</div>
 				<div class="text-right">
-					<button class='btn btn-primary mb-2' type='submit' @click.prevent='submit($event)'>Сохранить изменения</button></div>
+					<button class='btn btn-primary mb-2' type='submit' @click.prevent='submit($event)' :disabled="reg.valid">Сохранить изменения</button></div>
 				</div>
 			</div>
 		
@@ -214,134 +213,191 @@
 <!-- Start block -->
    <div class=""  >
      <!--Start card-->
-     <div class="card mb-3 mt-1 " >
-       <div class="row no-gutters "  :class="user.subscription != 'L' ? 'vip' : 'low'">
- 
-         <div class="col-md-2 p-2">
-           <img :src="img_url" class="" alt="..." style='width: 100%; height: auto;'>          
-         </div>
- 
-         <div class="col-md-10 mt-sm-1">
-           <div class="card-body">
-             <h5 class="card-title"><%user.name%> <%user.surname%></h5>
-             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-             <span v-for='(value, name) in type_lesson_all' v-if='type_lesson_all[name] == true'> <% name %>,</span>
-             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-             <span v-for='skill in lessons'> <% skill %> </span> </p>
-             <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user.id" > Подробнее...</button> 
-           </div>
-         </div>
- 
-         <div class="col">
-           <div class="row card-text d-flex justify-content-between m-sm-1">
-             <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user.like | countLike %> </small></div>
-             <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user.city%> </small></div>
-             <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user.age%> </small></div>
-             <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user.price_per_hource%> </small></div>
-           </div>         
-         </div>
-       </div> 
-       <!-- End card -->
-     </div>
- 
- 
-     <!-- Start modal block -->
-     <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :id="'demo' + user.id">
-       <div class="modal-dialog modal-lg" >
-         <div class="modal-content" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
-           <!-- Header modal block -->
-           <div class="modal-header">
-             <div class="container-fluid">
-               <div class="row">
-                 <div class="col-lg-4 col-12 text-center">
-                   <img :src="img_url" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
-                 </div>
-                 
-                 <div class="col-lg-8 col-12">
-                   <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user.name%> <%user.surname%></h3>
-                   <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user.city%> </span></p>
-                   <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user.age%> </span></p>
-                   <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user.price_per_hource%></span></p>
-                   <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-                   <span v-for='type in user.type_lesson'> <% type.type_lesson %>,</span>
-                   <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-                   <span v-for='skill in lessons'> <% skill %> </span> </p>
-                 </div>
-                 <div class="col-8">
-                   <h4>Контактные данные: </h4>
-                   <p v-if='user.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user.mobile_number%></p>
-                   <p v-if='user.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user.email%></p>
-                   <p v-if='user.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user.skype%></p>
-                   <p v-if='user.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user.telegram%></p>
-                   <p v-if='user.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user.viber%></p>
-                   <p v-if='user.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user.instagram%></p>
-                 </div>
-                 <div class="col-12 col-sm-4  align-self-end">
-                   <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user.id"> <% user.like | countLike %> </span>                 
-                     
-                   </p>
-                 </div>
-                 <hr>
-               </div>
-             </div>
-           </div>
-           <!-- End header block -->
-       <!-- Start body block -->
-       <div class="modal-body ml-3">
-         <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
-         <p class="modal-title mb-3"> <%user.about%></p>
-         <div class="accordion" id="accordionExample">
-          <div class="card">
-             <div class="card-header" id="headingOne" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
-               <h2 class="mb-0">
-                 <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user.id" aria-expanded="true" aria-controls="collapseOne">
-                   Комментарии
-                 </button>
-               </h2>
-             </div>
- 
-             <div :id="'collapseOne' + user.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
-               <div class="card-body mr-3">
-                 <div class="input-group mb-3 mt-3 ">
-                   <input type="text" class="form-control"    disabled>
-                   <div class="input-group-append">
-                     <button class="btn btn-outline-secondary btn-primary" type="button" disabled>Отправить</button>
-                   </div>
-                 </div>
-                 <div :id="'comments_' + user.id">
-                   <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user.recipient_comment">
-                     <p><% comment.text %></p>
-                     <div class="row">
-                       <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
-                       <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
-                     </div>
-                 </div>
-               </div>
-             </div>
-           </div> 
-         </div>
+    <div class="card mb-3 mt-1 " >
+      <div class="row no-gutters "  :class="user.subscription != 'L' ? 'vip' : 'low'">
+
+        <div class="col-md-2 p-2">
+          <img :src="user.img" class="" alt="..." style='width: 100%; height: auto;'>          
+        </div>
+
+        <div class="col-md-10 mt-sm-1">
+          <div class="card-body">
+            <h5 class="card-title"><%user.name%> <%user.surname%></h5>
+            <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+            <span v-for='(type, index) in user.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user.type_lesson.length">, </span></span>
+            <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+            <span v-for='(skill, index) in user.skill'> <% skill.skill_name %><span v-if="index+1 < user.skill.length">, </span></span> </p>
+            <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user.id" > Подробнее...</button> 
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="row card-text  m-sm-1">
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5">Нравится: <% user.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5">Город: <%user.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5"> Возраст: <%user.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5"> Цена в час: <%user.price_per_hource%> </small></div>
+          </div>         
+        </div>
+      </div> 
+      <!-- End card -->
+    </div>
+
+
+    <!-- Start modal block -->
+    <div class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :id="'demo' + user.id">
+      <div class="modal-dialog modal-lg" >
+        <div class="modal-content" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+          <!-- Header modal block -->
+          <div class="modal-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-4 col-12 text-center">
+                  <img :src="user.img" class="img-thumbnail" alt="..." style='max-width: 100%; height: auto;'>
+                </div>
+                
+                <div class="col-lg-8 col-12">
+                  <h3 class="modal-title font-weight-bold" id="exampleModalLongTitle"><%user.name%> <%user.surname%></h3>
+                  <p class="modal-title"> <span class="font-weight-bold">Город <i class="fas fa-city"></i></span>: <span><%user.city%> </span></p>
+                  <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user.age%> </span></p>
+                  <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user.price_per_hource%></span></p>
+                  <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
+                  <span v-for='(type, index) in user.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user.type_lesson.length">, </span></span>
+                  <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
+                  <span v-for='(skill, index) in user.skill'> <% skill.skill_name %><span v-if="index+1 < user.skill.length">, </span></span> </p>
+                </div>
+                <div class="col-8">
+                  <h4>Контактные данные: </h4>
+                  <p v-if='user.mobile_number != null'><span class="font-weight-bold"><i class="fas fa-phone-alt"></i> Номер телефона:</span> <%user.mobile_number%></p>
+                  <p v-if='user.email != null'><span class="font-weight-bold"><i class="fas fa-envelope"></i> Почта:</span> <%user.email%></p>
+                  <p v-if='user.skype != null'><span class="font-weight-bold"><i class="fab fa-skype"></i> Skype:</span> <%user.skype%></p>
+                  <p v-if='user.telegram != null'><span class="font-weight-bold"><i class="fab fa-telegram"></i> Telegram:</span> <%user.telegram%></p>
+                  <p v-if='user.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user.viber%></p>
+                  <p v-if='user.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user.instagram%></p>
+                </div>
+                <div class="col-12 col-sm-4  align-self-end " :id="'like'+user.id">
+                  <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user.id"> <% user.like | countLike %> </span>                 
+                    <button v-on:click="addLike(user.id)" class="btn btn-primary ml-sm-3">  
+                      <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                          <title>Layer 1</title>
+                          <g id="layer1">
+                           <path id="svg_2" d="m219.28949,21.827393c-66.240005,0 -119.999954,53.76001 -119.999954,120c0,134.755524 135.933151,170.08728 228.562454,303.308044c87.574219,-132.403381 228.5625,-172.854584 228.5625,-303.308044c0,-66.23999 -53.759888,-120 -120,-120c-48.047913,0 -89.401611,28.370422 -108.5625,69.1875c-19.160797,-40.817078 -60.514496,-69.1875 -108.5625,-69.1875z"/>
+                          </g>
+                        </g>
+                      </svg>
+                   </button> 
+                  </p>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+          <!-- End header block -->
+      <!-- Start body block -->
+      <div class="modal-body ml-3">
+        <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
+        <p class="modal-title mb-3"> <%user.about%></p>
+        <div class="accordion" :id="'accordionComment'+ user.id">
          <div class="card">
-             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+           <div class="card-header" :id="'headingOne'+user.id" :class="user.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+             <h2 class="mb-0">
+               <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user.id" aria-expanded="false" :aria-controls="'collapseOne' + user.id">
+                 Комментарии
+               </button>
+             </h2>
+           </div>
+           
+           <div :id="'collapseOne' + user.id" class="collapse " :aria-labelledby="'headingOne'+user.id" :data-parent="'#accordionComment'+ user.id">
+             <div class="card-body mr-3">
+               <div class="input-group mb-3 mt-3 ">
+                 <input type="text" class="form-control" :id="'text_comment' + user.id" >
+                 <div class="input-group-append">
+                   <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user.id)">Отправить</button>
+                 </div>
+               </div>
+               <div :id="'comments_' + user.id">
+                 <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user.recipient_comment">
+                   <p><% comment.text %></p>
+                   <div class="row">
+                     <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
+                     <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
+                   </div>
+               </div>
              </div>
            </div>
-         </div>
-       </div>
-       <!-- End body block -->
-       <!-- Start footer block -->
-       <div class="modal-footer">
- 
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-         <button type="button" class="btn btn-primary">Связаться</button>
-       </div>
-       <!-- End footer block -->
-     </div>
-     <!-- End modal block -->
-   </div>  
+                     </div>
+        </div>
+        <div class="card">
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End body block -->
+      <!-- Start footer block -->
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+       <!--  <button type="button" class="btn btn-primary">Связаться</button> -->
+      </div>
+      <!-- End footer block -->
+    </div>
+    <!-- End modal block -->
+  </div>
+  <!-- End card block -->
+
+</div>
    <!-- End card block -->
 </div> 
 
+<div class="container">
+    <example-modal ref="modal"></example-modal>
+    
+</div>
+<div class="container">
 
+    <enough-modal ref="enough_modal"></enough-modal>
+</div>
+</div>
+<template id="enough-modal">
+  <!-- Modal -->
+  <div class="modal  enough-modal fade" id="enoughModal" tabindex="-1" role="dialog" aria-labelledby="enoughModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style='min-height: 25%'>
+        <div class="modal-header">
 
+          <button type="button" class="close" data-dismiss="enough-modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+           <p class="h5 text-center m-1 ">Больше нельзя добавить уроков</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="example-modal">
+  <!-- Modal -->
+  <div class="modal  fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style='min-height: 25%'>
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+           <p class="h5 text-center m-1 ">Оформите подписку, что бы продолжить</p>
+           <a href="{% url 'user:subscribe' %}" class="btn btn-primary m-2 mt-4">Оформить подписку</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 {% endblock %}
 
@@ -350,6 +406,15 @@
 
 
 <script>
+	Vue.component('enough-modal', {
+		template: '#enough-modal',
+	});
+	Vue.component('example-modal', {
+		template: '#example-modal',
+	});
+
+
+
 	function count(value){
 		var length = 0;
 		for( var key in value ) {
@@ -374,6 +439,8 @@
 				{id: 2, type_lesson: 'решаю на заказ', checked: false },
 			],
 			lessons: [],
+			reg: /^[a-zA-Z ,.'-]+$/u,
+			checkedButton: true
 			
 		},
 		created: function() {
@@ -400,14 +467,30 @@
 			});
 		},
 		methods:{
-			isNameValid() {
+
+
+
+			showModal() {				
+				let element = this.$refs.modal.$el
+				console.log('Show Modal')
+				console.log(element)
+				$(element).modal('show')
+			},
+			enoughModal() {				
+				let element = this.$refs.enough_modal.$el
+				console.log('Enough modal')
+				console.log(element)
+				$(element).modal('show')
+			},
+
+/*			isNameValid() {
 				const namePattern = '/\D/'
 				if (namePattern.test(this.user.name)) {
 					this.wrongEmail = false;
 				} else {
 					this.wrongEmail = true;
 				}
-			},
+			},*/
 			
 			onFileChange(e) {
 				const file = e.target.files[0];
@@ -436,12 +519,15 @@
 			addLesson(){
 
 				if(this.lessons.length == 3 && this.user.subscription == 'L'){
-					alert('Оформите подписку, что бы получить больше уроков')
+					console.log('L')
+					this.showModal()
 				}
 				else if(this.lessons.length == 6 && this.user.subscription == 'M'){
-					alert('Повысте уровоень подписки что бы продолжить')
+					console.log('M')
+					this.showModal()
 				}else if(this.lessons.length == 9 && this.user.subscription == 'V'){
-					alert('Нельзя добавить больше уроков')
+					console.log('V')
+					this.enoughModal()
 				}else{
 					this.lessons.push('')
 				}
@@ -452,10 +538,38 @@
 				this.lessons.splice(index, 1);
 			},
 
+			reg(){
+				console.log()
+				console.log(typeof this.reg)
+				let errors = []
+				if(!this.reg.test(this.user.name)){
+					errors.push('Некоректо введено имя')
+				}
+				if(!this.reg.test(this.user.surname)){
+					errors.push('Некоректо введена фамилия')
+				}
+				if(!this.reg.test(this.user.city)){
+					errors.push('Некоректо введен город')
+				}
+				if(this.user.age < 0 && this.user.age > 120){
+					errors.push('Некоректо введено имя')
+				}
+				if(this.user.price_per_hource < 0){
+					errors.push('Некоректо введена цена')
+				}
+
+				if (errors.length === 0) {
+					return { valid:true, errors }
+				} else {
+					return { valid:false, errors }
+				}
+			},
+
 			submit(e){
 				e.stopPropagation();
 				e.preventDefault();
-
+				testingForm = this.reg();
+				if (testingForm.valid = true){
 				this.user.skill = []
 				for(let i in this.lessons){
 					if(this.lessons[i].length > 0 )
@@ -499,7 +613,10 @@
 				)
 				.then(resp => console.log(resp.data))
 				.catch(err => console.log(err.response.data))
-
+				}
+				else{
+					console.log(testingForm.valid)
+				}
 			}
 		},
 		filters: {
