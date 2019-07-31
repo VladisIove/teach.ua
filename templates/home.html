@@ -93,8 +93,6 @@
 {% block content %}
 
 <div class="row" id='app'>
-
-  
   <div class="col-12 filter mt-3 mb-3 p-5">
     <p class="h2 text-center  mb-4 ">Найти человека</p>
     <form method='GET'>
@@ -303,7 +301,7 @@
                   <p v-if='user_ad.viber != null'><span class="font-weight-bold"><i class="fab fa-viber"></i> Viber:</span> <%user_ad.viber%></p>
                   <p v-if='user_ad.instagram != null'><span class="font-weight-bold"><i class="fab fa-instagram"></i> Instagram:</span> <%user_ad.instagram%></p>
                 </div>
-                <div class="col-12 col-sm-4  align-self-end">
+                <div class="col-12 col-sm-4  align-self-end " :id="'like'+user_ad.id">
                   <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user_ad.id"> <% user_ad.like | countLike %> </span>                 
                     <button v-on:click="addLike(user_ad.id)" class="btn btn-primary ml-sm-3">  
                       <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
@@ -580,8 +578,16 @@
      methods: {
 
       addLike: function (user_ad_id) {
+        const like = 'like'+user_ad_id;
         if (this.user_id == 'None'){
-          
+          const itemsHTML = `<div class="alert alert-danger m-1" >
+          <p>Зарегестрерийтесь или войдите, что бы продолжить</p>
+          <div class='m-2'>
+          <a href="{% url 'login' %}" class="btn btn-primary m-1">Войти</a>
+          <a href="{% url 'user:django_registration_register' %}" class="btn btn-primary m-1">Зарегестрироваться</a>
+          </div>
+          </div>`
+          document.getElementById(like).insertAdjacentHTML('beforebegin', itemsHTML)
         }else{
 
 
@@ -594,7 +600,6 @@
             data: params
           })
           .then(function(response){
-            console.log(response.data)
               $(this).toggleClass('');
               id = response.data.data.toString();
               document.getElementById(id).innerText = response.data.like
@@ -603,11 +608,17 @@
 
       },
       addComment: function (user_ad_id) {
-        var comment = 'text_comment' + user_ad_id
-        console.log('text_comment' + user_ad_id)
-        var comments = 'comments_' + user_ad_id
+        const comment = 'text_comment' + user_ad_id;
+        const comments = 'comments_' + user_ad_id;
         if (this.user_id == 'None'){
-
+          const itemsHTML = `<div class="alert alert-danger m-1" >
+            <p>Зарегестрерийтесь или войдите, что бы продолжить</p>
+            <div class='m-2'>
+            <a href="{% url 'login' %}" class="btn btn-primary m-1">Войти</a>
+            <a href="{% url 'user:django_registration_register' %}" class="btn btn-primary m-1">Зарегестрироваться</a>
+            </div>
+            </div>`
+            document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
         }else{
          
           const params = new URLSearchParams();
