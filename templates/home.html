@@ -93,6 +93,8 @@
 {% block content %}
 
 <div class="row" id='app'>
+
+  
   <div class="col-12 filter mt-3 mb-3 p-5">
     <p class="h2 text-center  mb-4 ">Найти человека</p>
     <form method='GET'>
@@ -126,12 +128,10 @@
       </div>
 
       <p class='text-right mt-1'>
-        <a class="btn btn-primary " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-          Расширенный поиск
-        </a>
-
-      </p>
-      <div class="collapse" id="collapseExample">
+<a class="btn btn-primary " data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
+     Расширенный поиск
+   </a> </p>
+      <div class="collapse" id="collapseSearch">
         <div class="card card-body">
 
           <div class="form-group row">
@@ -172,24 +172,24 @@
           <template v-else>
             <div class="col-sm-12 row">
               <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" @click = 'showModalSub'>
+                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" >
                 <label class="form-check-label" for="exampleRadiosLike" >
                   По количеству лаиков
                 </label>
               </div>
               <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" @click = 'showModalSub' >
+                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" >
                 <label class="form-check-label" for="exampleRadiosComment">
                   По количеству комментариев
                 </label>
               </div>
             </template>
-          </div>
+          
 
 
-        </div>
+           </div>
       </div>
-
+</div>
     </form>
   </div>
 </div>
@@ -220,10 +220,10 @@
 
         <div class="col">
           <div class="row card-text d-flex justify-content-between m-sm-1">
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-md-5">Нравится: <% user_ad.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-md-5">Город: <%user_ad.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-md-5"> Возраст: <%user_ad.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-md-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
           </div>         
         </div>
       </div> 
@@ -260,11 +260,11 @@
         </div>
 
         <div class="col">
-          <div class="row card-text d-flex justify-content-between m-sm-1">
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5">Нравится: <% user_ad.like | countLike %> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5">Город: <%user_ad.city%> </small></div>
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-m-5"> Возраст: <%user_ad.age%> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-m-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+          <div class="row card-text  m-sm-1">
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5">Нравится: <% user_ad.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5">Город: <%user_ad.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5"> Возраст: <%user_ad.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
           </div>         
         </div>
       </div> 
@@ -326,35 +326,35 @@
       <div class="modal-body ml-3">
         <p class="modal-title "><span class="font-weight-bold">О себе:</span> </p>
         <p class="modal-title mb-3"> <%user_ad.about%></p>
-        <div class="accordion" id="accordionExample">
+        <div class="accordion" :id="'accordionComment'+ user_ad.id">
          <div class="card">
-            <div class="card-header" id="headingOne" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
-              <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user_ad.id" aria-expanded="true" aria-controls="collapseOne">
-                  Комментарии
-                </button>
-              </h2>
-            </div>
-
-            <div :id="'collapseOne' + user_ad.id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
-              <div class="card-body mr-3">
-                <div class="input-group mb-3 mt-3 ">
-                  <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Отправить</button>
-                  </div>
-                </div>
-                <div :id="'comments_' + user_ad.id">
-                  <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
-                    <p><% comment.text %></p>
-                    <div class="row">
-                      <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
-                      <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
+           <div class="card-header" :id="'headingOne'+user_ad.id" :class="user_ad.subscription != 'L' ? 'vip-modal' : 'low-modal'">
+             <h2 class="mb-0">
+               <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapseOne' + user_ad.id" aria-expanded="false" :aria-controls="'collapseOne' + user_ad.id">
+                 Комментарии
+               </button>
+             </h2>
+           </div>
+           
+           <div :id="'collapseOne' + user_ad.id" class="collapse " :aria-labelledby="'headingOne'+user_ad.id" :data-parent="'#accordionComment'+ user_ad.id">
+             <div class="card-body mr-3">
+               <div class="input-group mb-3 mt-3 ">
+                 <input type="text" class="form-control" :id="'text_comment' + user_ad.id" >
+                 <div class="input-group-append">
+                   <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user_ad.id)">Отправить</button>
+                 </div>
+               </div>
+               <div :id="'comments_' + user_ad.id">
+                 <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
+                   <p><% comment.text %></p>
+                   <div class="row">
+                     <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
+                     <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
+                   </div>
+               </div>
+             </div>
+           </div>
+                     </div>
         </div>
         <div class="card">
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
@@ -379,54 +379,11 @@
 </div>
 
 </div>
-  <div class="container">
 
-    <reg-modal ref="modal"></reg-modal>
-    <sub-modal ref="modal"></sub-modal>
-  </div>
+
 </div>
 
-<template id="reg-modal">
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content text-center" style='min-height: 10%'>
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Внимание!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h1">Зарегестрируйтесь, что бы продолжить!</h1>
-          <a class="btn btn-primary " href="{% url 'login' %}">Войти</a>
-          <a class="btn btn-primary " href="{% url 'user:django_registration_register' %}">Зарегестрироваться</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
-
-<template id="sub-modal">
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content text-center" style='min-height: 10%'>
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Внимание!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h1">Оформите подписку, что бы продолжить!</h1>
-            <a class="btn btn-primary" href="{% url 'user:subscribe' %}">Оформить подписку</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
 {% endblock %}
 
@@ -435,12 +392,6 @@
 
 <script>
 
-Vue.component('reg-modal', {
-  template: '#reg-modal',
-})
-Vue.component('sub-modal', {
-  template: '#sub-modal',
-})
 
 
   function count(value){
@@ -627,17 +578,10 @@ Vue.component('sub-modal', {
        }
      },
      methods: {
-    showModalReg() {
-      let element = this.$refs.modal.$el
-      $(element).modal('show')
-    },
-    showModalSub() {
-      let element = this.$refs.modal.$el
-      $(element).modal('show')
-    },
+
       addLike: function (user_ad_id) {
         if (this.user_id == 'None'){
-          this.showModalReg()
+          
         }else{
 
 
@@ -663,7 +607,7 @@ Vue.component('sub-modal', {
         console.log('text_comment' + user_ad_id)
         var comments = 'comments_' + user_ad_id
         if (this.user_id == 'None'){
-          this.showModalReg()
+
         }else{
          
           const params = new URLSearchParams();
