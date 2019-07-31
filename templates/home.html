@@ -136,7 +136,7 @@
             <div class="col-sm-6 col-12">
               <div class="mt-sm-1">Вид занятости:</div>
               <div class="col-sm-12 ">
-                <div class="form-check ">
+                <div class=" ">
                   <div class="custom-control custom-checkbox mt-1 " v-for='(value, name) in checkTypeWork'>
                     <input type="checkbox" class="form-check-input" :id="'customDistanceTeaching' + name" name='option1' v-model='checkTypeWork[name]'>
                     <label class="form-check-label" :for="'customDistanceTeaching' + name" ><% name %></label>
@@ -150,16 +150,17 @@
              <template v-if='user_status == "V" || user_status == "M" '>
 
               <div class="col-sm-12 row">
-                <div class="form-check mt-1 col-12">
+                <div class=" mt-1 col-12">
                   <input class="form-check" type="radio" id="exampleRadiosLike" value="like" v-model='radioSort'>
                   <label class="form-check-label" for="exampleRadiosLike" >
-                    По количеству лаиков
+                    По лайкам
                   </label>
                 </div>
-                <div class="form-check mt-1 col-12">
+                <div class=" mt-1 col-12">
                   <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" v-model='radioSort' >
                   <label class="form-check-label" for="exampleRadiosComment">
-                    По количеству комментариев
+                    По сообщениям
+
                   </label>
                 </div>
 
@@ -169,16 +170,16 @@
           </template>
           <template v-else>
             <div class="col-sm-12 row">
-              <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" >
+              <div class=" mt-1 col-12">
+                <input class="form-check" type="radio" id="exampleRadiosLike" value="like" @click="showModal">
                 <label class="form-check-label" for="exampleRadiosLike" >
-                  По количеству лаиков
+                  По лайкам
                 </label>
               </div>
-              <div class="form-check mt-1 col-12">
-                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" >
+              <div class=" mt-1 col-12">
+                <input class="form-check" type="radio"  id="exampleRadiosComment" value="comment" @click="showModal">
                 <label class="form-check-label" for="exampleRadiosComment">
-                  По количеству комментариев
+                  По сообщениям
                 </label>
               </div>
             </template>
@@ -217,11 +218,11 @@
         </div>
 
         <div class="col">
-          <div class="row card-text d-flex justify-content-between m-sm-1">
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-md-5">Нравится: <% user_ad.like | countLike %> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-md-5">Город: <%user_ad.city%> </small></div>
-            <div class="col-md-3 col-5"><small class="text-muted pl-3 pl-md-5"> Возраст: <%user_ad.age%> </small></div>
-            <div class="col-md-3 col-7"><small class="text-muted pl-2 pl-md-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
+          <div class="row card-text  m-sm-1">
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5">Нравится: <% user_ad.like | countLike %> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5">Город: <%user_ad.city%> </small></div>
+            <div class="col-md-3 col-5"><small class="text-muted pl-0 pl-md-5"> Возраст: <%user_ad.age%> </small></div>
+            <div class="col-md-3 col-7"><small class="text-muted pl-0 pl-md-5"> Цена в час: <%user_ad.price_per_hource%> </small></div>
           </div>         
         </div>
       </div> 
@@ -373,15 +374,33 @@
   </div>
   <!-- End card block -->
 
-
 </div>
 
 </div>
-
+  <div class="container">
+    <example-modal ref="modal"></example-modal>
+  </div>
 
 </div>
+<template id="example-modal">
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style='min-height: 25%'>
+        <div class="modal-header">
 
-
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+           <p class="h5 text-center m-1 ">Оформите подписку, что бы продолжить</p>
+           <a href="{% url 'user:subscribe' %}" class="btn btn-primary m-2 mt-4">Оформить подписку</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 {% endblock %}
 
@@ -390,7 +409,9 @@
 
 <script>
 
-
+Vue.component('example-modal', {
+  template: '#example-modal',
+})
 
   function count(value){
     var length = 0;
@@ -437,6 +458,8 @@
     },
 
       computed: {
+
+      
         filteredPerson: function(){
           var self = this;
           var checkTypeWork = true 
@@ -576,11 +599,16 @@
        }
      },
      methods: {
+    showModal() {
+      
+      let element = this.$refs.modal.$el
+      $(element).modal('show')
+    },
 
       addLike: function (user_ad_id) {
         const like = 'like'+user_ad_id;
         if (this.user_id == 'None'){
-          const itemsHTML = `<div class="alert alert-danger m-1" >
+          const itemsHTML = `<div class="alert alert-danger m-1 p-1" >
           <p>Зарегестрерийтесь или войдите, что бы продолжить</p>
           <div class='m-2'>
           <a href="{% url 'login' %}" class="btn btn-primary m-1">Войти</a>
@@ -611,7 +639,7 @@
         const comment = 'text_comment' + user_ad_id;
         const comments = 'comments_' + user_ad_id;
         if (this.user_id == 'None'){
-          const itemsHTML = `<div class="alert alert-danger m-1" >
+          const itemsHTML = `<div class="alert alert-danger m-1 p-1" >
             <p>Зарегестрерийтесь или войдите, что бы продолжить</p>
             <div class='m-2'>
             <a href="{% url 'login' %}" class="btn btn-primary m-1">Войти</a>
