@@ -70,6 +70,26 @@
 	.form-check-label{
 		color: #495057;
 	}
+
+	 svg{
+    display: block;
+    width: 50px;
+    height: auto;
+  }
+
+  #svg_2{
+    fill:transparent; 
+    stroke:#e4e0ee;
+    fill: #e4e0ee;
+    stroke-width:6px;
+    cursor:pointer;
+    transition:fill .3s;
+  }
+
+.form-text{
+	color: red !important;
+	font-size: 13px;
+}
 </style>
 {% endblock %}
 
@@ -90,13 +110,18 @@
 					<div class="form-group col-md-12">
 						<label for="name">Имя</label>
 						<input type="text" class="form-control" id="name"  v-model.lazy.trem='user.name' required>
+						<div class="form-text text-muted" id='nameInvalid'>
+
+						</div>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label for="surname">Фамилия</label>
 						<input type="text" class="form-control"  id="surname" v-model.lazy.trem='user.surname' required>
+						<div class="form-text text-muted" id='surnameInvalid'>
 
+						</div>
 					</div>
 				</div>
 				<div class="form-row">
@@ -110,10 +135,21 @@
 					<div class="form-group col-md-6">
 						<label for="age">Возраст</label>
 						<input type="number"  class="form-control" id="age" v-model.lazy.trem='user.age' required>
+												<div class="form-text text-muted" id='ageInvalid'>
+
+						</div>
+						<div class="form-text text-muted" id='ageBigInvalid'>
+
+						</div>
+
 					</div>
 					<div class="form-group col-md-6">
 						<label for="price">Цена за 1 час</label>
 						<input type="number"  class="form-control" id="price" v-model.lazy.trem='user.price_per_hource'  required>
+												<div class="form-text text-muted" id='priceInvalid'>
+
+						</div>
+
 					</div>
 
 				</div>
@@ -123,23 +159,33 @@
 						<label for="phone">Номер телефона</label>
 						<input class='form-control' type="tel" id="phone" name="phone" v-model.lazy.trem='user.mobile_number'
 						required>
+												<div class="form-text text-muted" id='numberInvalid'>
+
+						</div>
 
 					</div>
 					<div class="form-group col-md-6">
 						<label for="city">Город</label>
 						<input type="text" class="form-control" id="city" v-model.lazy.trem='user.city' required>
+						<div class="form-text text-muted" id='cityInvalid'>
+
+						</div>
 
 					</div>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col-12">
-						<p>Вид преподования:</p>
+						<p>Вид занятости:</p>
 						<div v-for='(item, index) in type_lesson_all' class='ml-5 '>
 							<input type="checkbox" class="form-check-input" :id='"checkType"+item.type_lesson' v-model='item.checked'>
 							
 							<label class='form-check-label' :for='"checkType"+item.type_lesson'><% item.type_lesson %> </label>	
 						</div>
+						<div class="form-text text-muted" id='typeInvalid'>
+
+						</div>
+
 					</div>
 
 				</div>
@@ -151,10 +197,13 @@
 			<div class="form-group">
 				<label>Уроки</label>
 				<input type="button" 
-				class="btn btn-primary" 
+				class="btn btn-primary m-1" 
 				value="Добавить урок"
 				@click="addLesson"
 				>
+				<div class="form-text text-muted" id='lessonInvalid'>
+
+				</div>
 
 			</div>
 		</div>
@@ -204,6 +253,9 @@
 				</div>
 				<div class="text-right">
 					<button class='btn btn-primary mb-2' type='submit' @click.prevent='submit($event)' :disabled="reg.valid">Сохранить изменения</button></div>
+																<div class="form-text text-muted text-right" id='alertTestForm'>
+
+						</div>
 				</div>
 			</div>
 		
@@ -224,9 +276,9 @@
           <div class="card-body">
             <h5 class="card-title"><%user.name%> <%user.surname%></h5>
             <p class="card-text font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-            <span v-for='(type, index) in user.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user.type_lesson.length">, </span></span>
+            <span v-for='(type, index) in type_lesson_all' v-if='type.checked == true'> <% type.type_lesson %> <span v-if="index+1 < type_lesson_all.length">, </span></span>
             <p class="card-text font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-            <span v-for='(skill, index) in user.skill'> <% skill.skill_name %><span v-if="index+1 < user.skill.length">, </span></span> </p>
+            <span v-for='(skill, index) in lessons'> <% skill %> <span v-if="index+1 < lessons.length">, </span></span> </p>
             <button type="button" class="btn btn-primary m-sm-1" data-toggle="modal":data-target="'#demo' + user.id" > Подробнее...</button> 
           </div>
         </div>
@@ -262,9 +314,9 @@
                   <p class="modal-title"> <span class="font-weight-bold">Возраст <i class="fas fa-user-tie"></i></span>: <span><%user.age%> </span></p>
                   <p class="modal-title"> <span class="font-weight-bold">Цена в час <i class="far fa-clock"></i></span>: <span><%user.price_per_hource%></span></p>
                   <p class="modal-title font-weight-bold">Вид занятости <i class="fas fa-chalkboard-teacher"></i>: </p>
-                  <span v-for='(type, index) in user.type_lesson'> <% type.type_lesson %><span v-if="index+1 < user.type_lesson.length">, </span></span>
+            <span v-for='(type, index) in type_lesson_all' v-if='type.checked == true'> <% type.type_lesson %> <span v-if="index+1 < type_lesson_all.length">, </span></span>
                   <p class="modal-title font-weight-bold">Название предмета <i class="fas fa-graduation-cap"></i>:</p>
-                  <span v-for='(skill, index) in user.skill'> <% skill.skill_name %><span v-if="index+1 < user.skill.length">, </span></span> </p>
+                  <span v-for='(skill, index) in lessons'> <% skill %><span v-if="index+1 < lessons.length">, </span></span> </p>
                 </div>
                 <div class="col-8">
                   <h4>Контактные данные: </h4>
@@ -277,7 +329,7 @@
                 </div>
                 <div class="col-12 col-sm-4  align-self-end " :id="'like'+user.id">
                   <p class="card-text" >Нравится:<span class="text-muted" v-bind:id="user.id"> <% user.like | countLike %> </span>                 
-                    <button v-on:click="addLike(user.id)" class="btn btn-primary ml-sm-3">  
+                    <button  class="btn btn-primary ml-sm-3">  
                       <svg width="340" height="180" viewbox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
                         <g>
                           <title>Layer 1</title>
@@ -313,7 +365,7 @@
                <div class="input-group mb-3 mt-3 ">
                  <input type="text" class="form-control" :id="'text_comment' + user.id" >
                  <div class="input-group-append">
-                   <button class="btn btn-outline-secondary btn-primary" type="button" v-on:click="addComment(user.id)">Отправить</button>
+                   <button class="btn btn-outline-secondary btn-primary" type="button" disabled>Отправить</button>
                  </div>
                </div>
                <div :id="'comments_' + user.id">
@@ -359,6 +411,10 @@
 
     <enough-modal ref="enough_modal"></enough-modal>
 </div>
+<div class="container">
+
+    <update-modal ref="update_modal"></update-modal>
+</div>
 </div>
 <template id="enough-modal">
   <!-- Modal -->
@@ -399,6 +455,26 @@
   </div>
 </template>
 
+<template id="update-modal">
+  <!-- Modal -->
+  <div class="modal  fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style='min-height: 25%'>
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+           <p class="h5 text-center m-1 ">Данные обновлены успешно!</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 {% endblock %}
 
 {% block js %}
@@ -411,6 +487,10 @@
 	});
 	Vue.component('example-modal', {
 		template: '#example-modal',
+	});
+
+	Vue.component('update-modal', {
+		template: '#update-modal',
 	});
 
 
@@ -439,7 +519,8 @@
 				{id: 2, type_lesson: 'решаю на заказ', checked: false },
 			],
 			lessons: [],
-			reg: /^[a-zA-Z ,.'-]+$/u,
+			regular: /^[a-zA-Zа-яА-Я ,.'-]+$/u,
+			regularNumber: /^[+0-9]*$/u,
 			checkedButton: true
 			
 		},
@@ -450,7 +531,7 @@
 			.then(response => {
 				this.user = response.data
 				this.img_url = this.user.img
-				console.log(this.user)
+				
 				for(let i_all in this.type_lesson_all){
 					for(let i in this.user.type_lesson ){
 						if(this.user.type_lesson[i].id == this.type_lesson_all[i_all].id){
@@ -461,7 +542,7 @@
 				for(let i in this.user.skill){
 					this.lessons.push(this.user.skill[i]['skill_name'])
 				}
-			console.log(this.user.type_lesson)
+			
 
 
 			});
@@ -472,25 +553,19 @@
 
 			showModal() {				
 				let element = this.$refs.modal.$el
-				console.log('Show Modal')
-				console.log(element)
+
 				$(element).modal('show')
 			},
 			enoughModal() {				
 				let element = this.$refs.enough_modal.$el
-				console.log('Enough modal')
-				console.log(element)
+				$(element).modal('show')
+			},
+			updatehModal() {				
+				let element = this.$refs.update_modal.$el
 				$(element).modal('show')
 			},
 
-/*			isNameValid() {
-				const namePattern = '/\D/'
-				if (namePattern.test(this.user.name)) {
-					this.wrongEmail = false;
-				} else {
-					this.wrongEmail = true;
-				}
-			},*/
+
 			
 			onFileChange(e) {
 				const file = e.target.files[0];
@@ -513,20 +588,15 @@
 					data,
 					config,
 					)
-				.then(resp => console.log(resp.data))
-				.catch(err => console.log(err.response.data))
 			},
 			addLesson(){
 
 				if(this.lessons.length == 3 && this.user.subscription == 'L'){
-					console.log('L')
 					this.showModal()
 				}
 				else if(this.lessons.length == 6 && this.user.subscription == 'M'){
-					console.log('M')
 					this.showModal()
 				}else if(this.lessons.length == 9 && this.user.subscription == 'V'){
-					console.log('V')
 					this.enoughModal()
 				}else{
 					this.lessons.push('')
@@ -539,23 +609,96 @@
 			},
 
 			reg(){
-				console.log()
-				console.log(typeof this.reg)
+				
 				let errors = []
-				if(!this.reg.test(this.user.name)){
+				if(!this.regular.test(this.user.name)){
 					errors.push('Некоректо введено имя')
+					let item = `Некоректо введено имя`
+					
+					document.getElementById('nameInvalid').innerHTML =  item			
+					
+				}else{
+					document.getElementById('nameInvalid').innerHTML = ''
 				}
-				if(!this.reg.test(this.user.surname)){
+
+
+				if(!this.regular.test(this.user.surname)){
 					errors.push('Некоректо введена фамилия')
+					let item = `Некоректо введена фамилия`
+					document.getElementById('surnameInvalid').innerHTML = item
+				}else{
+					document.getElementById('surnameInvalid').innerHTML = ''
 				}
-				if(!this.reg.test(this.user.city)){
+
+
+				if(!this.regular.test(this.user.city)){
 					errors.push('Некоректо введен город')
+					let item = `Некоректо введен город`
+					document.getElementById('cityInvalid').innerHTML = item
+				}else{
+					document.getElementById('cityInvalid').innerHTML = ''
 				}
-				if(this.user.age < 0 && this.user.age > 120){
-					errors.push('Некоректо введено имя')
+
+	
+				if(this.user.age < 0 ){
+					errors.push('Возраст не может быть отрицательным')
+					let item = `Возраст не может быть отрицательным`
+					document.getElementById('ageInvalid').innerHTML = item
+				}else{
+					document.getElementById('ageInvalid').innerHTML = ''
 				}
+
+
+				if(this.user.age > 120){
+					errors.push('Вам больше 120?')
+					let item = `Вам больше 120?`
+					document.getElementById('ageBigInvalid').innerHTML = item
+				}else{
+					document.getElementById('ageBigInvalid').innerHTML = ''
+				}
+
+
 				if(this.user.price_per_hource < 0){
 					errors.push('Некоректо введена цена')
+					let item = `Некоректо введена цена`
+					document.getElementById('priceInvalid').innerHTML = item
+				}else{
+					document.getElementById('priceInvalid').innerHTML = ''
+				}
+
+
+				if(this.lessons.length < 1){
+					errors.push('Напишите хотя бы один предмет')
+					let item = `Напишите хотя бы один предмет`
+					document.getElementById('lessonInvalid').innerHTML = item
+				}else{
+					document.getElementById('lessonInvalid').innerHTML = ''
+				}
+
+
+				
+				
+				if(!this.regularNumber.test(this.user.mobile_number)){
+					errors.push('Некоректно введен номер телефона')
+					let item = `Некоректно введен номер телефона`
+					document.getElementById('numberInvalid').innerHTML = item
+				}else{
+					document.getElementById('numberInvalid').innerHTML = ''
+				}
+
+
+				let checked_type_lesson = false;
+				for( i in this.type_lesson_all){
+					if (this.type_lesson_all[i].checked == true){
+						checked_type_lesson = true;
+					}
+				}
+				if(!checked_type_lesson){
+					errors.push('Выберите хотя бы один вид занятости')
+					let item = `Выберите хотя бы один вид занятости`
+					document.getElementById('typeInvalid').innerHTML =  item
+				}else{
+					document.getElementById('typeInvalid').innerHTML = ''
 				}
 
 				if (errors.length === 0) {
@@ -569,11 +712,19 @@
 				e.stopPropagation();
 				e.preventDefault();
 				testingForm = this.reg();
-				if (testingForm.valid = true){
+				if (testingForm.valid == true){
+					document.getElementById('nameInvalid').innerHTML =  ''
+					document.getElementById('cityInvalid').innerHTML = ''
+					document.getElementById('ageInvalid').innerHTML = ''
+					document.getElementById('ageBigInvalid').innerHTML = ''
+					document.getElementById('priceInvalid').innerHTML = ''
+					document.getElementById('lessonInvalid').innerHTML = ''
+					document.getElementById('numberInvalid').innerHTML = ''
+					document.getElementById('typeInvalid').innerHTML =  ''
 				this.user.skill = []
 				for(let i in this.lessons){
 					if(this.lessons[i].length > 0 )
-						this.user.skill.push(this.lessons[i])
+						this.user.skill.push(this.lessons[i].toLowerCase())
 				}
 				this.user.type_lesson = []
 				for( i in this.type_lesson_all){
@@ -611,11 +762,10 @@
 					data,
 					config,
 				)
-				.then(resp => console.log(resp.data))
-				.catch(err => console.log(err.response.data))
-				}
-				else{
-					console.log(testingForm.valid)
+				.then(resp => this.updatehModal())
+	
+				}else{
+					document.getElementById('alertTestForm').innerHTML = 'Форма заполнена неправильно!'
 				}
 			}
 		},

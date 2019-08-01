@@ -463,45 +463,30 @@ Vue.component('example-modal', {
       
         filteredPerson: function(){
           var self = this;
-          var checkTypeWork = true 
-          for (i in self.checkTypeWork){
-            if(self.checkTypeWork[i] == true){
-              checkTypeWork = false
-            }
-          }
-
-          users = this.users.filter(function(user){
-            skill_name_user = []
-            for (i in user.skill){
-              skill_name_user.push(user.skill[i].skill_name)  
-            }
-            type_les_user = []
-
-            for(i in user.type_lesson){
-              type_les_user.push(user.type_lesson[i].type_lesson)
-            }
-            let check = false
-            for( i in self.checkTypeWork){
-              if (type_les_user.includes(i) && self.checkTypeWork[i]==true){
-                check = true;
-                break;
+          users = this.users
+          .filter(function(user){
+            if(self.searchSkill == '')
+              return user 
+            for(let index in user.skill){
+              if(user.skill[index].skill_name.indexOf(self.searchSkill) == 0){
+                return true
               }
             }
-
-            if(checkTypeWork){
-              if (self.searchSkill.toLowerCase() != ''){
-
-                return skill_name_user.includes(self.searchSkill.toLowerCase());
-              }else{
-                return user
+            return false
+            
+          })
+          .filter(function(user){
+            let checked = false;
+            for(let i in self.checkTypeWork){
+              if(self.checkTypeWork[i] == true){
+                checked = true;
+                for(let type_work_index in user.type_lesson){
+                  if(user.type_lesson[type_work_index].type_lesson == i)
+                    return true 
+                }
               }
-            }else{
-              if (self.searchSkill.toLowerCase() != ''){
-                return  skill_name_user.includes(self.searchSkill.toLowerCase()) && check;
-              }else{
-                return  check;
-              }
-            }   
+            }
+            return !checked 
           })
           .filter(function(user){
             return (user.age >= parseInt(self.minAge) && user.age <= parseInt(self.maxAge))
@@ -513,13 +498,13 @@ Vue.component('example-modal', {
             return (user.price_per_hource >= parseInt(self.minSalary) && user.price_per_hource <= parseInt(self.maxSalary))
           });
 
-
           if(this.radioSort == 'like'){
             users = users.sort(sortByLike)
           } 
           if(this.radioSort == 'comment'){
             users = users.sort(sortByComment)
           }
+
           return users;
 
         },
