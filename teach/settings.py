@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'social_django',
+    'djcelery',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -158,14 +161,13 @@ MEDIA_ROOT = os.path.join('media/')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-"""EMAIL_USE_TLS = True
+EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'baturin.ivan9@gmail.com'
-EMAIL_HOST_PASSWORD = "ivanbaturin1999"
+EMAIL_HOST_USER = 'teach.teacher.ua@gmail.com'
+EMAIL_HOST_PASSWORD = "thisismyemail"
 DEFAULT_FROM_EMAIL = 'Vlad'
 DEFAULT_TO_EMAIL = "thisismyemail"
-"""
 
 
 REST_FRAMEWORK = {
@@ -218,3 +220,10 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+#CELERY_ACCEPT_CONTENT = ['application/json']
+#CELERY_TASK_SERIALIZER = 'json'
+#CELERY_RESULT_SERIALIZER = 'json'

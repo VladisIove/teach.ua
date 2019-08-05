@@ -1,11 +1,14 @@
 from django import forms 
-from crispy_forms.helper import FormHelper
+from django.contrib.auth.forms import UserCreationForm
 
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from .models import User , TypeLesson, Skill
 
-class CustomFormRegistration(RegistrationFormUniqueEmail):
+
+
+
+class FormRegistration(UserCreationForm):
 	name = forms.CharField(required=True, label='Имя',  max_length=100)
 	surname = forms.CharField(required=True, label='Фамилия', max_length=100)
 	email = forms.CharField(required=True, label='E-mail',  max_length=100)

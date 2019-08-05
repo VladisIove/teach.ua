@@ -1,10 +1,20 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django_registration.views import ActivationView
 from django.contrib.auth.decorators import login_required 
-from .views import UserProfailView, HomePageView, ProfileUpdateView, help_message, settings, password, add_like, add_comment, UserView, RegistrationView
+from .views import (usersignup, 
+					activate_account, 
+					UserProfailView, 
+					HomePageView,
+					ProfileUpdateView, 
+	 				help_message,
+	  				settings,
+	  				password,
+	    			add_like,
+	     			add_comment,
+	      			UserView)
 
 app_name = 'user'
 
@@ -20,12 +30,6 @@ urlpatterns = [
 	path('settings/password/', password, name='password'),
 	path('add_like/', add_like, name='add-like'),
 	path('add_comment/', add_comment, name='add-comment'),
-
-
-
-    # The activation key can make use of any character from the
-    # URL-safe base64 alphabet, plus the colon as a separator.
-    url(r'^activate/(?P<activation_key>[-:\w]+)/$', ActivationView.as_view(),name='django_registration_activate'),
-    url(r'^register/$', RegistrationView.as_view(),name='django_registration_register'),
-
+	path('signup/', usersignup, name='django_registration_register'),
+	re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', activate_account, name='activate_account'),
 ]

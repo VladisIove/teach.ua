@@ -17,7 +17,6 @@ from django.views.generic.list import ListView
 from social_django.models import UserSocialAuth
 import json 
 import os
-from django_registration.views import RegistrationView as BaseRegistrationView
 from django.urls import reverse_lazy
 from rest_framework.views import APIView
 from django.http import Http404
@@ -38,19 +37,61 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 
-from .forms import HelpForm, UpdateUserProfile, CustomFormRegistration, FilterForm
+from .forms import HelpForm, UpdateUserProfile, FilterForm, FormRegistration
 from .models import User, Comment, TypeLesson, Skill
 from .serializers import Userserializer, UserProfileSerializer
 from .permissions import IsOwnerOrReadOnly
 
+from .tasks import send_activation_email
+
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
+from .tokens import account_activation_token
+
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode
+from django.template.loader import render_to_string
+
+from django.core.mail import EmailMessage
 
 
-REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
 
+def usersignup(request):
+	if request.method == 'POST':
+		form = FormRegistration(request.POST)
+		if form.is_valid():
+			user = form.save(commit = False)
+			user.is_active = False 
+			user.save()
+			domain_site = get_current_site(request).domain
+			to_email = form.cleaned_data.get('email')
+			uid = urlsafe_base64_encode(force_bytes(user.pk))
+			token = account_activation_token.make_token(user)
+			send_activation_email.delay(domain_site, user.name, to_email, uid, token)
+			return render(request, 'django_registration/registration_complete.html')
+	else:
+		form = FormRegistration()
+	return render(request, 'django_registration/registration_form.html', {'form': form})
 
 
-
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return render(request, 'django_registration/activation_complete.html')
+    else:
+        return render(request, 'django_registration/activation_failed.html') 
 
 class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
 	queryset = User.objects.all()
@@ -97,85 +138,7 @@ class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, gener
 		return Response({'data': 'good'}, status = status.HTTP_200_OK)
 
 
-class RegistrationView(BaseRegistrationView):
-	"""
-	Register a new (inactive) user account, generate an activation key
-	and email it to the user.
-	This is different from the model-based activation workflow in that
-	the activation key is the username, signed using Django's
-	TimestampSigner, with HMAC verification on activation.
-	"""
-	email_body_template = 'django_registration/activation_email_body.txt'
-	email_subject_template = 'django_registration/activation_email_subject.txt'
-	success_url = reverse_lazy('django_registration_complete')
-	form_class = CustomFormRegistration
 
-	def register(self, form):
-		new_user = self.create_inactive_user(form)
-		signals.user_registered.send(
-			sender=self.__class__,
-			user=new_user,
-			request=self.request
-		)
-		return new_user
-
-	def create_inactive_user(self, form):
-		"""
-		Create the inactive user account and send an email containing
-		activation instructions.
-		"""
-		new_user = form.save(commit=False)
-		new_user.is_active = False
-		new_user.save()
-
-		self.send_activation_email(new_user)
-
-		return new_user
-
-	def get_activation_key(self, user):
-		"""
-		Generate the activation key which will be emailed to the user.
-		"""
-		return signing.dumps(
-			obj=user.get_username(),
-			salt=REGISTRATION_SALT
-		)
-
-	def get_email_context(self, activation_key):
-		"""
-		Build the template context used for the activation email.
-		"""
-		scheme = 'https' if self.request.is_secure() else 'http'
-
-		return {
-			'scheme': scheme,
-			'activation_key': activation_key,
-			'expiration_days': 7,
-			'site': get_current_site(self.request)
-		}
-
-	def send_activation_email(self, user):
-		"""
-		Send the activation email. The activation key is the username,
-		signed using TimestampSigner.
-		"""
-		activation_key = self.get_activation_key(user)
-		context = self.get_email_context(activation_key)
-		context['user'] = user
-		subject = render_to_string(
-			template_name=self.email_subject_template,
-			context=context,
-			request=self.request
-		)
-		# Force subject to a single line to avoid header-injection
-		# issues.
-		subject = ''.join(subject.splitlines())
-		message = render_to_string(
-			template_name=self.email_body_template,
-			context=context,
-			request=self.request
-		)
-		user.email_user(subject, message, 'teach.teacher.ua@gmail.com')
 
 
 @login_required
