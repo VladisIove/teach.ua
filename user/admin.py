@@ -13,7 +13,7 @@ class UserAdmin(admin.ModelAdmin):
 				'classes': ('wide',),
 				'fields': ( ('name','surname', 'last_change', 'valid_announcement', 'age',),
 			   			  ('img', 'city', 'type_persone' ,'about', 'price_per_hource'),
-			   			   ('subscription', 'start_subscription', 'end_subscription'))
+			   			   ('subscription', 'start_subscription'))
 				}),
 			('Contact info', {
 				'classes': ('collapse',),
@@ -26,9 +26,9 @@ class UserAdmin(admin.ModelAdmin):
 				}),
 
 				)
-	list_display = ('email','name', 'surname', 'age', 'subscription','valid_announcement', 'start_subscription', 'end_subscription')		
+	list_display = ('email','name', 'surname', 'age', 'subscription','valid_announcement', 'start_subscription')		
 	list_display_links = ['email',]
-	list_editable = ('subscription', 'start_subscription','valid_announcement', 'end_subscription', 'age', )
+	list_editable = ('subscription', 'start_subscription','valid_announcement',  'age')
 
 admin.site.register( User, UserAdmin)
 admin.site.register(Skill)

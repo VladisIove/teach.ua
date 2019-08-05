@@ -103,7 +103,6 @@ class User(AbstractUser):
 
 	# I am xz kak realizovat podpicky
 	start_subscription = models.DateTimeField(blank=True, null=True)
-	end_subscription = models.DateTimeField(blank=True, null=True)
 	LOW = 'L'
 	MIDDLE = 'M'
 	VIP = 'V'

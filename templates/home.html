@@ -82,6 +82,7 @@
     background-color: #e4e0ee;
     border: 2px solid #401f68;
     color: #716c6b;
+    border-radius: 8px;
   }
   .vip-comment hr{
     background-color: #401f68;
@@ -193,7 +194,7 @@
   </div>
 </div>
 
-<div class="col-12 main p-5 mb-2" v-if='filteredPerson.length > 0'>
+<div class="col-12 main p-5 mb-2 vip_container" v-if='filteredVIPPerson.length > 0'>
 
   <!--  Start vip block -->
   <div class="" v-for='user_ad in filteredVIPPerson' :key='user_ad.id' >
@@ -344,13 +345,19 @@
                  </div>
                </div>
                <div :id="'comments_' + user_ad.id">
-                 <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
-                   <p><% comment.text %></p>
-                   <div class="row">
-                     <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
-                     <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
-                   </div>
-               </div>
+                <ul class="list-unstyled" >
+                  <li class="media my-5 p-2" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user_ad.recipient_comment">
+                    <div class="media-body">
+                      <h5 class="mt-0 mb-1"><% comment.text %></h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-6 col-sm-6 text-left"><% comment.owner.name %> <% comment.owner.surname %> <% comment.owner.subscription %></div>
+                        <div class="col-6 col-sm-6 text-right"><% comment.date | dateParse %></div>
+                      </div> 
+                    </div>
+                  </li>
+                </ul>
+
              </div>
            </div>
                      </div>
@@ -581,7 +588,7 @@ Vue.component('example-modal', {
           return count(value);
         },
         dateParse: function(value){
-         return value.slice(0,-17)
+         return value.slice(0,-22)
        }
      },
      methods: {
@@ -624,6 +631,7 @@ Vue.component('example-modal', {
       addComment: function (user_ad_id) {
         const comment = 'text_comment' + user_ad_id;
         const comments = 'comments_' + user_ad_id;
+        console.log(document.getElementById(comment).value.trim().length )
         if (this.user_id == 'None'){
           const itemsHTML = `<div class="alert alert-danger m-1 p-1" >
             <p>Зарегестрерийтесь или войдите, что бы продолжить</p>
@@ -633,8 +641,10 @@ Vue.component('example-modal', {
             </div>
             </div>`
             document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
-        }else{
-         
+        }
+        else if(document.getElementById(comment).value.trim().length > 0){
+
+  
           const params = new URLSearchParams();
           params.append('user_id', user_ad_id);
           params.append('profile_id', this.user_id);
@@ -646,13 +656,24 @@ Vue.component('example-modal', {
           })
           .then(function(response){
             id = 'comment_'+response.data.data.toString();
-            const itemsHTML = `<div class="alert alert-success" >
-            <p>${response.data.comment}</p>
-            <div class="row">
-            <div class="col-6  text-left">${response.data.owner_name} ${response.data.owner_surname}</div>
-            <div class="col-6 text-right"><span class=" ">${response.data.date.slice(0,-14)}</span></div>
-            </div>`
+
+            const itemsHTML = `
+<li class="media my-5 p-2 ${ this.user_status == "V" ? "vip-comment": "low-coment" }" >
+
+
+                    <div class="media-body">
+                      <h5 class="mt-0 mb-1">${response.data.comment}</h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-6 col-sm-6 text-left">${response.data.owner_name} ${response.data.owner_surname}</div>
+                        <div class="col-6 col-sm-6 text-right">${response.data.date.slice(0,-14)}</div>
+                      </div> 
+                    </div>
+                  </li>
+
+`
             document.getElementById(comments).insertAdjacentHTML('afterbegin', itemsHTML)
+            document.getElementById(comment).value = ''
               })
 
           

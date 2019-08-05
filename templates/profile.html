@@ -90,6 +90,18 @@
 	color: red !important;
 	font-size: 13px;
 }
+
+
+  .vip-comment{
+    background-color: #e4e0ee;
+    border: 2px solid #401f68;
+    color: #716c6b;
+    border-radius: 8px;
+  }
+  .vip-comment hr{
+    background-color: #401f68;
+    border-top-color: #401f68;
+  }
 </style>
 {% endblock %}
 
@@ -100,6 +112,7 @@
 	<form method="POST" enctype="multipart/form-data"  name='uploadForm' id="uploadForm">
 		<div class="form-row">
 			<div class="form-group col-md-6 ">	
+       
 				<img :src='img_url'  alt="" id="blah">
 				<input type="file" class="form-control-file mt-2" id="imgInp"  @change="onFileChange">	
 			</div>
@@ -252,6 +265,7 @@
 					<label class='form-check-label' for='checkTypeValid'>Показывать ваш профиль другим пользователям?</label>	
 				</div>
 				<div class="text-right">
+           <a href="{% url 'user:subscribe' %}" class="btn btn-primary mb-2 mr-sm-2 ">Оформить подписку</a>
 					<button class='btn btn-primary mb-2' type='submit' @click.prevent='submit($event)' :disabled="reg.valid">Сохранить изменения</button></div>
 																<div class="form-text text-muted text-right" id='alertTestForm'>
 
@@ -369,13 +383,18 @@
                  </div>
                </div>
                <div :id="'comments_' + user.id">
-                 <div class="alert alert-success" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user.recipient_comment">
-                   <p><% comment.text %></p>
-                   <div class="row">
-                     <div class="col-6  text-left"><% comment.owner.name %> <% comment.owner.surname %></div>
-                     <div class="col-6 text-right"><span class=" "><% comment.date | dateParse %></span></div>
-                   </div>
-               </div>
+<ul class="list-unstyled" >
+                  <li class="media my-5 p-2" :class=' comment.owner.subscription == "V" ? "vip-comment": "low-coment"' v-for="comment in user.recipient_comment">
+                    <div class="media-body">
+                      <h5 class="mt-0 mb-1"><% comment.text %></h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-6 col-sm-6 text-left"><% comment.owner.name %> <% comment.owner.surname %> <% comment.owner.subscription %></div>
+                        <div class="col-6 col-sm-6 text-right"><% comment.date | dateParse %></div>
+                      </div> 
+                    </div>
+                  </li>
+                </ul>
              </div>
            </div>
                      </div>

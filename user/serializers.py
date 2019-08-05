@@ -7,7 +7,7 @@ class OwnerCommentSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User 
-		fields = ['name', 'surname']
+		fields = ['name', 'surname', 'subscription']
 
 class LikeSerializer(serializers.ModelSerializer):
 
