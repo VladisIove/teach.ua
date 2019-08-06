@@ -1,63 +1,35 @@
 # Create your views here.
-from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from django.views.generic.edit import FormMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.views.generic import TemplateView
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import UpdateView
-from django.views.generic.list import ListView
-from social_django.models import UserSocialAuth
-import json 
-import os
-from django.urls import reverse_lazy
-from rest_framework.views import APIView
-from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response 
-from rest_framework import mixins, generics, permissions, viewsets
+from rest_framework import mixins, generics
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
-from django.core import signing
-from django_registration import signals
-from django.contrib.auth import update_session_auth_hash
-from django.views.decorators.csrf import requires_csrf_token
-from teach import settings 
-
-from django.core.mail import EmailMessage
-from django.contrib import messages
 
 
-from .forms import HelpForm, UpdateUserProfile, FilterForm, FormRegistration
+from social_django.models import UserSocialAuth
+
+
+from .forms import HelpForm, FormRegistration
 from .models import User, Comment, TypeLesson, Skill
 from .serializers import Userserializer, UserProfileSerializer
-from .permissions import IsOwnerOrReadOnly
-
-from .tasks import send_activation_email
-
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-
+from .tasks import send_activation_email, help_message_task
 from .tokens import account_activation_token
-
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_decode
-from django.template.loader import render_to_string
-
-from django.core.mail import EmailMessage
 
 
 
@@ -97,7 +69,7 @@ class UserProfailView( mixins.RetrieveModelMixin, mixins.UpdateModelMixin, gener
 	queryset = User.objects.all()
 	serializer_class = UserProfileSerializer
 	parser_classes = (FormParser, JSONParser, MultiPartParser)
-	#permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
 
 	def get(self, request, *args, **kwargs):
 		return self.retrieve(request, *args, **kwargs)
@@ -220,16 +192,11 @@ def help_message(request):
 		form = HelpForm(request.POST)
 
 		if form.is_valid():
-			current_site = get_current_site(request)
-			mail_subject = 'Пришло письмо с поддержки'
-			message = request.POST.get('email') + ' ' + request.POST.get('name') + ' ' + request.POST.get('message')
-			to_email = 'teach.teacher.ua@gmail.com'
-			email = EmailMessage(mail_subject, message, to=[to_email])
-			email.send()
+			message = request.POST.get('email') + '\n ' + request.POST.get('name') + '\n ' + request.POST.get('message')
+			help_message_task.delay(message)
 			message = 'Письмо отправлено'
 			messages.success(request, message)
 			return render(request, 'help.html', {'form': form})
-	# return HttpResponse('Письмо отправлено')
 	else:
 		form = HelpForm()
 

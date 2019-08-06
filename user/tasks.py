@@ -25,23 +25,23 @@ def print_user():
 			if (date_now - user.start_subscription) > timedelta(days=30):
 				user_up = User.objects.filter(pk = user.pk).update(subscription = 'L')
 
-@task 
-def help_message_task(email, name, message):
+@task(bind=True) 
+def help_message_task( self, message):
 	
-	#Task to send an help e-mail .
-	
+	#Task to send an help e-mail .	
+	print('Help message start')
 	mail_subject = 'Пришло письмо с поддержки'
-	message = email + '\n ' + name + '\n ' + message
 	to_email = 'teach.teacher.ua@gmail.com'
 	email = EmailMessage(mail_subject, message, to=[to_email])
 	email.send()
+	print('Help message end')
 
 
 
 
 
-@task 
-def send_activation_email(domain_site, username, to_email, uid, token):
+@task(bind=True) 
+def send_activation_email(self, domain_site, username, to_email, uid, token):
 	# Task to send activation email 
 
 	email_subject = 'Активация аккаунта'

@@ -1,8 +1,6 @@
 from django.urls import path, include, re_path
-from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
-from django_registration.views import ActivationView
 from django.contrib.auth.decorators import login_required 
 from .views import (usersignup, 
 					activate_account, 
